@@ -33,7 +33,6 @@ let
       unstable.syncthingtray
       unstable.syncthing
       unstable.rnote
-      unstable.saber
       inputs.lan-mouse.packages.${pkgs.stdenv.hostPlatform.system}.default
 
       #troubleshooting disks
@@ -48,11 +47,12 @@ let
       xournalpp
     ]
     ++ lib.optionals (desktop != null && hostname == "laptop-nix") [
+      # Productivity
       superProductivity
+      affine
 
       # Dotnet
-      dotnet-sdk_8
-      mono
+      dotnet-sdk_9
 
       # PHP
       php82
@@ -83,17 +83,13 @@ let
       wget
       unstable.jetbrains-toolbox
       icu63
-      networkmanager_strongswan
       unstable.cloudflare-warp
 
       # Dev
       bruno
       unstable.zed-editor
-      python311
-      python311Packages.jupyter
-      python311Packages.notebook
-      python311Packages.pip
-
+      python313
+      
       # Other
       structorizer
       vlc
@@ -115,8 +111,6 @@ let
       rpi-imager
       android-tools
 
-      minikube
-
       #Music/Video
       spotify
       stremio
@@ -129,12 +123,10 @@ let
       cloudflared
       zotero
 
-      # Discord
+      # Games and co
       discord
       steam
       heroic
-      appflowy
-      musescore
     ]
     ++ lib.optionals (desktop != null && hostname == "surface-nix") [
     ];
