@@ -5,6 +5,7 @@ _: {
       path = "/var/lib/netdata/cloud.d/token";
     };
     k3s-server-token = {};
+    cloudflared-token = {};
     "homepage/cachix-api-key" = {};
     "homepage/argocd-api-key" = {};
     "homepage/cloudflare-account-id" = {};

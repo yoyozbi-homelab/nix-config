@@ -49,7 +49,7 @@ let
     ++ lib.optionals (desktop != null && hostname == "laptop-nix") [
       # Productivity
       superProductivity
-      affine
+      unstable.affine
 
       # Dotnet
       dotnet-sdk_9
