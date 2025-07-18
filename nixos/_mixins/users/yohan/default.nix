@@ -99,7 +99,8 @@ let
       vlc
 
       # Photos
-      rawtherapee
+      unstable.darktable
+      hugin
       digikam
       exiftool
       gimp
