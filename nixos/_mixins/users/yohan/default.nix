@@ -81,7 +81,6 @@ let
       unzip
       zip
       wget
-      unstable.jetbrains-toolbox
       icu63
       unstable.cloudflare-warp
 
@@ -114,6 +113,7 @@ let
       #Music/Video
       spotify
       stremio
+      jellyfin-media-player
       kodi-wayland
       deluge
       obs-studio
