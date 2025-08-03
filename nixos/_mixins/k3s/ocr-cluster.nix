@@ -18,5 +18,6 @@ _: {
     "homepage/qbittorrent-password" = {};
     "vikunja/user" = {};
     "vikunja/password" = {};
+    "kDrive/api-key" = {};
   };
 }

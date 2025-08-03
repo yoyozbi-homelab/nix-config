@@ -63,6 +63,7 @@ let
       rustPackages.clippy
       rustfmt
       openssl.dev
+      jetbrains.rust-rover
 
       # Go
       go
