@@ -95,7 +95,7 @@ let
       vlc
 
       # Photos
-      unstable.darktable
+      #unstable.darktable #TODO: Re-add when https://github.com/NixOS/nixpkgs/issues/429268 is closed
       hugin
       digikam
       exiftool

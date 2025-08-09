@@ -50,10 +50,17 @@
     "cgroup_enable=memory"
   ];
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-label/NIXOS_SD"; # this is important!
-    fsType = "ext4";
-    options = [ "noatime" ];
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-label/NIXOS_SD"; # this is important!
+      fsType = "ext4";
+      options = [ "noatime" ];
+    };
+    "/mnt" = {
+      device = "/dev/sdb1";
+      fsType = "ext4";
+      options = [ "noatime "];
+    };
   };
 
   swapDevices = [ ];
