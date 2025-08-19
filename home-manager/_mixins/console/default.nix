@@ -248,6 +248,9 @@ in
         init = {
           defaultBranch = "main";
         };
+        lfs = {
+          enable = true;
+        };
       };
     };
 
