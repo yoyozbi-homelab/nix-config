@@ -234,6 +234,9 @@ in
         fucked = "reset --hard";
         graph = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
       };
+      lfs = {
+        enable = true;
+      };
       extraConfig = {
         core = {
           pager = "bat";
@@ -247,9 +250,6 @@ in
         };
         init = {
           defaultBranch = "main";
-        };
-        lfs = {
-          enable = true;
         };
       };
     };

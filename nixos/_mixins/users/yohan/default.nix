@@ -84,7 +84,9 @@ let
       wget
       icu63
       unstable.cloudflare-warp
+
       godot
+      pixelorama
 
       # Dev
       bruno
