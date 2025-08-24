@@ -1,9 +1,10 @@
-{...} : {
+{ ... }:
+{
   imports = [
     ../services/networkmanager.nix
     ../services/pipewire.nix
   ];
-  services= {
+  services = {
     xserver.desktopManager.plasma5.mobile.enable = true;
   };
 }

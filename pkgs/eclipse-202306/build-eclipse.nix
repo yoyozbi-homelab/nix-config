@@ -55,7 +55,8 @@ stdenv.mkDerivation rec {
     libXtst
     libsecret
     zlib
-  ] ++ lib.optional (webkitgtk != null) webkitgtk;
+  ]
+  ++ lib.optional (webkitgtk != null) webkitgtk;
 
   buildCommand = ''
     # Unpack tarball.

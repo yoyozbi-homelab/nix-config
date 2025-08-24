@@ -136,45 +136,45 @@ rustPlatform.buildRustPackage rec {
     protobuf
     rustPlatform.bindgenHook
     cargo-about
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ];
 
   dontUseCmakeConfigure = true;
 
-  buildInputs =
+  buildInputs = [
+    curl
+    fontconfig
+    freetype
+    libgit2
+    openssl
+    sqlite
+    zlib
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libxkbcommon
+    wayland
+    xorg.libxcb
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks;
     [
-      curl
-      fontconfig
-      freetype
-      libgit2
-      openssl
-      sqlite
-      zlib
-      zstd
+      AppKit
+      CoreAudio
+      CoreFoundation
+      CoreGraphics
+      CoreMedia
+      CoreServices
+      CoreText
+      Foundation
+      IOKit
+      Metal
+      Security
+      SystemConfiguration
+      VideoToolbox
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libxkbcommon
-      wayland
-      xorg.libxcb
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        CoreAudio
-        CoreFoundation
-        CoreGraphics
-        CoreMedia
-        CoreServices
-        CoreText
-        Foundation
-        IOKit
-        Metal
-        Security
-        SystemConfiguration
-        VideoToolbox
-      ]
-    );
+  );
 
   cargoBuildFlags = [
     "--package=zed"

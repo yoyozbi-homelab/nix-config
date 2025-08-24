@@ -59,7 +59,7 @@
     "/mnt" = {
       device = "/dev/sdb1";
       fsType = "ext4";
-      options = [ "noatime "];
+      options = [ "noatime " ];
     };
   };
 

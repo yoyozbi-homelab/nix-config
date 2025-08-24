@@ -16,9 +16,8 @@
       };
     };
   };
-  environment.systemPackages = with pkgs; 
-    [ 
-      netdataCloud 
-      git 
-    ];
+  environment.systemPackages = with pkgs; [
+    netdataCloud
+    git
+  ];
 }

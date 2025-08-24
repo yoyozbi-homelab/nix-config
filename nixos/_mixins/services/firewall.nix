@@ -48,8 +48,8 @@ let
   };
   lan-mouse = {
     hosts = [
-    "laptop-nix"
-    "surface-nix"
+      "laptop-nix"
+      "surface-nix"
     ];
 
     tcpPortRanges = [
@@ -77,7 +77,8 @@ in
         ++ lib.optionals (builtins.elem hostname kdeconnect.hosts) kdeconnect.tcpPortRanges
         ++ lib.optionals (builtins.elem hostname mqtt.hosts) mqtt.tcpPortRanges
         ++ lib.optionals (builtins.elem hostname lan-mouse.hosts) lan-mouse.tcpPortRanges;
-      allowedUDPPortRanges = lib.optionals (builtins.elem hostname kdeconnect.hosts) kdeconnect.udpPortRanges
+      allowedUDPPortRanges =
+        lib.optionals (builtins.elem hostname kdeconnect.hosts) kdeconnect.udpPortRanges
         ++ lib.optionals (builtins.elem hostname lan-mouse.hosts) lan-mouse.udpPortRanges;
     };
   };

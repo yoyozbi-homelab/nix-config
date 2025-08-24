@@ -92,7 +92,7 @@ let
       bruno
       unstable.zed-editor
       python313
-      
+
       # Other
       structorizer
       vlc
@@ -174,23 +174,22 @@ in
     description = "Yohan Zbinden";
     isNormalUser = true;
     group = "yohan";
-    extraGroups =
-      [
-        "audio"
-        "input"
-        "networkmanager"
-        "kvm"
-        "libvirtd"
-        "users"
-        "video"
-        "wheel"
-      ]
-      ++ ifExists [
-        "docker"
-        "lxd"
-        "podman"
-        "vboxusers"
-      ];
+    extraGroups = [
+      "audio"
+      "input"
+      "networkmanager"
+      "kvm"
+      "libvirtd"
+      "users"
+      "video"
+      "wheel"
+    ]
+    ++ ifExists [
+      "docker"
+      "lxd"
+      "podman"
+      "vboxusers"
+    ];
     # mkpasswd -m sha-512
     hashedPassword = "$6$a.nRdlFB3YPvVgjX$iWBzmkH0zK/3n/yyEl2Fuwp1G4ayzr5zG0Un7z4hCvWoKctMZirMKWMcwPBgqRylhgnI.gKLhg5xvwqRuipqZ.";
     openssh.authorizedKeys.keys = [
