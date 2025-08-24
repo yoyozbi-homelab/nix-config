@@ -13,6 +13,7 @@ in
       enable = true;
     };
   };
+
   home = {
     file = {
       "${config.xdg.configHome}/yazi/keymap.toml".text = builtins.readFile ./yazi-keymap.toml;
@@ -224,7 +225,7 @@ in
           "git"
           "thefuck"
         ];
-        theme = "robbyrussell";
+        theme = "eastwood";
       };
     };
 
@@ -281,10 +282,16 @@ in
         };
       };
     };
+
     neovim = {
       enable = true;
       defaultEditor = true;
       package = pkgs.unstable.neovim-unwrapped;
+    };
+
+    zoxide = {
+      enable = true;
+      enableZshIntegration = true;
     };
 
     tmux = {

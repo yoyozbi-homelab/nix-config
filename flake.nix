@@ -40,7 +40,7 @@
       system = "x86_64-linux";
 
       # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-      stateVersion = "23.11";
+      stateVersion = "25.05";
       libx = import ./lib { inherit inputs outputs stateVersion; };
     in
     {

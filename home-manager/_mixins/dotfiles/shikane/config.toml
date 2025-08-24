@@ -21,7 +21,7 @@ transform = "270"
 [[profile.output]]
 search = "n=eDP-1"
 exec = ["echo This is output $SHIKANE_OUTPUT_NAME"]
-enable = false
+enable = true
 mode = { width = 1920, height = 1200, refresh = 60 }
 position = { x = 1080, y = 1440 }
 scale = 1
