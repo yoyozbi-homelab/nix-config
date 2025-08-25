@@ -2,7 +2,7 @@
 {
   imports = [
     ../../../console
-    ../../../desktop/hyprland.nix
+    ../../../desktop/hyprland/default.nix
     ../../../services/darktable-lua-scripts.nix
   ];
 }
