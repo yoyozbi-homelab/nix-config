@@ -4,6 +4,20 @@
     ./waybar.nix
   ];
 
+  xdg = {
+    enable = true;
+    mime = {
+      enable = true;
+    };
+    mimeApps = {
+      enable = true;
+
+      defaultApplications = {
+        "image/png" = "org.kde.gwenview.desktop";
+      };
+    };
+  };
+
   home = {
     file = {
       "${config.xdg.configHome}/hypr" = {
