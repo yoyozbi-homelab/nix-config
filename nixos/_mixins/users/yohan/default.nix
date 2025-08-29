@@ -50,6 +50,7 @@ let
       # Productivity
       superProductivity
       unstable.affine
+      gnome-network-displays
 
       # Dotnet
       dotnet-sdk_9
@@ -98,7 +99,7 @@ let
       vlc
 
       # Photos
-      #unstable.darktable #TODO: Re-add when https://github.com/NixOS/nixpkgs/issues/429268 is closed
+      unstable.darktable
       hugin
       digikam
       exiftool
