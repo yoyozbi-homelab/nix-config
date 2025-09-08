@@ -33,7 +33,7 @@ let
       unstable.syncthingtray
       unstable.syncthing
       unstable.rnote
-      inputs.lan-mouse.packages.${pkgs.stdenv.hostPlatform.system}.default
+      inputs.lan-mouse.packages.${system}.default
 
       #troubleshooting disks
       gparted
@@ -43,7 +43,7 @@ let
 
       # Other
       unstable.obsidian
-      firefox-wayland
+      inputs.zen-browser.packages.${system}.beta
       xournalpp
     ]
     ++ lib.optionals (desktop != null && hostname == "laptop-nix") [
