@@ -42,7 +42,7 @@ let
       samba
 
       # Other
-      obsidian
+      unstable.obsidian
       firefox-wayland
       xournalpp
     ]
@@ -99,8 +99,8 @@ let
       vlc
 
       # Photos
-      unstable.darktable
-      hugin
+      #unstable.darktable
+      #hugin
       digikam
       exiftool
       gimp

@@ -34,7 +34,6 @@ let
     hypridle
     hyprlock
     kitty
-    ghostty
   ];
 in
 {

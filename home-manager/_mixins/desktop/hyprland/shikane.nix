@@ -1,5 +1,5 @@
 {...}: {
-  programs.shikane = {
+  services.shikane = {
     enable = true;
     settings = {
       profile = [
@@ -39,7 +39,7 @@
               enable = true;
               mode = { width = 1920; height = 1200; refresh = 60; };
               position = { x = 0; y = 0; };
-              scale = 1.2;
+              scale = 1;
             }
           ];
         }
