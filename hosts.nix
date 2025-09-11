@@ -203,6 +203,11 @@ in
           enabled = true;
           dashboardUrl = "traefik-rp.yohanzbinden.ch";
         };
+
+        argocd = {
+          enabled = true;
+          dashboardUrl = "argo-rp.yohanzbinden.ch";
+        };
       };
     };
   };
