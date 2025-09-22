@@ -66,6 +66,16 @@ let
       openssl.dev
       jetbrains.rust-rover
 
+      # Java
+      jdk24
+      jetbrains.idea-ultimate
+      unstable.android-studio
+      imagej
+      turbovnc
+      unityhub
+
+      unstable.flutter 
+
       # Go
       go
       gopls
@@ -91,6 +101,7 @@ let
 
       # Dev
       bruno
+      beekeeper-studio
       unstable.zed-editor
       python313
 
@@ -99,8 +110,8 @@ let
       vlc
 
       # Photos
-      #unstable.darktable
-      #hugin
+      unstable.darktable
+      hugin
       digikam
       exiftool
       gimp
@@ -146,6 +157,7 @@ in
   environment.systemPackages = stable-packages;
 
   nixpkgs.config.permittedInsecurePackages = [
+    "beekeeper-studio-5.1.5"
   ];
 
   programs.zsh.enable = true;

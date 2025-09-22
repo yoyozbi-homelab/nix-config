@@ -50,6 +50,7 @@ in
         ruff
         php82Packages.php-codesniffer
         php82Extensions.xdebug
+        intelephense
         php82Extensions.pcov
         bun
         master.neovide

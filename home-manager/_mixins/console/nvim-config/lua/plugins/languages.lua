@@ -14,6 +14,7 @@ return {
     opts = {
       ensure_installed = {
         "tinymist",
+        "laravel-ls",
       },
     },
   },
@@ -22,11 +23,21 @@ return {
     opts = {
       ensure_installed = {
         "typst",
+        "php",
+        "blade",
       },
     },
   },
-
-  -- Deno
+  {
+    "nvimtools/none-ls.nvim",
+    optional = true,
+    opts = function(_, opts)
+      local nls = require("null-ls")
+      opts.sources = opts.sources or {}
+      table.insert(opts.sources, nls.builtins.formatting.phpcsfixer)
+      table.insert(opts.sources, nls.builtins.diagnostics.phpcs)
+    end,
+  },
   {
     "neovim/nvim-lspconfig",
     ---@class PluginLspOpts
@@ -40,6 +51,9 @@ return {
             exportPdf = "never",
             semanticTokens = "disable",
           },
+        },
+        intelephense = {
+          enabled = true,
         },
       },
     },
@@ -56,8 +70,18 @@ return {
     }, -- lazy.nvim will implicitly calls `setup {}`
   },
 
+  -- Flutter
+  {
+    "nvim-flutter/flutter-tools.nvim",
+    lazy = false,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "stevearc/dressing.nvim", -- optional for vim.ui.select
+    },
+    config = true,
+  },
+
   -- Other programing language
-  { import = "lazyvim.plugins.extras.lang.php" },
   { import = "lazyvim.plugins.extras.lang.go" },
   { import = "lazyvim.plugins.extras.lang.nix" },
   { import = "lazyvim.plugins.extras.lang.python" },
