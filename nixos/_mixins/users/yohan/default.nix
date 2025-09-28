@@ -74,8 +74,6 @@ let
       turbovnc
       unityhub
 
-      unstable.flutter 
-
       # Go
       go
       gopls
