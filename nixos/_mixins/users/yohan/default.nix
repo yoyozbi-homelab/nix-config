@@ -49,7 +49,6 @@ let
     ++ lib.optionals (desktop != null && hostname == "laptop-nix") [
       # Productivity
       superProductivity
-      unstable.affine
       gnome-network-displays
 
       # Dotnet

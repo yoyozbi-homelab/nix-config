@@ -5,117 +5,117 @@
       enable = true;
       settings = {
         mainBar = {
-        layer = "top";
-        position = "top";
-        mod = "dock";
-        height = 50;
-        modules-left = [
-          "clock"
-          "hyprland/workspaces"
-        ];
-        modules-center = [
-          "hyprland/window"
-        ];
-        modules-right = [
-          "network"
-          "bluetooth"
-          "battery"
-          "cpu"
-          "memory"
-          "pulseaudio"
-          "tray"
-        ];
-        "hyprland/window" = {
-          format = { };
-        };
-        "hyprland/workspaces" = {
-          disable-scroll = true;
-          all-outputs = true;
-          sort-by-number = true;
-          on-click = "activate";
-        };
-        tray = {
-          icon-size = 18;
-          spacing = 10;
-        };
-        clock = {
-          format = " {:%I:%M %p   %a, %b %e}";
-          tooltip-format = "<big>%{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
-        };
-        battery = {
-          states = {
-            good = 95;
-            warning = 30;
-            critical = 20;
-          };
-          format = "{icon} {capacity}%";
-          format-charging = " {capacity}%";
-          format-plugged = " {capacity}%";
-          format-alt = "{time} {icon}";
-          format-icons = [
-            "󰂎"
-            "󰁺"
-            "󰁻"
-            "󰁼"
-            "󰁽"
-            "󰁾"
-            "󰁿"
-            "󰂀"
-            "󰂁"
-            "󰂂"
-            "󰁹"
+          layer = "top";
+          position = "top";
+          mod = "dock";
+          height = 50;
+          modules-left = [
+            "clock"
+            "hyprland/workspaces"
           ];
-        };
-        pulseaudio = {
-          format = "{icon} {volume}%";
-          tooltip = false;
-          format-muted = " Muted";
-          #"on-click": "pamixer -t",
-          on-click = "kitty --class floating -e pulsemixer";
-          on-scroll-up = "pamixer -i 5";
-          on-scroll-down = "pamixer -d 5";
-          scroll-step = 5;
-          format-icons = {
-            headphone = "";
-            hands-free = "";
-            headset = "";
-            phone = "";
-            portable = "";
-            car = "";
-            default = [
-              ""
-              ""
-              ""
+          modules-center = [
+            "hyprland/window"
+          ];
+          modules-right = [
+            "network"
+            "bluetooth"
+            "battery"
+            "cpu"
+            "memory"
+            "pulseaudio"
+            "tray"
+          ];
+          "hyprland/window" = {
+            format = { };
+          };
+          "hyprland/workspaces" = {
+            disable-scroll = true;
+            all-outputs = true;
+            sort-by-number = true;
+            on-click = "activate";
+          };
+          tray = {
+            icon-size = 18;
+            spacing = 10;
+          };
+          clock = {
+            format = " {:%I:%M %p   %a, %b %e}";
+            tooltip-format = "<big>%{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+          };
+          battery = {
+            states = {
+              good = 95;
+              warning = 30;
+              critical = 20;
+            };
+            format = "{icon} {capacity}%";
+            format-charging = " {capacity}%";
+            format-plugged = " {capacity}%";
+            format-alt = "{time} {icon}";
+            format-icons = [
+              "󰂎"
+              "󰁺"
+              "󰁻"
+              "󰁼"
+              "󰁽"
+              "󰁾"
+              "󰁿"
+              "󰂀"
+              "󰂁"
+              "󰂂"
+              "󰁹"
             ];
           };
-        };
-        cpu = {
-          format = "  {usage} %";
-          tooltip-format = "{icon}: {avg_frequency}";
-        };
-        memory = {
-          format = "RAM: {percentage} %";
-          tooltip-format = "{used:0.1f}GiB used \n {avail:0.1f}GiB left";
-        };
-        network = {
-          # interface = "wlp2*"; // (Optional) To force the use of this interface
-          format-wifi = "  {signalStrength}%";
-          format-ethernet = "󰈀  {bandwidthTotalOctets}";
-          tooltip-format = "{essid} - {ipaddr}/{cidr} - {ifname} via {gwaddr}";
-          format-linked = "{ifname} (No IP)";
-          format-disconnected = "Disconnected ⚠";
-          # format-alt = "{ifname}:{essid} {ipaddr}/{cidr}";
-          on-click = "kitty --class floating -e nmtui";
-        };
-        bluetooth = {
-          format = " {status}";
-          format-disabled = ""; # an empty format will hide the module
-          format-connected = " {num_connections}";
-          tooltip-format = "{device_alias}";
-          tooltip-format-connected = " {device_enumerate}";
-          tooltip-format-enumerate-connected = "{device_alias}";
-          on-click = "kitty --class floating -e bluetuith";
-        };
+          pulseaudio = {
+            format = "{icon} {volume}%";
+            tooltip = false;
+            format-muted = " Muted";
+            #"on-click": "pamixer -t",
+            on-click = "kitty --class floating -e pulsemixer";
+            on-scroll-up = "pamixer -i 5";
+            on-scroll-down = "pamixer -d 5";
+            scroll-step = 5;
+            format-icons = {
+              headphone = "";
+              hands-free = "";
+              headset = "";
+              phone = "";
+              portable = "";
+              car = "";
+              default = [
+                ""
+                ""
+                ""
+              ];
+            };
+          };
+          cpu = {
+            format = "  {usage} %";
+            tooltip-format = "{icon}: {avg_frequency}";
+          };
+          memory = {
+            format = "RAM: {percentage} %";
+            tooltip-format = "{used:0.1f}GiB used \n {avail:0.1f}GiB left";
+          };
+          network = {
+            # interface = "wlp2*"; // (Optional) To force the use of this interface
+            format-wifi = "  {signalStrength}%";
+            format-ethernet = "󰈀  {bandwidthTotalOctets}";
+            tooltip-format = "{essid} - {ipaddr}/{cidr} - {ifname} via {gwaddr}";
+            format-linked = "{ifname} (No IP)";
+            format-disconnected = "Disconnected ⚠";
+            # format-alt = "{ifname}:{essid} {ipaddr}/{cidr}";
+            on-click = "kitty --class floating -e nmtui";
+          };
+          bluetooth = {
+            format = " {status}";
+            format-disabled = ""; # an empty format will hide the module
+            format-connected = " {num_connections}";
+            tooltip-format = "{device_alias}";
+            tooltip-format-connected = " {device_enumerate}";
+            tooltip-format-enumerate-connected = "{device_alias}";
+            on-click = "kitty --class floating -e bluetuith";
+          };
         };
       };
 

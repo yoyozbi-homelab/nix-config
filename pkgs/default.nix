@@ -11,6 +11,5 @@
   superProductivity = pkgs.callPackage ./superProductivity.nix { };
   devToys = pkgs.callPackage ./devToys.nix { };
   appflowy = pkgs.callPackage ./appflowy.nix { };
-  affine = pkgs.callPackage ./affine.nix { };
   #zed-editor = pkgs.callPackage ./zed-editor { };
 }
