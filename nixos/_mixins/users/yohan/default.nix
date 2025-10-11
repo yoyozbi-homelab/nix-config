@@ -43,6 +43,7 @@ let
 
       # Other
       unstable.obsidian
+      unstable.ungoogled-chromium
       inputs.zen-browser.packages.${system}.beta
       xournalpp
     ]

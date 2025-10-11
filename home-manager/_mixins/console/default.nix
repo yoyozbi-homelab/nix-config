@@ -44,6 +44,7 @@ in
         luarocks
 
         # lsp
+        unstable.biome
         tree-sitter
         eslint_d
         stylua
@@ -117,7 +118,7 @@ in
         wormhole-william # Terminal file transfer
         yq-go # Terminal `jq` for YAML
 
-        nodejs_20
+        nodejs_24
       ]
       ++ lib.optionals isLinux [
         figlet # Terminal ASCII banners
