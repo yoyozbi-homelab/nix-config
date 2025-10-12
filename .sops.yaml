@@ -3,7 +3,7 @@ keys:
   - &ocr1 age1r46e0k2t89dpqf93vqerkatq9jevl8pj2lhv7d06axw5q3svs53sgy2da8
   - &tiny1 age1xrwyye8j3ha5amfppy6jfszusrkge0aly8qe6gwn9sezr5ec7gmqklvx0e
   - &tiny2 age1pl8fux4vzurj4l8hmtwqeeuzn5x5jmf6s6paekueawr760vyv94s8d0j4e
-  - &rp age17ywcr7kkevqtmpgacj6mff7suqh570fglngz0x0c7l8lajr3gchq5yn29v
+  - &rp age1a6ssujp7yhqaxgehhana5f463axh3ksmytv7qa3y43z7wl28y3esv47mm6
 creation_rules:
   - path_regex: secrets.yml$
     key_groups:
