@@ -70,6 +70,7 @@ let
       jdk24
       jetbrains.idea-ultimate
       unstable.android-studio
+      gradle
       imagej
       turbovnc
       unityhub
