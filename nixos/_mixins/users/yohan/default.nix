@@ -51,6 +51,7 @@ let
       # Productivity
       superProductivity
       gnome-network-displays
+      claude-code
 
       # Dotnet
       dotnet-sdk_9
@@ -80,6 +81,7 @@ let
       gopls
 
       # C/C++
+      jetbrains.clion
       mesa # Opengl
       autoconf # vcpkg
       pkgconf
