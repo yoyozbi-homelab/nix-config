@@ -69,6 +69,39 @@
             }
           ];
         }
+        {
+          name = "NE310";
+          output = [
+            {
+              search = "m=DELL P2422H";
+              enable = true;
+              mode = {
+                width = 1920;
+                height = 1080;
+                refresh = 60;
+              };
+              position = {
+                x = 0;
+                y = 0;
+              };
+              scale = 1;
+            }
+            {
+              search = "n=eDP-1";
+              enable = true;
+              mode = {
+                width = 1920;
+                height = 1200;
+                refresh = 60;
+              };
+              position = {
+                x = 0;
+                y = 1080;
+              };
+              scale = 1.25;
+            }
+          ];
+        }
       ];
     };
   };

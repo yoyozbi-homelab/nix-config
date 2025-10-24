@@ -14,7 +14,7 @@
 
 buildNpmPackage rec {
   pname = "super-productivity";
-  version = "15.0.0";
+  version = "16.0.0";
 
   src = fetchFromGitHub {
     owner = "johannesjo";
