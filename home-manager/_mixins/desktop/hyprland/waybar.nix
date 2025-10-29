@@ -1,5 +1,12 @@
-{ ... }:
+{ pkgs,... }:
 {
+  home.packages = with pkgs; [
+    pamixer
+    pulsemixer
+    bluetuith
+    kitty
+  ];
+
   programs = {
     waybar = {
       enable = true;

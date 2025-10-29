@@ -6,34 +6,18 @@
 }:
 let
   stable-packages = with pkgs; [
-    shikane
-    wofi
-    wlogout
-    sway-audio-idle-inhibit
-    swaybg
     darkman
-    pulsemixer
-    bluetuith
-    dunst
-    pamixer
     python311
     python311Packages.requests
-    grim
-    slurp
-    swappy
-    networkmanagerapplet
     seahorse
     libsForQt5.polkit-kde-agent
     imagemagick_light
-    kdePackages.xwaylandvideobridge
     brightnessctl
+    kdePackages.kwallet
+    kdePackages.kwalletmanager
   ];
 
   unstable-packages = with pkgs.unstable; [
-    cliphist
-    hypridle
-    hyprlock
-    kitty
   ];
 in
 {
@@ -64,8 +48,8 @@ in
       };
     };
     gvfs.enable = true;
-    gnome = {
-      gnome-keyring.enable = true;
+    kde = {
+      kwallet.enable = true;
     };
   };
 

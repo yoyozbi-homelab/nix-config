@@ -1,7 +1,12 @@
 { config, ... }:
 {
   imports = [
+    ./hyprland.nix
+    ./hypridle.nix
+    ./hyprlock.nix
     ./waybar.nix
+    ./wofi.nix
+    ./wlogout.nix
     ./ghostty.nix
     ./shikane.nix
   ];
@@ -22,15 +27,6 @@
 
   home = {
     file = {
-      "${config.xdg.configHome}/hypr" = {
-        source = ../../dotfiles/hypr;
-      };
-      "${config.xdg.configHome}/wlogout" = {
-        source = ../../dotfiles/wlogout;
-      };
-      "${config.xdg.configHome}/wofi" = {
-        source = ../../dotfiles/wofi;
-      };
       "${config.home.homeDirectory}/.icons/Nordzy-hyprcursors" = {
         source = ../../cursor-theme/Nordzy-hyprcursors;
       };
