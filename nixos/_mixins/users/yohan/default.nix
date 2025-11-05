@@ -69,7 +69,7 @@ let
 
       # Java
       jdk24
-      jetbrains.idea-ultimate
+      unstable.jetbrains.idea-ultimate
       unstable.android-studio
       gradle
       imagej

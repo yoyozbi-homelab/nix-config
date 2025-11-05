@@ -48,9 +48,6 @@ in
       };
     };
     gvfs.enable = true;
-    kde = {
-      kwallet.enable = true;
-    };
   };
 
   xdg.portal = {
