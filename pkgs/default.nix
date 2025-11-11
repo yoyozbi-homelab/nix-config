@@ -7,9 +7,8 @@
   #distrobox = pkgs.callPackage ./distrobox.nix { };
   kDrive = pkgs.callPackage ./kDrive { };
   sddm-themes = pkgs.callPackage ./sddm-themes.nix { };
-  eclipse202306 = pkgs.callPackage ./eclipse-202306 { };
+  eclipse202406 = pkgs.callPackage ./eclipse-202406 { };
   superProductivity = pkgs.callPackage ./superProductivity.nix { };
   devToys = pkgs.callPackage ./devToys.nix { };
   appflowy = pkgs.callPackage ./appflowy.nix { };
-  #zed-editor = pkgs.callPackage ./zed-editor { };
 }

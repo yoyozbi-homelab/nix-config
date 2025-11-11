@@ -1,6 +1,6 @@
 { pkgs, ... }:
 {
   home.packages = [
-    pkgs.eclipse202306.eclipse-java
+    pkgs.eclipse202406.eclipse-java
   ];
 }

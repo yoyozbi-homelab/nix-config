@@ -124,7 +124,6 @@ let
       handbrake
       #kDrive
 
-      rpi-imager
       android-tools
 
       #Music/Video

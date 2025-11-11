@@ -138,6 +138,40 @@
             }
           ];
         }
+        {
+          name = "BIBLIO";
+          output = [
+            {
+              search = "m=HP E24i G4";
+              enable = true;
+              mode = {
+                width = 1920;
+                height = 1200;
+                refresh = 59.95;
+              };
+              position = {
+                x = 0;
+                y = 0;
+              };
+              scale = 1;
+            }
+            {
+              search = "n=eDP-1";
+              enable = true;
+              mode = {
+                width = 1920;
+                height = 1200;
+                refresh = 60;
+              };
+              position = {
+                x = 0;
+                y = 1200;
+              };
+              scale = 1;
+            }
+
+          ];
+        }
       ];
     };
   };
