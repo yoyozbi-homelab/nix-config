@@ -18,6 +18,7 @@
     ../_mixins/services/netdata.nix
     ../_mixins/k3s/ocr-cluster.nix
     ../_mixins/k3s/agent.nix
+    ../_mixins/services/tmux.nix
   ];
 
   boot = {
