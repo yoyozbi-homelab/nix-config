@@ -15,7 +15,7 @@
     ../_mixins/services/netdata.nix
     ../_mixins/k3s/ocr-cluster.nix
     ../_mixins/k3s/server.nix
-    ../_mixins/services/thunderbolt.nix
+    ../_mixins/services/tmux.nix
   ];
 
   boot.initrd.availableKernelModules = [
