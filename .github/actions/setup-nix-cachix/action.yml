@@ -18,7 +18,7 @@ runs:
         extra_nix_config: |
           auto-allocate-uids = true
           configurable-impure-env = true
-    - uses: cachix/cachix-action@v14
+    - uses: cachix/cachix-action@v16
       with:
         name: ${{ inputs.cacheName }}
         authToken: ${{ inputs.cachixAuthToken }}
