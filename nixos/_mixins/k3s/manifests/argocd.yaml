@@ -25,6 +25,47 @@ spec:
     repoServer:
       replicas: 1
 
+      # KSOPS/SOPS environment configuration
+      env:
+        - name: XDG_CONFIG_HOME
+          value: /.config
+        - name: SOPS_AGE_KEY_FILE
+          value: /.config/sops/age/keys.txt
+
+      # Volumes for KSOPS tools and age key
+      volumes:
+        - name: custom-tools
+          emptyDir: {}
+        - name: sops-age
+          secret:
+            secretName: sops-age
+
+      # Init container to install KSOPS binaries
+      initContainers:
+        - name: install-ksops
+          image: viaductoss/ksops:v4.4.0
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Installing KSOPS...";
+              cp /usr/local/bin/ksops /custom-tools/;
+              cp /usr/local/bin/kustomize /custom-tools/;
+              echo "Done.";
+          volumeMounts:
+            - mountPath: /custom-tools
+              name: custom-tools
+
+      # Mount KSOPS tools and age key
+      volumeMounts:
+        - mountPath: /usr/local/bin/kustomize
+          name: custom-tools
+          subPath: kustomize
+        - mountPath: /usr/local/bin/ksops
+          name: custom-tools
+          subPath: ksops
+        - mountPath: /.config/sops/age
+          name: sops-age
+
     applicationSet:
       replicas: 1
     configs:
@@ -33,6 +74,8 @@ spec:
       cm:
         create: true
         accounts.readonly: apiKey
+        # Enable kustomize alpha plugins for KSOPS
+        kustomize.buildOptions: "--enable-alpha-plugins --enable-exec"
       rbac:
         create: true
         policy.csv: |

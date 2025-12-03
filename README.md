@@ -40,6 +40,23 @@ nix-shell -p sops --run "sops updatekeys nixos/_mixins/k3s/ocr-secrets.yml"
 
  5. Updates hosts in `hosts.nix`
 
+ 6. If the host is a k3s master with argocd:
+ ```bash
+# Create argocd namespace if it doesn't exist
+kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
+
+# Convert SSH host key to age private key
+nix-shell -p ssh-to-age --run 'ssh-to-age -private-key -i /root/.ssh/ssh_host_ed25519_key' > age.key
+
+# Create the secret
+kubectl create secret generic sops-age \
+  --namespace=argocd \
+  --from-file=keys.txt=age.key
+
+# Clean up the temporary file
+rm age.key
+ ```
+
  6. If the host has  `netdata` run the following command to enroll the node
 
 ```bash
