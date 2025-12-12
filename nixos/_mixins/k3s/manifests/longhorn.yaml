@@ -11,7 +11,7 @@ spec:
   repo: https://charts.longhorn.io
   targetNamespace: longhorn-system
   chart: longhorn
-  version: 1.9.0
+  version: 1.10.0
   valuesContent: |-
     defaultSettings:
       defaultReplicaCount: 1
