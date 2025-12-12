@@ -22,8 +22,6 @@ let
       vim
       comma
       graphviz
-      #inputs.tide.packages.x86_64-linux.tide
-
     ]
     ++ lib.optionals (desktop != null) [
       appimage-run
@@ -33,7 +31,6 @@ let
       unstable.syncthingtray
       unstable.syncthing
       unstable.rnote
-      #inputs.lan-mouse.packages.${system}.default
 
       #troubleshooting disks
       gparted

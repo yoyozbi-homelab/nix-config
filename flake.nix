@@ -1,13 +1,12 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
     lanzaboote.url = "github:nix-community/lanzaboote";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     cachix-deploy.url = "github:cachix/cachix-deploy-flake";
     deploy-rs.url = "github:serokell/deploy-rs";
-    lan-mouse.url = "github:feschber/lan-mouse";
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
 
     disko = {
