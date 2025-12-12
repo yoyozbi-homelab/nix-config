@@ -45,6 +45,7 @@ in
       "--node-external-ip=${currentHost.externalIp}"
       "--node-ip=${currentHost.internalIp}"
       "--advertise-address=${currentHost.internalIp}"
+      "--tls-san=${currentHost.externalIp}"
     ];
     tokenFile = config.sops.secrets.k3s-server-token.path;
     clusterInit = true;
