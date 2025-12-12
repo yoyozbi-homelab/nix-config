@@ -11,7 +11,7 @@ spec:
   repo: https://argoproj.github.io/argo-helm
   targetNamespace: argocd
   chart: argo-cd
-  version: 8.0.14
+  version: 9.1.7
   valuesContent: |-
     redis-ha:
       enabled: false
