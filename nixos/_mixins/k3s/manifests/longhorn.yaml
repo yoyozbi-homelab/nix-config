@@ -10,8 +10,9 @@ metadata:
 spec:
   repo: https://charts.longhorn.io
   targetNamespace: longhorn-system
+  failurePolicy: abort
   chart: longhorn
-  version: 1.10.0
+  version: 1.10.1
   valuesContent: |-
     defaultSettings:
       defaultReplicaCount: '{"v1": "1", "v2": "1"}'
