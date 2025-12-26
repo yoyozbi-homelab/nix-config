@@ -8,6 +8,7 @@
     cachix-deploy.url = "github:cachix/cachix-deploy-flake";
     deploy-rs.url = "github:serokell/deploy-rs";
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    flake-utils.url = "github:numtide/flake-utils";
 
     disko = {
       url = "github:nix-community/disko";
@@ -33,17 +34,46 @@
       self,
       nixpkgs,
       deploy-rs,
+      cachix-deploy,
+      flake-utils,
       ...
     }@inputs:
     let
       inherit (self) outputs;
-      system = "x86_64-linux";
-
+      
       # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
       stateVersion = "25.05";
       libx = import ./lib { inherit inputs outputs stateVersion; };
+      
+      # Define all hosts in one place
+      allHosts = {
+        laptop-nix = { username = "yohan"; desktop = "kde"; };
+        surface-nix = { username = "yohan"; desktop = "gnome"; };
+        ocr1 = { username = "nix"; };
+        tiny1 = { username = "nix"; };
+        tiny2 = { username = "nix"; };
+        rp = { username = "nix"; };
+      };
+      
+      # Filter server hosts (those without desktop)
+      serverHosts = builtins.filterAttrs (name: cfg: cfg.desktop == null) allHosts;
     in
-    {
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+        cachix-deploy-lib = cachix-deploy.lib pkgs;
+      in
+      {
+        defaultPackage = cachix-deploy-lib.spec {
+          agents = builtins.mapAttrs (hostname: cfg:
+            (libx.mkHost {
+              inherit hostname;
+              inherit (cfg) username;
+            }).config.system.build.toplevel
+          ) serverHosts;
+        };
+      }
+    ) // {
       homeConfigurations = {
         "yohan@laptop-nix" = libx.mkHome {
           hostname = "laptop-nix";
@@ -56,51 +86,14 @@
           desktop = "gnome";
         };
       };
-      nixosConfigurations = {
-        "laptop-nix" = libx.mkHost {
-          hostname = "laptop-nix";
-          username = "yohan";
-          desktop = "kde";
-        };
-        "surface-nix" = libx.mkHost {
-          hostname = "surface-nix";
-          username = "yohan";
-          desktop = "gnome";
-        };
-        "tiny1" = libx.mkHost {
-          hostname = "tiny1";
-          username = "nix";
-        };
-        "tiny2" = libx.mkHost {
-          hostname = "tiny2";
-          username = "nix";
-        };
-        "ocr1" = libx.mkHost {
-          hostname = "ocr1";
-          username = "nix";
-        };
-        "rp" = libx.mkHost {
-          hostname = "rp";
-          username = "nix";
-        };
-      };
-
-      packages.${system} = {
-        hosts = {
-          tiny1 = self.nixosConfigurations."tiny1".config.system.build.toplevel;
-          tiny2 = self.nixosConfigurations."tiny2".config.system.build.toplevel;
-          rp = self.nixosConfigurations."rp".config.system.build.toplevel;
-          surface-nix = self.nixosConfigurations."surface-nix".config.system.build.toplevel;
-        };
-
-      };
-
-      packages.aarch64-linux = {
-        hosts = {
-          ocr1 = self.nixosConfigurations."ocr1".config.system.build.toplevel;
-          rp = self.nixosConfigurations."rp".config.system.build.toplevel;
-        };
-      };
+      
+      nixosConfigurations = builtins.mapAttrs (hostname: cfg:
+        libx.mkHost {
+          inherit hostname;
+          inherit (cfg) username;
+          desktop = cfg.desktop or null;
+        }
+      ) allHosts;
 
       deploy.nodes = {
         surface-nix = {
@@ -112,8 +105,6 @@
           };
         };
       };
-
-      formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
 
       overlays = import ./overlays { inherit inputs; };
     };
