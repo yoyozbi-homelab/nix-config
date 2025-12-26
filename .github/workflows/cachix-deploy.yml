@@ -47,7 +47,7 @@ jobs:
         env:
           CACHIX_ACTIVATE_TOKEN: ${{ secrets.CACHIX_ACTIVATE_TOKEN }}
         run: |
-          cachix deploy activate ${{ steps.build.outputs.spec }}
+          cachix deploy activate ${{ steps.build.outputs.spec }} --async
 
   build-aarch64:
     runs-on: blacksmith-8vcpu-ubuntu-2404-arm
@@ -82,4 +82,4 @@ jobs:
         env:
           CACHIX_ACTIVATE_TOKEN: ${{ secrets.CACHIX_ACTIVATE_TOKEN }}
         run: |
-          cachix deploy activate ${{ steps.build.outputs.spec }}
+          cachix deploy activate ${{ steps.build.outputs.spec }} --async
