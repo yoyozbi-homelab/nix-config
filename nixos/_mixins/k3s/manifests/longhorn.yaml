@@ -12,7 +12,6 @@ metadata:
   finalizers:
   - wrangler.cattle.io/on-helm-chart-remove
   generation: 2
-  name: longhorn-install
   namespace: default
 spec:
   repo: https://charts.longhorn.io
