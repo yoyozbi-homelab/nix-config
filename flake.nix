@@ -47,12 +47,12 @@
       
       # Define all hosts in one place
       allHosts = {
-        laptop-nix = { username = "yohan"; desktop = "kde"; };
-        surface-nix = { username = "yohan"; desktop = "gnome"; };
-        ocr1 = { username = "nix"; };
-        tiny1 = { username = "nix"; };
-        tiny2 = { username = "nix"; };
-        rp = { username = "nix"; };
+        laptop-nix = { username = "yohan"; desktop = "kde"; platform = "x86_64-linux"; };
+        surface-nix = { username = "yohan"; desktop = "gnome"; platform = "x86_64-linux"; };
+        ocr1 = { username = "nix"; platform = "aarch64-linux"; };
+        tiny1 = { username = "nix"; platform = "x86_64-linux"; };
+        tiny2 = { username = "nix"; platform = "x86_64-linux"; };
+        rp = { username = "nix"; platform = "aarch64-linux"; };
       };
       
       # Filter server hosts (those without desktop)
