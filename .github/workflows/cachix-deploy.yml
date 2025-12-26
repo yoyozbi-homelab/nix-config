@@ -1,0 +1,50 @@
+name: "Cachix Deploy"
+
+on: # yamllint disable-line rule:truthy
+  workflow_dispatch: # allows manual triggering
+  push:
+    branches:
+      - main
+
+env:
+  CACHE_NAME: homelab-yohan
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: blacksmith-8vcpu-ubuntu-2404
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: cachix/install-nix-action@v27
+
+      - uses: cachix/cachix-action@v14
+        with:
+          name: ${{ env.CACHE_NAME }}
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Build Cachix Deploy Spec
+        id: build
+        run: |
+          spec=$(nix build --print-out-paths .#defaultPackage.x86_64-linux)
+          echo "spec=$spec" >> $GITHUB_OUTPUT
+
+      - name: Push to Cachix
+        env:
+          CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+        run: |
+          cachix push ${{ env.CACHE_NAME }} ${{ steps.build.outputs.spec }}
+
+      - name: Deploy with Cachix
+        env:
+          CACHIX_ACTIVATE_TOKEN: ${{ secrets.CACHIX_ACTIVATE_TOKEN }}
+        run: |
+          cachix deploy activate ${{ steps.build.outputs.spec }}
