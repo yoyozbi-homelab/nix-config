@@ -62,6 +62,9 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         cachix-deploy-lib = cachix-deploy.lib pkgs;
+        
+        # Filter servers for this system only
+        serversForSystem = nixpkgs.lib.filterAttrs (name: cfg: cfg.platform == system) serverHosts;
       in
       {
         defaultPackage = cachix-deploy-lib.spec {
@@ -69,8 +72,9 @@
             "${(libx.mkHost {
               inherit hostname;
               inherit (cfg) username;
+              platform = cfg.platform;
             }).config.system.build.toplevel}"
-          ) serverHosts;
+          ) serversForSystem;
         };
       }
     ) // {
