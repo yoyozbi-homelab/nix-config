@@ -56,7 +56,7 @@
       };
       
       # Filter server hosts (those without desktop)
-      serverHosts = builtins.filterAttrs (name: cfg: cfg.desktop == null) allHosts;
+      serverHosts = nixpkgs.lib.filterAttrs (name: cfg: (cfg.desktop or null) == null) allHosts;
     in
     flake-utils.lib.eachDefaultSystem (system:
       let
@@ -66,10 +66,10 @@
       {
         defaultPackage = cachix-deploy-lib.spec {
           agents = builtins.mapAttrs (hostname: cfg:
-            (libx.mkHost {
+            "${(libx.mkHost {
               inherit hostname;
               inherit (cfg) username;
-            }).config.system.build.toplevel
+            }).config.system.build.toplevel}"
           ) serverHosts;
         };
       }
