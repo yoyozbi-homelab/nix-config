@@ -65,16 +65,19 @@
         
         # Filter servers for this system only
         serversForSystem = nixpkgs.lib.filterAttrs (name: cfg: cfg.platform == system) serverHosts;
+        
+        # Build agents for this system as derivation paths
+        agentPaths = builtins.mapAttrs (hostname: cfg:
+          (libx.mkHost {
+            inherit hostname;
+            inherit (cfg) username;
+            platform = cfg.platform;
+          }).config.system.build.toplevel
+        ) serversForSystem;
       in
       {
         defaultPackage = cachix-deploy-lib.spec {
-          agents = builtins.mapAttrs (hostname: cfg:
-            "${(libx.mkHost {
-              inherit hostname;
-              inherit (cfg) username;
-              platform = cfg.platform;
-            }).config.system.build.toplevel}"
-          ) serversForSystem;
+          agents = agentPaths;
         };
       }
     ) // {
