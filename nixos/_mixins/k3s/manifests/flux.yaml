@@ -73,7 +73,7 @@ spec:
   sync:
     kind: GitRepository
     url: "https://github.com/yoyozbi-homelab/k8s-config"
-    ref: "main"
+    ref: "refs/heads/main"
     path: "clusters/ocr1"
     pullSecret: "ghcr-auth"
 ---
