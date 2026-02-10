@@ -66,6 +66,7 @@ in
   environment.etc."argocd.yaml".text = argocd;
   environment.etc."longhorn.yaml".text = longhorn;
   environment.etc."portainer.yaml".text = portainer;
+  environment.etc."flux.yaml".text = flux;
 
   # Link the file to k3s manifest directory
   system.activationScripts.k3s.text = ''
@@ -90,6 +91,10 @@ in
 
     if [ -s /etc/portainer.yaml ]; then
     	ln -sf /etc/portainer.yaml /var/lib/rancher/k3s/server/manifests/portainer.yaml
+    fi
+
+    if [ -s /etc/flux.yaml ]; then
+    	ln -sf /etc/flux.yaml /var/lib/rancher/k3s/server/manifests/flux.yaml
     fi
   '';
 }
