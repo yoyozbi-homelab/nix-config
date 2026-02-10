@@ -35,6 +35,15 @@ let
       )
     else
       "";
+
+  flux =
+    if currentHost.flux != null && currentHost.flux.enabled then
+      builtins.replaceStrings [ "<HOSTNAME>" "<USERNAME>" "<PASSWORD>" ] [ currentHost.flux.dashboardUrl config.sops.secrets."github/username" config.sops.secrets."github/password"] (
+        builtins.readFile ./manifests/portainer.yaml
+      )
+    else
+      "";
+
 in
 {
   imports = [ ./. ];

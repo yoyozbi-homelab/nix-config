@@ -61,6 +61,22 @@ let
     };
   };
 
+  fluxOptions = lib.types.submodule {
+    options = {
+      enabled = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Enable flux-controller helm chart and configure flux 
+        '';
+      };
+      dashboardUrl = lib.mkOption {
+        type = lib.types.str;
+        default = "flux.${hostname}.local";
+      };
+    };
+  };
+
   portainerOptions = lib.types.submodule {
     options = {
       enabled = lib.mkOption {
@@ -130,6 +146,14 @@ let
       '';
     };
 
+    flux = mkOption {
+      type = types.nullOr fluxOptions;
+      default = null;
+      description = ''
+        flux config
+        '';
+    };
+
     longhorn = mkOption {
       type = types.nullOr longhornOptions;
       default = null;
@@ -164,6 +188,11 @@ in
         traefik-dashboard = {
           enabled = true;
           dashboardUrl = "traefik-ocr1.yohanzbinden.ch";
+        };
+
+        flux = {
+            enabled = true;
+            dashboardUrl = "flux.yohanzbinden.ch";
         };
 
         argocd = {

@@ -20,5 +20,7 @@ _: {
     "vikunja/user" = { };
     "vikunja/password" = { };
     "kDrive/api-key" = { };
+    "github/username" = { };
+    "github/password" = { };
   };
 }
