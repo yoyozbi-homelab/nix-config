@@ -78,15 +78,3 @@ spec:
     path: "clusters/ocr1"
     pullSecret: "ghcr-auth"
 ---
-# https://kubernetes.io/docs/concepts/configuration/secret/
-apiVersion: v1
-kind: Secret
-metadata:
-  name: ghcr-auth
-  namespace: flux-system
-type: kubernetes.io/basic-auth
-data:
-  username: <USERNAME>
-  password: <PASSWORD>
----
-
