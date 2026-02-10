@@ -1,5 +1,8 @@
 k3s-server-token: ENC[AES256_GCM,data:H5HEqpw5UfVIoLUe5WojP9sLybZsVk2wQa/RE9PZ,iv:XLQEdZH5um0UjwDfDp1hng0jmhF2l6gS1Xe0bu7FRF8=,tag:VWyYd6E2dj73ypzdr9bllw==,type:str]
 cloudflared-token: ENC[AES256_GCM,data:RKedK2IgZTyRyBs5w8kWb+VJNAX5eZnE8E9worFUFBlSpma6UW+Bxtwd4DantArsuHXjcTvClS48uJkhRnzD7VNFSI1Xg8Y5g5uUljpSZ8J2IAjzG2TX3A/mx/o52CG67pPeFlWNvZOT10K86N1T3gWu4qf5HocVTVuybYiAWuCeAbz0/YPo0Wfuxi3Aq9Y6WHs96mu/SATEaT9hkS33D1YyDn7fEkDnNG+ca0vmlNppIAYplNlGKQ==,iv:dM9XE5GW01pMj85E8mkkBZFGU44DIImadyctbDspP6s=,tag:s1grdN61x+GNNtDBg2mwCw==,type:str]
+github:
+    username: ""
+    password: ""
 sops:
     age:
         - recipient: age1lfpdcqsgcsa294c0kypu6ny5syavfp9ls3cj8mf06awrf7237pssazlfan
@@ -20,7 +23,7 @@ sops:
             cXo5UzRZTEJIcXYxalRPMHQ1ajJkTWsKa6zYTjiss6oX1yCoZTnJUJ9hqxwb8RjE
             gRk7osLM4FJEAzKgE495QpWugZvf1jrVva6aOeK1vxilnGw7LFGlWg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-05-07T16:27:20Z"
-    mac: ENC[AES256_GCM,data:6TflIhwqJZqMmlYRgBfmJivsZFen/znaSpFVAytuP/cVs2Ar5kT4rnYTBJaB7sNxGdKdMb1bbsOXyXQMn5pE0JfVIhD0zmkgeM543mtl82jGMZMcQQ1aKDCXGSUQrfMF7338gatrQkezSMixaSYaQNZHIZvRTRRrQg2UrfUj92o=,iv:yMJTrm1gkw5D0X/5f7AV9CRbqL1phKFoKo0ugStanXY=,tag:tGMXnO21X39JuEYjUa0sRw==,type:str]
+    lastmodified: "2026-02-10T16:22:11Z"
+    mac: ENC[AES256_GCM,data:dM3xxc3Dx9cELC+g9/Hc8cjdENmIwwsWO9tbQxP0ZCxbeIQXZmvVsGugONO6vyp4yC4BfKMnJz5g5RRpf6GGWIb84T/78x7/f2MJ61F/tkH5Q+wzvnhhnbpVXQngGbIj/d1qHX7cdPfrHfpVM0P/oSrOi9lOblf51UFlEN+QRms=,iv:rsqq0n0So2iUI949ughwd8SumKZrcIIE2xCSI/PHR+E=,tag:3tRJL98/C2flh3jRE/MLdA==,type:str]
     unencrypted_suffix: _unencrypted
-    version: 3.9.4
+    version: 3.11.0
