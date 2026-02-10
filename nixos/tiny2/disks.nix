@@ -1,6 +1,6 @@
 _: {
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/1835-FDD0";
+    device = "/dev/disk/by-uuid/9947-500A";
     fsType = "vfat";
   };
   fileSystems."/" = {
