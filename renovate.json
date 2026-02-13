@@ -24,7 +24,7 @@
         "nixos/_mixins/k3s/manifests/.+\\.ya?ml$"
       ],
       "matchStrings": [
-        "kind:\\s+HelmChart[\\s\\S]*?repo:\\s*(?<registryUrl>\\S+)[\\s\\S]*?chart:\\s*(?<depName>[\\w\\-]+)[\\s\\S]*?version:\\s*(?<currentValue>[\\d\\.]+)"
+        "kind: HelmChart.*?repo: (?<registryUrl>\\S+).*?chart: (?<depName>[\\w\\-]+).*?version: (?<currentValue>[\\d\\.]+)"
       ],
       "datasourceTemplate": "helm",
       "versioningTemplate": "semver"
@@ -36,7 +36,7 @@
         "nixos/_mixins/k3s/manifests/.+\\.ya?ml$"
       ],
       "matchStrings": [
-        "kind:\\s+HelmChart[\\s\\S]*?chart:\\s*oci://(?:\\S+/)*(?<depName>[\\w\\-]+)\\s*[\\s\\S]*?version:\\s*(?<currentValue>[\\d\\.]+)"
+        "kind: HelmChart.*?chart: oci://.*?/(?<depName>[\\w\\-]+)\\s*.*?version: (?<currentValue>[\\d\\.]+)"
       ],
       "datasourceTemplate": "oci",
       "versioningTemplate": "semver"
