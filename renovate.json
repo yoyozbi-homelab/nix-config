@@ -11,22 +11,31 @@
     "venv/**",
     "**/flake.lock"
   ],
-  "helm-values": {
-    "managerFilePatterns": [
-      "nixos/_mixins/k3s/manifests/.+\\.ya?ml$"
-    ]
-  },
   "kubernetes": {
     "managerFilePatterns": [
       "nixos/_mixins/k3s/manifests/.+\\.ya?ml$"
     ]
   },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update Rancher HelmChart versions",
+      "managerFilePatterns": [
+        "nixos/_mixins/k3s/manifests/.+\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "kind: HelmChart[\\s\\S]*?chart:\\s*(?<depName>[^\\s]+)\\s+[\\s\\S]*?version:\\s*(?<currentValue>[^\\s]+)"
+      ],
+      "datasourceTemplate": "helm",
+      "versioningTemplate": "semver"
+    }
+  ],
   "packageRules": [
     {
       "description": "Group Kubernetes and Helm Chart updates together",
       "matchManagers": [
         "kubernetes",
-        "helm-values"
+        "regex"
       ],
       "groupName": "Kubernetes and Helm Charts",
       "commitMessagePrefix": "chore(k8s): "
