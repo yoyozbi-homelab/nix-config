@@ -4,16 +4,23 @@
     "config:recommended",
     "schedule:weekly"
   ],
-  "enabledManagers": [
-    "github-actions",
-    "kubernetes",
-    "helm-values"
-  ],
+  "semanticCommits": "enabled",
   "ignorePaths": [
-    "**/node_modules/**",
-    "**/.git/**",
+    "node_modules/**",
+    ".venv/**",
+    "venv/**",
     "**/flake.lock"
   ],
+  "helm-values": {
+    "managerFilePatterns": [
+      "nixos/_mixins/k3s/manifests/.+\\.ya?ml$"
+    ]
+  },
+  "kubernetes": {
+    "managerFilePatterns": [
+      "nixos/_mixins/k3s/manifests/.+\\.ya?ml$"
+    ]
+  },
   "packageRules": [
     {
       "description": "Group Kubernetes and Helm Chart updates together",
@@ -30,6 +37,15 @@
         "github-actions"
       ],
       "commitMessagePrefix": "ci(actions): "
+    },
+    {
+      "description": "Automatically rebase non-major updates",
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "rebaseWhen": "behind-base-branch"
     }
   ]
 }
