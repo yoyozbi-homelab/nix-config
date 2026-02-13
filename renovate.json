@@ -21,7 +21,7 @@
       "customType": "regex",
       "description": "Update Rancher HelmChart versions (Helm repository)",
       "managerFilePatterns": [
-        "nixos/_mixins/k3s/manifests/.+\\.ya?ml$"
+        "nixos/_mixins/k3s/manifests/*.yaml"
       ],
       "matchStrings": [
         "kind: HelmChart.*?repo: (?<registryUrl>\\S+).*?chart: (?<depName>[\\w\\-]+).*?version: (?<currentValue>[\\d\\.]+)"
@@ -33,12 +33,12 @@
       "customType": "regex",
       "description": "Update Rancher HelmChart versions (OCI charts)",
       "managerFilePatterns": [
-        "nixos/_mixins/k3s/manifests/.+\\.ya?ml$"
+        "nixos/_mixins/k3s/manifests/*.yaml"
       ],
       "matchStrings": [
-        "kind: HelmChart.*?chart: oci://.*?/(?<depName>[\\w\\-]+)\\s*.*?version: (?<currentValue>[\\d\\.]+)"
+        "kind: HelmChart.*?chart: oci://(?<registryUrl>[^/\\s]+).*?(?<depName>[\\w\\-]+)\\s*.*?version: (?<currentValue>[\\d\\.]+)"
       ],
-      "datasourceTemplate": "oci",
+      "datasourceTemplate": "docker",
       "versioningTemplate": "semver"
     }
   ],
