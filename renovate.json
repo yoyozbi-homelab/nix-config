@@ -1,17 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    "schedule:weekly"
   ],
-  "kubernetes": {
-    "enabled": true
-  },
-  "helm-values": {
-    "enabled": true
-  },
-  "dockerfile": {
-    "enabled": true
-  },
+  "enabledManagers": [
+    "github-actions",
+    "kubernetes",
+    "helm-values"
+  ],
   "ignorePaths": [
     "**/node_modules/**",
     "**/.git/**",
@@ -19,12 +16,12 @@
   ],
   "packageRules": [
     {
-      "description": "Enable Kubernetes and Helm Chart management",
+      "description": "Group Kubernetes and Helm Chart updates together",
       "matchManagers": [
         "kubernetes",
         "helm-values"
       ],
-      "enabled": true,
+      "groupName": "Kubernetes and Helm Charts",
       "commitMessagePrefix": "chore(k8s): "
     },
     {
@@ -32,24 +29,7 @@
       "matchManagers": [
         "github-actions"
       ],
-      "enabled": true,
-      "commitMessagePrefix": "ci: "
-    },
-    {
-      "description": "Group Kubernetes and Helm updates together",
-      "matchManagers": [
-        "kubernetes",
-        "helm-values"
-      ],
-      "groupName": "Kubernetes and Helm Charts",
-      "schedule": [
-        "weekly"
-      ]
+      "commitMessagePrefix": "ci(actions): "
     }
-  ],
-  "renovate-config": {
-    "extends": [
-      "schedule:weekly"
-    ]
-  }
+  ]
 }
