@@ -196,7 +196,7 @@ in
         };
 
         argocd = {
-          enabled = true;
+          enabled = false;
           dashboardUrl = "argocd.yohanzbinden.ch";
         };
 
