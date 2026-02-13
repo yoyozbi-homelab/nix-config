@@ -19,7 +19,7 @@
         "nixos/_mixins/k3s/manifests/*.yaml"
       ],
       "matchStrings": [
-        "kind: HelmChart.{0,500}repo: (?<registryUrl>https?://[^\\n]+).{0,500}chart: (?<depName>[^\\n]+).{0,500}version: (?<currentValue>[^\\n]+)"
+        "kind: HelmChart[\\s\\S]{0,500}repo: (?<registryUrl>https?://[^\\n]+)[\\s\\S]{0,500}chart: (?<depName>[^\\n]+)[\\s\\S]{0,500}version: (?<currentValue>[^\\n]+)"
       ],
       "datasourceTemplate": "helm",
       "versioningTemplate": "semver"
@@ -31,7 +31,7 @@
         "nixos/_mixins/k3s/manifests/*.yaml"
       ],
       "matchStrings": [
-        "kind: HelmChart.{0,500}chart: (?<depName>oci://[^\\n]+).{0,500}version: (?<currentValue>[^\\n]+)"
+        "kind: HelmChart[\\s\\S]{0,500}chart: (?<depName>oci://[^\\n]+)[\\s\\S]{0,500}version: (?<currentValue>[^\\n]+)"
       ],
       "datasourceTemplate": "docker",
       "versioningTemplate": "semver"
