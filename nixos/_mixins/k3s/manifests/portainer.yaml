@@ -11,7 +11,7 @@ spec:
   repo: https://portainer.github.io/k8s/
   targetNamespace: portainer
   chart: portainer
-  version: 2.33.5
+  version: 2.33.7
   valuesContent: |-
     service:
       type: NodePort

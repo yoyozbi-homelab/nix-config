@@ -11,7 +11,7 @@ spec:
   repo: https://releases.rancher.com/server-charts/latest
   targetNamespace: cattle-system
   chart: rancher
-  version: 2.9.2
+  version: 2.13.2
   valuesContent: |-
     hostname: rancher.yohanzbinden.ch
     replicas: 1;
