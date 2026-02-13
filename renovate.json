@@ -36,7 +36,7 @@
         "nixos/_mixins/k3s/manifests/.+\\.ya?ml$"
       ],
       "matchStrings": [
-        "kind:\\s+HelmChart[\\s\\S]*?chart:\\s*oci://(?<registryUrl>[^/\\s]+/[^/\\s]+)(?:/[^\\s]+)?[\\s\\S]*?version:\\s*(?<currentValue>[\\d\\.]+)"
+        "kind:\\s+HelmChart[\\s\\S]*?chart:\\s*oci://(?:\\S+/)*(?<depName>[\\w\\-]+)\\s*[\\s\\S]*?version:\\s*(?<currentValue>[\\d\\.]+)"
       ],
       "datasourceTemplate": "oci",
       "versioningTemplate": "semver"
