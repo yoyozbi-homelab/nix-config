@@ -31,7 +31,7 @@
         "nixos/_mixins/k3s/manifests/*.yaml"
       ],
       "matchStrings": [
-        "kind: HelmChart[\\s\\S]{0,500}chart: (?<depName>oci://[^\\n]+)[\\s\\S]{0,500}version: (?<currentValue>[^\\n]+)"
+        "kind: HelmChart[\\s\\S]{0,500}chart: oci://(?<depName>[^\\n]+)[\\s\\S]{0,500}version: (?<currentValue>[^\\n]+)"
       ],
       "datasourceTemplate": "docker",
       "versioningTemplate": "semver"
