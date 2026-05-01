@@ -39,6 +39,10 @@
   ],
   "packageRules": [
     {
+      "matchPackageNames": ["cloudflare/cloudflared"],
+      "versioning": "regex:^(?<major>\\d{4})\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+    },
+    {
       "description": "Group Kubernetes and Helm Chart updates together",
       "matchManagers": [
         "custom.regex"

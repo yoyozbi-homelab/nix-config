@@ -25,21 +25,11 @@ spec:
       # - Init containers always run to completion.
       # - Each init container must complete successfully before the next one starts.
       containers:
-        - image: alpine #{"$imagescan": "cloudflared-scan"}
-          command: ["/bin/sh"]
+        - image: cloudflare/cloudflared:2026.3.0 #{"$imagescan": "cloudflared-scan"}
+          name: cloudflared
+          command: ["/bin/sh", "-c"]
           args:
-            - -c
-            - >-
-              apk add --no-cache curl &&
-              if [ $(arch) = 'x86_64' ]; then
-                export arch="amd64"
-              else
-                export arch="arm64"
-              fi &&
-              curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-$arch -o /usr/bin/cloudflared &&
-              chmod +x /usr/bin/cloudflared &&
-              export TUNNEL_TOKEN="$(cat /etc/cloudflared-token)" &&
-              cloudflared tunnel --no-autoupdate run
+            - "cloudflared tunnel --no-autoupdate run --token $(cat /etc/cloudflared-token)"
           resources:
             limits:
               cpu: 100m
@@ -51,8 +41,6 @@ spec:
             - mountPath: /etc/cloudflared-token
               name: cloudflared-token
               readOnly: true
-
-          name: cloudflared
       restartPolicy: Always
       volumes:
         - name: cloudflared-token
