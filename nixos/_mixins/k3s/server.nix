@@ -68,6 +68,22 @@ in
   environment.etc."portainer.yaml".text = portainer;
   environment.etc."flux.yaml".text = flux;
 
+  # Write cloudflared token as a k8s Secret manifest from the SOPS-decrypted secret.
+  # The official cloudflared image is distroless (no /bin/sh), so shell substitution
+  # to read a hostPath file doesn't work — TUNNEL_TOKEN env var is used instead.
+  system.activationScripts.cloudflaredSecret = {
+    deps = [ "setupSecrets" "k3s" ];
+    text = ''
+      if [ -f /run/secrets/cloudflared-token ]; then
+        token=$(cat /run/secrets/cloudflared-token)
+        encoded=$(printf '%s' "$token" | base64 -w 0)
+        printf 'apiVersion: v1\nkind: Secret\nmetadata:\n  name: cloudflared-token\n  namespace: kube-system\ntype: Opaque\ndata:\n  token: %s\n' \
+          "$encoded" > /var/lib/rancher/k3s/server/manifests/cloudflared-secret.yaml
+        chmod 600 /var/lib/rancher/k3s/server/manifests/cloudflared-secret.yaml
+      fi
+    '';
+  };
+
   # Link the file to k3s manifest directory
   system.activationScripts.k3s.text = ''
        mkdir -p /var/lib/rancher/k3s/server/manifests

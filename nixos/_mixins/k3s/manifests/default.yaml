@@ -21,15 +21,16 @@ spec:
       labels:
         app: cloudflared
     spec:
-      # Init containers are exactly like regular containers, except:
-      # - Init containers always run to completion.
-      # - Each init container must complete successfully before the next one starts.
       containers:
         - image: cloudflare/cloudflared:2026.3.0 #{"$imagescan": "cloudflared-scan"}
           name: cloudflared
-          command: ["/bin/sh", "-c"]
-          args:
-            - "cloudflared tunnel --no-autoupdate run --token $(cat /etc/cloudflared-token)"
+          command: ["cloudflared", "tunnel", "--no-autoupdate", "run"]
+          env:
+            - name: TUNNEL_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: cloudflared-token
+                  key: token
           resources:
             limits:
               cpu: 100m
@@ -37,16 +38,7 @@ spec:
             requests:
               cpu: 100m
               memory: 100Mi
-          volumeMounts:
-            - mountPath: /etc/cloudflared-token
-              name: cloudflared-token
-              readOnly: true
       restartPolicy: Always
-      volumes:
-        - name: cloudflared-token
-          hostPath:
-            path: /run/secrets/cloudflared-token
-            type: File
 ---
 apiVersion: v1
 kind: Namespace
