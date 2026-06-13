@@ -15,7 +15,6 @@
         ms-vsliveshare.vsliveshare
         christian-kohler.path-intellisense
         bmewburn.vscode-intelephense-client
-        devsense.profiler-php-vscode
         esbenp.prettier-vscode
         rust-lang.rust-analyzer
         bradlc.vscode-tailwindcss
