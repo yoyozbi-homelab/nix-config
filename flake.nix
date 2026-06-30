@@ -7,7 +7,10 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     cachix-deploy.url = "github:cachix/cachix-deploy-flake";
     deploy-rs.url = "github:serokell/deploy-rs";
-    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-utils.url = "github:numtide/flake-utils";
 
     disko = {
@@ -27,6 +30,11 @@
     };
 
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+
+    noctalia = {
+      url = "github:noctalia-dev/noctalia";
+      # intentionally omitting nixpkgs.follows to enable binary cache at noctalia.cachix.org
+    };
   };
 
   outputs =
@@ -49,6 +57,7 @@
       allHosts = {
         laptop-nix = { username = "yohan"; desktop = "kde"; platform = "x86_64-linux"; };
         surface-nix = { username = "yohan"; desktop = "gnome"; platform = "x86_64-linux"; };
+        vm-nix = { username = "yohan"; desktop = "noctalia"; platform = "x86_64-linux"; buildHome = true; };
         ocr1 = { username = "nix"; platform = "aarch64-linux"; };
         tiny1 = { username = "nix"; platform = "x86_64-linux"; };
         tiny2 = { username = "nix"; platform = "x86_64-linux"; };
@@ -92,6 +101,11 @@
           username = "yohan";
           desktop = "gnome";
         };
+        "yohan@vm-nix" = libx.mkHome {
+          hostname = "vm-nix";
+          username = "yohan";
+          desktop = "noctalia";
+        };
       };
       
       nixosConfigurations = builtins.mapAttrs (hostname: cfg:
@@ -99,6 +113,7 @@
           inherit hostname;
           inherit (cfg) username;
           desktop = cfg.desktop or null;
+          buildHome = cfg.buildHome or false;
         }
       ) allHosts;
 

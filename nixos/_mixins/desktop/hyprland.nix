@@ -7,10 +7,10 @@
 let
   stable-packages = with pkgs; [
     darkman
-    python311
-    python311Packages.requests
+    #python311
+    #python311Packages.requests
     seahorse
-    libsForQt5.polkit-kde-agent
+    kdePackages.polkit-kde-agent-1
     imagemagick_light
     brightnessctl
     kdePackages.kwallet
