@@ -5,7 +5,6 @@
     dunst
     swaybg
     sway-audio-idle-inhibit
-    kdePackages.xwaylandvideobridge
     wl-clipboard
     cliphist
     networkmanagerapplet
@@ -15,6 +14,7 @@
     package       = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     enable        = true;
+    configType    = "lua";
     extraConfig   = ''
       require("conf/main")
     '';

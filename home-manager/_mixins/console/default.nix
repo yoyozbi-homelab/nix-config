@@ -171,6 +171,7 @@ in
         tree = "eza --tree";
         delete-old-branch = "git fetch -p && for branch in $(git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == \"[gone]\" {sub(\"refs/heads/\", \"\", $1); print $1}'); do git branch -D $branch; done";
       };
+      dotDir = "${config.xdg.configHome}/zsh";
       initContent = ''
         fastfetch
       '';
@@ -185,14 +186,11 @@ in
 
     git = {
       enable = true;
-      aliases = {
-        fucked = "reset --hard";
-        graph = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
-      };
-      lfs = {
-        enable = true;
-      };
-      extraConfig = {
+      settings = {
+        alias = {
+          fucked = "reset --hard";
+          graph = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+        };
         core = {
           pager = "bat";
         };
@@ -206,6 +204,10 @@ in
         init = {
           defaultBranch = "main";
         };
+      };
+     
+      lfs = {
+        enable = true;
       };
     };
 
@@ -225,6 +227,7 @@ in
       enableBashIntegration = true;
       enableFishIntegration = true;
       enableZshIntegration = true;
+      shellWrapperName = "y";
       settings = {
         manager = {
           show_hidden = false;
@@ -240,6 +243,8 @@ in
     neovim = {
       enable = true;
       defaultEditor = true;
+      withRuby = false;
+      withPython3 = true;
       package = pkgs.unstable.neovim-unwrapped;
     };
 
@@ -316,6 +321,7 @@ in
     userDirs = {
       enable = isLinux;
       createDirectories = lib.mkDefault true;
+      setSessionVariables = true;
     };
   };
 }

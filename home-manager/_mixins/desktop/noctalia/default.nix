@@ -37,7 +37,7 @@ in
     extraConfig = ''
       local __is_vm      = ${if isVm then "true" else "false"}
       local __polkit_path = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
-      require("conf/main")
+      require("conf/noctalia")
     '';
   };
 
@@ -45,7 +45,7 @@ in
     enable = true;
     mime.enable = true;
     configFile = {
-      "hypr/conf/main.lua".source = ./lua/main.lua;
+      "hypr/conf/noctalia.lua".source = ./lua/main.lua;
     };
   };
 }

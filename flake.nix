@@ -57,7 +57,7 @@
       allHosts = {
         laptop-nix = { username = "yohan"; desktop = "kde"; platform = "x86_64-linux"; };
         surface-nix = { username = "yohan"; desktop = "gnome"; platform = "x86_64-linux"; };
-        vm-nix = { username = "yohan"; desktop = "noctalia"; platform = "x86_64-linux"; buildHome = true; };
+        vm-nix = { username = "yohan"; desktop = "hyprland"; platform = "x86_64-linux"; buildHome = true; };
         ocr1 = { username = "nix"; platform = "aarch64-linux"; };
         tiny1 = { username = "nix"; platform = "x86_64-linux"; };
         tiny2 = { username = "nix"; platform = "x86_64-linux"; };
@@ -104,7 +104,7 @@
         "yohan@vm-nix" = libx.mkHome {
           hostname = "vm-nix";
           username = "yohan";
-          desktop = "noctalia";
+          desktop = "hyprland";
         };
         "yohan@wsl-nix" = libx.mkHome {
           hostname = "wsl-nix";
