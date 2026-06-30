@@ -62,7 +62,10 @@
     # This will add each flake input as a registry
     # To make nix3 commands consistent with your flake
     registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
-    package = pkgs.unstable.nix;
+    # mkDefault so the home-manager NixOS module (buildHome) can forward the
+    # system's nix.package without conflicting; standalone home configs still
+    # get unstable.nix as there is no competing definition.
+    package = lib.mkDefault pkgs.unstable.nix;
 
     settings = {
       auto-optimise-store = true;

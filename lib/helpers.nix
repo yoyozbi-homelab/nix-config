@@ -56,38 +56,30 @@
         #inputs.agenix.nixosModules.default
       ]
       ++ (inputs.nixpkgs.lib.optionals (installer != null) [ installer ])
-      ++ (inputs.nixpkgs.lib.optionals buildHome) [
+      ++ (inputs.nixpkgs.lib.optionals buildHome [
         inputs.home-manager.nixosModules.home-manager
         {
-          specialArgs = {
-            inherit
-              inputs
-              outputs
-              desktop
-              hostname
-              platform
-              username
-              stateVersion
-              ;
-          };
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users = {
-            ${username} = import ../home-manager; # {
-            #inherit outputs inputs stateVersion desktop hostname platform username;
-            # pkgs = inputs.nixpkgs.legacyPackages.${platform};
-            # lib = inputs.nixpkgs.lib;
-            # config =
-            # };
-            root = import ../home-manager; # {
-            # inherit outputs inputs stateVersion desktop hostname platform;
-            # pkgs = inputs.nixpkgs.legacyPackages.${platform};
-            # lib = inputs.nixpkgs.lib;
-            # username = "root";
-            # };
+          home-manager = {
+            # false: the shared home-manager/default.nix sets nixpkgs.* (overlays
+            # + config) which standalone home configs need; useGlobalPkgs would
+            # forbid those. Let home-manager build its own pkgs with our overlays.
+            useGlobalPkgs = false;
+            useUserPackages = true;
+            extraSpecialArgs = {
+              inherit
+                inputs
+                outputs
+                desktop
+                hostname
+                platform
+                username
+                stateVersion
+                ;
+            };
+            users.${username} = import ../home-manager;
           };
         }
-      ];
+      ]);
     };
 
   forAllSystems = inputs.nixpkgs.lib.genAttrs [
