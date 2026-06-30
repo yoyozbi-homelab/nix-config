@@ -21,16 +21,10 @@ let
       git
       vim
       comma
-      graphviz
     ]
     ++ lib.optionals (desktop != null) [
       appimage-run
       libreoffice
-      owncloud-client
-
-      unstable.syncthingtray
-      unstable.syncthing
-      unstable.rnote
 
       #troubleshooting disks
       gparted
@@ -41,8 +35,7 @@ let
       # Other
       unstable.obsidian
       unstable.ungoogled-chromium
-      inputs.zen-browser.packages.${system}.beta
-      xournalpp
+      inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     ]
     ++ lib.optionals (desktop != null && hostname == "laptop-nix") [
       # Productivity
@@ -53,10 +46,6 @@ let
       # Dotnet
       dotnet-sdk_9
 
-      # PHP
-      php82
-      php82Packages.composer
-
       # Rust
       rustup
       rustPackages.clippy
@@ -66,19 +55,18 @@ let
 
       # Java
       jdk24
-      unstable.jetbrains.idea-ultimate
-      unstable.android-studio
+#      unstable.jetbrains.idea-ultimate
+#      unstable.android-studio
       gradle
       imagej
       turbovnc
-      unityhub
 
       # Go
       go
       gopls
 
       # C/C++
-      jetbrains.clion
+#      jetbrains.clion
       mesa # Opengl
       autoconf # vcpkg
       pkgconf
@@ -92,10 +80,9 @@ let
       zip
       wget
       icu63
-      unstable.cloudflare-warp
 
-      godot
-      pixelorama
+#      godot
+#      pixelorama
 
       # Dev
       bruno
@@ -104,17 +91,16 @@ let
       python313
 
       # Other
-      structorizer
       vlc
 
       # Photos
-      unstable.darktable
-      hugin
-      digikam
+#      unstable.darktable
+#      hugin
+#      digikam
       exiftool
-      gimp
+#      gimp
 
-      kdePackages.kdenlive
+#      kdePackages.kdenlive
       ffmpeg
       SDL
       xml2
@@ -125,21 +111,19 @@ let
 
       #Music/Video
       spotify
-      stremio
       jellyfin-media-player
-      kodi-wayland
       deluge
       obs-studio
       blender
 
       unstable.argocd
-      cloudflared
+#      cloudflared
       zotero
 
       # Games and co
-      discord
-      steam
-      heroic
+#      discord
+#      steam
+#      heroic
     ]
     ++ lib.optionals (desktop != null && hostname == "surface-nix") [
     ];
@@ -153,9 +137,6 @@ in
   environment.localBinInPath = true;
   environment.systemPackages = stable-packages;
 
-  nixpkgs.config.permittedInsecurePackages = [
-    "beekeeper-studio-5.1.5"
-  ];
 
   programs.zsh.enable = true;
   programs.nix-ld.enable = true;
