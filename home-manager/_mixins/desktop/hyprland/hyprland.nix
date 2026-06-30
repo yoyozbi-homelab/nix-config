@@ -122,13 +122,11 @@ in
         disable_hyprland_logo = false;
         mouse_move_enables_dpms = true;
         key_press_enables_dpms = true;
-        vfr = true;
       };
 
       # Decoration
       decoration = {
         rounding = 10;
-        blurls = ["lockscreen"];
         shadow = {
           enabled = true;
           range = 60;
@@ -141,8 +139,7 @@ in
       # Group appearance
       group = {
         groupbar = {
-          "col.active" = "rgb(bd93f9) rgb(44475a) 90deg";
-          "col.inactive" = "rgb(282a36)";
+          col_textlock = "rgba(ffffff7f)";
         };
       };
 
@@ -161,7 +158,6 @@ in
 
       # Dwindle layout
       dwindle = {
-        pseudotile = true;
         preserve_split = true;
       };
 
@@ -197,7 +193,6 @@ in
         "$mainMod, V, togglefloating,"
         "$mainMod, SPACE, exec, wofi"
         "$mainMod, P, pseudo,"
-        "$mainMod, J, togglesplit,"
         "$mainMod, S, exec, grim -g \"$(slurp)\" - | swappy -f -"
         "$mainMod, F, fullscreen, 1"
         "$mainMod SHIFT, F, fullscreen, 0"
@@ -250,11 +245,6 @@ in
       bindm = [
         "$mainMod, mouse:272, movewindow"
         "$mainMod, mouse:273, resizewindow"
-      ];
-
-      # Gestures
-      gesture = [
-        "3, horizontal, workspace"
       ];
     };
   };
