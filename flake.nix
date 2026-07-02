@@ -35,6 +35,11 @@
       url = "github:noctalia-dev/noctalia";
       # intentionally omitting nixpkgs.follows to enable binary cache at noctalia.cachix.org
     };
+
+    dms = {
+      url = "github:AvengeMedia/DankMaterialShell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

@@ -152,6 +152,27 @@
         "type": "github"
       }
     },
+    "dms": {
+      "inputs": {
+        "flake-compat": "flake-compat_2",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782956387,
+        "narHash": "sha256-XkJMx6T4ym+5XHNB8+QCO9f2kWgelRd52pOzmUTooUE=",
+        "owner": "AvengeMedia",
+        "repo": "DankMaterialShell",
+        "rev": "57d08f6b3b033eb0c022f3b601d32b2ee68ad7ad",
+        "type": "github"
+      },
+      "original": {
+        "owner": "AvengeMedia",
+        "repo": "DankMaterialShell",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -185,6 +206,22 @@
       }
     },
     "flake-compat_3": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767039857,
+        "narHash": "sha256-vNpUSpF5Nuw8xvDLj2KCwwksIbjua2LZCqhV1LNRDns=",
+        "owner": "NixOS",
+        "repo": "flake-compat",
+        "rev": "5edf11c44bc78a0d334f6334cdaf7d60d732daab",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
+    "flake-compat_4": {
       "flake": false,
       "locked": {
         "lastModified": 1767039857,
@@ -401,11 +438,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1782755845,
-        "narHash": "sha256-FaKdwTEAZBFD/b7Ck2kGhUovtOP5zoCIhoF03V9XRPM=",
+        "lastModified": 1782977902,
+        "narHash": "sha256-2LwEnr184uOaly/HFGsjxVPf555W21qOuHc7zFbuv/Y=",
         "ref": "refs/heads/main",
-        "rev": "254d6bae775258b554e1d3a4a853f3bc244190d9",
-        "revCount": 7533,
+        "rev": "9350e3410bd776385cb597ec45ebadaf581b634a",
+        "revCount": 7542,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/hyprwm/Hyprland"
@@ -775,11 +812,11 @@
     },
     "nixpkgs-master": {
       "locked": {
-        "lastModified": 1782801657,
-        "narHash": "sha256-p4f+RIaLXPfatbEAHb0k+LtX4Feam2VdMuKjAucev4U=",
+        "lastModified": 1782985472,
+        "narHash": "sha256-szc453d/YgHdY+gS2GDZ6zlJ4vlXMLWPPe6rbjz6ZQc=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "2c51b55beb3ff7fa587cc94342f10ff80cd57c5b",
+        "rev": "848ae1a0cb604ac4e313b38c16f4c7d548d62422",
         "type": "github"
       },
       "original": {
@@ -868,11 +905,11 @@
     },
     "nixpkgs_6": {
       "locked": {
-        "lastModified": 1782535326,
-        "narHash": "sha256-ZeRxu4yn6shd3SNF5ZUQb4r7BaVo1zBKMjRhfoNSBmw=",
+        "lastModified": 1782847225,
+        "narHash": "sha256-JC9PjqKYG9ve5U8aDOLQipp3+KLANBHUvGdLZlxzdKI=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "714a5f8c4ead6b31148d829288440ed033ccc041",
+        "rev": "95ca1e203c0750115fd4a6f17d5a245dfe6b1edd",
         "type": "github"
       },
       "original": {
@@ -916,11 +953,11 @@
         "nixpkgs": "nixpkgs_7"
       },
       "locked": {
-        "lastModified": 1782788501,
-        "narHash": "sha256-OyNnY+o3WZfnjeYxce/0wX3ANu0Bk5mN1BRbzCCjNVc=",
+        "lastModified": 1782953157,
+        "narHash": "sha256-mp92xRkWul0PEkPt1v/eJOBcuzG/ohQavn6vO+djEtc=",
         "owner": "noctalia-dev",
         "repo": "noctalia",
-        "rev": "c5042b9edf23fae3d90b7c8ae291ed9b577001dd",
+        "rev": "8d2c6881d3e1e7f1e894fc2e811c36fe9ffa6989",
         "type": "github"
       },
       "original": {
@@ -931,7 +968,7 @@
     },
     "pre-commit": {
       "inputs": {
-        "flake-compat": "flake-compat_3",
+        "flake-compat": "flake-compat_4",
         "gitignore": "gitignore_2",
         "nixpkgs": [
           "lanzaboote",
@@ -954,7 +991,7 @@
     },
     "pre-commit-hooks": {
       "inputs": {
-        "flake-compat": "flake-compat_2",
+        "flake-compat": "flake-compat_3",
         "gitignore": "gitignore",
         "nixpkgs": [
           "hyprland",
@@ -980,6 +1017,7 @@
         "cachix-deploy": "cachix-deploy",
         "deploy-rs": "deploy-rs",
         "disko": "disko_2",
+        "dms": "dms",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager_2",
         "hyprland": "hyprland",
