@@ -106,6 +106,10 @@
           username = "yohan";
           desktop = "noctalia";
         };
+        "yohan@wsl-nix" = libx.mkHome {
+          hostname = "wsl-nix";
+          username = "yohan";
+        };
       };
       
       nixosConfigurations = builtins.mapAttrs (hostname: cfg:
