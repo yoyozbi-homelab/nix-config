@@ -32,6 +32,10 @@ in
         nerd-fonts.jetbrains-mono
         nerd-fonts.ubuntu-mono
 
+        cargo
+        rustc
+        statix
+
         iosevka-comfy.comfy
         lua-language-server
         nixd
