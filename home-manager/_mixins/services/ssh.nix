@@ -2,6 +2,7 @@ _: {
   programs = {
     ssh = {
       enable = true;
+      enableDefaultConfig = false;
       settings = {
         "gitlab-etu.ing.he-arc.ch" = {
           HostName = "gitlab-etu.ing.he-arc.ch";
