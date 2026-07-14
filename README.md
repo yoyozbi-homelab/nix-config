@@ -7,13 +7,18 @@ Updates are built by github actions and deployed to servers using cachix-deploy
 # Hosts
 
 | Name | location | hardware | role |
-|------|----------|----------|------|
-| ocr1 | oci      | arm64 4cpu 24G ram 60G ssd | k3s master |
-| tiny1 | oci     | amd64 2cpu 1G ram 60G ssd  | k3s agent  |
-| tiny2 | oci     | amd64 2cpu 1G ram 60G ssd  | k3s agent  |
-| rp    | home    | rpi4b with 4gb ram         | k3s cluster (solo)  |
-| laptop-nix | with me | dell xps16 9520 (i7 12700H 32G ram 1TB ssd) | daily driver |
+| ------ | ---------- | ---------- | ------ |
+| ocr1 | oci | arm64 4cpu 24G ram 60G ssd | k3s master |
+| tiny1 | oci | amd64 2cpu 1G ram 60G ssd | k3s agent |
+| tiny2 | oci | amd64 2cpu 1G ram 60G ssd | k3s agent |
+| rp | home | rpi4b with 4gb ram | k3s cluster (solo) |
+| ❌ laptop-nix | with me | dell xps16 9520 (i7 12700H 32G ram 1TB ssd) | daily driver |
+| ❄️ laptop-omarchy | with me | ⬆️, running omarchy | daily driver |
+| ❄️ wsl-nix | with me | ⬆️, running archlinux inside WSL | daily driver |
 | surface-nix | with me | Surface Pro 5 | handwritten notes |
+
+❌: Not currently installed or used
+❄️: Using `home-manager` only
 
 # Installation (or reinstallation)
 
@@ -25,22 +30,23 @@ Updates are built by github actions and deployed to servers using cachix-deploy
  CACHIX_AGENT_TOKEN=<token>
  ```
 
- 2. Get the new public age key of the server
+ 1. Get the new public age key of the server
 
  ```bash
  nix-shell -p ssh-to-age --run 'ssh-keyscan <ipAdress> | ssh-to-age'
  ```
 
- 3. Change public key of server in `.sops.yaml`
- 4. Update keys for secrets
+ 1. Change public key of server in `.sops.yaml`
+ 2. Update keys for secrets
 
  ```bash
 nix-shell -p sops --run "sops updatekeys nixos/_mixins/k3s/ocr-secrets.yml"
  ```
 
- 5. Updates hosts in `hosts.nix`
+ 1. Updates hosts in `hosts.nix`
 
- 6. If the host is a k3s master with argocd:
+ 2. If the host is a k3s master with argocd:
+
  ```bash
 # Create argocd namespace if it doesn't exist
 kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
@@ -57,7 +63,7 @@ kubectl create secret generic sops-age \
 rm age.key
  ```
 
- 6. If the host has  `netdata` run the following command to enroll the node
+ 1. If the host has  `netdata` run the following command to enroll the node
 
 ```bash
 sudo netdata-claim.sh
@@ -75,9 +81,9 @@ sudo netdata-claim.sh
  curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | NIX_CHANNEL=nixos-23.05 bash -x
  ```
 
- 5. Connect via the root user and change nix-config partitions uuids by looking at the `hardware-configuration.nix` file
- 6. Make common modification
- 7. Apply custom nix config over the new node
+ 1. Connect via the root user and change nix-config partitions uuids by looking at the `hardware-configuration.nix` file
+ 2. Make common modification
+ 3. Apply custom nix config over the new node
 
  ```bash
  nixos-rebuild --target-host root@tiny1 --flake ~/nix-config/.#tiny1 switch
@@ -91,4 +97,4 @@ sudo netdata-claim.sh
 nix run nixpkgs#nixos-generators -- -f sd-aarch64 --flake .#rp --system aarch64-linux -o ../pi.sd
 ```
 
-2. Make common modifications
+1. Make common modifications
