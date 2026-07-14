@@ -6,7 +6,6 @@
     lanzaboote.url = "github:nix-community/lanzaboote";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     cachix-deploy.url = "github:cachix/cachix-deploy-flake";
-    deploy-rs.url = "github:serokell/deploy-rs";
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -129,17 +128,6 @@
           buildHome = cfg.buildHome or false;
         }
       ) allHosts;
-
-      deploy.nodes = {
-        surface-nix = {
-          hostname = "surface-nix";
-          profiles.system = {
-            user = "root";
-            sshUser = "yohan";
-            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.surface-nix;
-          };
-        };
-      };
 
       overlays = import ./overlays { inherit inputs; };
     };
