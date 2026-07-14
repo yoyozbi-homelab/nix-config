@@ -115,6 +115,10 @@
           hostname = "wsl-nix";
           username = "yohan";
         };
+        "yohan@omarchy-nix" = libx.mkHome {
+            hostname = "wsl-nix";
+            username = "yohan";
+        };
       };
       
       nixosConfigurations = builtins.mapAttrs (hostname: cfg:

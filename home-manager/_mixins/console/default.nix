@@ -174,6 +174,26 @@ in
       dotDir = "${config.xdg.configHome}/zsh";
       initContent = ''
         fastfetch
+
+        # Portable cd: use the builtin when the path exists, otherwise fall back
+        # to zoxide. Mirrors Omarchy's `zd`, but defined here so it works on
+        # every host independent of Omarchy's shell defaults.
+        if command -v zoxide &> /dev/null; then
+          cd() {
+            if (( $# == 0 )); then
+              builtin cd ~ || return
+            elif [[ -d $1 ]]; then
+              builtin cd "$1" || return
+            else
+              if ! z "$@"; then
+                echo "Error: Directory not found"
+                return 1
+              fi
+              printf "\U000F17A9 "
+              pwd
+            fi
+          }
+        fi
       '';
       oh-my-zsh = {
         enable = true;
