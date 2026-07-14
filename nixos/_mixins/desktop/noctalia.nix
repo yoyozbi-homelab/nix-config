@@ -14,7 +14,17 @@
   services = {
     upower.enable = true;
     power-profiles-daemon.enable = true;
+    # Noctalia reads user account/avatar info via AccountsService.
+    accounts-daemon.enable = true;
   };
+
+  # Fonts noctalia expects by default. `inter` provides "Inter"/"Inter Variable";
+  # roboto is noctalia's default UI font; fira-code for terminals.
+  fonts.packages = with pkgs; [
+    inter
+    fira-code
+    roboto
+  ];
 
   nix.settings = {
     extra-substituters = [ "https://noctalia.cachix.org" ];

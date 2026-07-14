@@ -31,17 +31,23 @@
   # `nixos-rebuild build-vm` reads these `vmVariant` options to build the QEMU
   # run script. Defaults (1 vCPU / 1 GiB / no GPU) make Hyprland software-render
   # and thrash — the settings below give it real resources and 3D acceleration.
+  # spice-vdagentd bridges the SPICE clipboard channel to the Wayland clipboard
+  # inside the guest, enabling copy-paste between VM and host.
+  services.spice-vdagentd.enable = true;
+
   virtualisation.vmVariant.virtualisation = {
     memorySize = 4096; # MiB
     cores = 4;
     qemu.options = [
-      # Replace the default std VGA with a virgl-capable virtio GPU and render
-      # it with host OpenGL passthrough. SDL is used instead of GTK because the
-      # GTK backend fails to get an EGL/GLX context on a Wayland host (Hyprland),
-      # aborting with "Couldn't find current GLX or EGL context".
+      # virtio-vga-gl with spice-app gives 3D acceleration AND clipboard sharing.
+      # spice-app launches remote-viewer on the host automatically.
       "-vga none"
       "-device virtio-vga-gl"
-      "-display gtk,gl=on"
+      "-display spice-app,gl=on"
+      # SPICE vdagent channel — required for clipboard and guest<->host copy-paste
+      "-device virtio-serial"
+      "-chardev spicevmc,id=vdagent,name=vdagent"
+      "-device virtserialport,chardev=vdagent,name=com.redhat.spice.0"
     ];
   };
 }

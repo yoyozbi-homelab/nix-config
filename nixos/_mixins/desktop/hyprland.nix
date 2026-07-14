@@ -32,6 +32,17 @@ in
       portalPackage =
         inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     };
+    # UWSM wraps the compositor in a systemd user session so graphical-session.target,
+    # xdg-desktop-autostart.target and D-Bus activation all work correctly. Without it,
+    # apps spawned from Hyprland keybinds don't have a working portal or DBUS_SESSION_BUS_ADDRESS.
+    uwsm = {
+      enable = true;
+      waylandCompositors.hyprland = {
+        prettyName = "Hyprland";
+        comment = "Hyprland compositor managed by UWSM";
+        binPath = "/run/current-system/sw/bin/start-hyprland";
+      };
+    };
     dconf.enable = true;
   };
 
@@ -39,10 +50,11 @@ in
 
   services = {
     greetd = {
-      enable = false; # Would need to be set to true to have this greeter
+      enable = true; 
       settings = {
         default_session = {
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+          # Use uwsm so the session lands in systemd graphical-session.target
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd 'uwsm start -- start-hyprland'";
           user = "${username}";
         };
       };
