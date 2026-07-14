@@ -115,8 +115,8 @@
           hostname = "wsl-nix";
           username = "yohan";
         };
-        "yohan@omarchy-nix" = libx.mkHome {
-            hostname = "wsl-nix";
+        "yohan@laptop-omarchy" = libx.mkHome {
+            hostname = "laptop-omarchy";
             username = "yohan";
         };
       };
