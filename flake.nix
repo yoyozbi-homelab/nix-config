@@ -36,7 +36,7 @@
     };
 
     dms = {
-      url = "github:AvengeMedia/DankMaterialShell";
+      url = "github:AvengeMedia/DankMaterialShell/stable";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -61,7 +61,7 @@
       allHosts = {
         laptop-nix = { username = "yohan"; desktop = "kde"; platform = "x86_64-linux"; };
         surface-nix = { username = "yohan"; desktop = "gnome"; platform = "x86_64-linux"; };
-        vm-nix = { username = "yohan"; desktop = "hyprland"; platform = "x86_64-linux"; buildHome = true; };
+        vm-nix = { username = "yohan"; desktop = "dms"; platform = "x86_64-linux"; buildHome = true; };
         ocr1 = { username = "nix"; platform = "aarch64-linux"; };
         tiny1 = { username = "nix"; platform = "x86_64-linux"; };
         tiny2 = { username = "nix"; platform = "x86_64-linux"; };
@@ -108,7 +108,7 @@
         "yohan@vm-nix" = libx.mkHome {
           hostname = "vm-nix";
           username = "yohan";
-          desktop = "hyprland";
+          desktop = "dms";
         };
         "yohan@wsl-nix" = libx.mkHome {
           hostname = "wsl-nix";

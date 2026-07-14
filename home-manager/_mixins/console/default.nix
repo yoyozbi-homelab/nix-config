@@ -23,7 +23,6 @@ in
         source = ./nvim-config/lua;
         recursive = true;
       };
-      "${config.xdg.configHome}/nvim/init.lua".text = builtins.readFile ./nvim-config/init.lua;
     };
 
     packages =
@@ -266,6 +265,7 @@ in
       withRuby = false;
       withPython3 = true;
       package = pkgs.unstable.neovim-unwrapped;
+      initLua = builtins.readFile ./nvim-config/init.lua;
     };
 
     zoxide = {
