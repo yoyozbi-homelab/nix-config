@@ -2,6 +2,11 @@ name: "Cachix Deploy"
 
 on: # yamllint disable-line rule:truthy
   workflow_dispatch: # allows manual triggering
+    inputs:
+      force:
+        description: "Deploy even if server configs are unchanged"
+        type: boolean
+        default: false
   push:
     branches:
       - main
@@ -14,7 +19,78 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      x86_changed: ${{ steps.x86.outputs.changed }}
+      x86_hash: ${{ steps.hash-x86.outputs.hash }}
+      aarch64_changed: ${{ steps.aarch64.outputs.changed }}
+      aarch64_hash: ${{ steps.hash-aarch64.outputs.hash }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      # The deploy spec derivation is a content hash of everything that goes into
+      # the servers of a system, so its .drvPath changes iff a server changes.
+      # Evaluating .drvPath is eval-only (no build).
+      - name: Compute x86_64 spec hash
+        id: hash-x86
+        run: |
+          h=$(basename "$(nix eval --raw .#defaultPackage.x86_64-linux.drvPath)")
+          echo "hash=$h" >> "$GITHUB_OUTPUT"
+
+      - name: Compute aarch64 spec hash
+        id: hash-aarch64
+        run: |
+          h=$(basename "$(nix eval --raw .#defaultPackage.aarch64-linux.drvPath)")
+          echo "hash=$h" >> "$GITHUB_OUTPUT"
+
+      # A cache hit means this exact spec was already deployed -> skip.
+      - name: Check x86_64 deploy state
+        id: cache-x86
+        uses: actions/cache/restore@v4
+        with:
+          path: .deploy-marker
+          key: cachix-deploy-x86-${{ steps.hash-x86.outputs.hash }}
+          lookup-only: true
+
+      - name: Check aarch64 deploy state
+        id: cache-aarch64
+        uses: actions/cache/restore@v4
+        with:
+          path: .deploy-marker
+          key: cachix-deploy-aarch64-${{ steps.hash-aarch64.outputs.hash }}
+          lookup-only: true
+
+      - name: Resolve x86_64 changed
+        id: x86
+        run: |
+          if [ "${{ github.event.inputs.force }}" = "true" ] || [ "${{ steps.cache-x86.outputs.cache-hit }}" != "true" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Resolve aarch64 changed
+        id: aarch64
+        run: |
+          if [ "${{ github.event.inputs.force }}" = "true" ] || [ "${{ steps.cache-aarch64.outputs.cache-hit }}" != "true" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
   build-x86_64:
+    needs: changes
+    if: needs.changes.outputs.x86_changed == 'true'
     runs-on: blacksmith-8vcpu-ubuntu-2404
     permissions:
       contents: read
@@ -49,7 +125,19 @@ jobs:
         run: |
           cachix deploy activate ${{ steps.build.outputs.spec }} --async
 
+      # Only record the deployed state after a successful activate, so failed
+      # runs correctly retry next time.
+      - name: Record deployed state
+        run: touch .deploy-marker
+
+      - uses: actions/cache/save@v4
+        with:
+          path: .deploy-marker
+          key: cachix-deploy-x86-${{ needs.changes.outputs.x86_hash }}
+
   build-aarch64:
+    needs: changes
+    if: needs.changes.outputs.aarch64_changed == 'true'
     runs-on: blacksmith-8vcpu-ubuntu-2404-arm
     permissions:
       contents: read
@@ -83,3 +171,13 @@ jobs:
           CACHIX_ACTIVATE_TOKEN: ${{ secrets.CACHIX_ACTIVATE_TOKEN }}
         run: |
           cachix deploy activate ${{ steps.build.outputs.spec }} --async
+
+      # Only record the deployed state after a successful activate, so failed
+      # runs correctly retry next time.
+      - name: Record deployed state
+        run: touch .deploy-marker
+
+      - uses: actions/cache/save@v4
+        with:
+          path: .deploy-marker
+          key: cachix-deploy-aarch64-${{ needs.changes.outputs.aarch64_hash }}
