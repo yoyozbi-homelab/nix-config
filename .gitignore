@@ -1,0 +1,4 @@
+.serena/
+*.qcow2
+result
+result-*
