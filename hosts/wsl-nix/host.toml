@@ -1,0 +1,5 @@
+# home-manager-only host (no NixOS system managed from this flake)
+[host]
+username = "yohan"
+nixos = false
+home = true

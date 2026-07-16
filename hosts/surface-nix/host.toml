@@ -1,0 +1,17 @@
+[host]
+username = "yohan"
+desktop = "gnome"
+home = true
+
+roles = [
+  "boot-lanzaboote",
+  "cachix",
+  "bluetooth",
+  "firewall",
+  "fwupd",
+  "tpm",
+  "touchpad",
+  "openssh",
+]
+
+hardware = ["microsoft-surface-pro-intel"]

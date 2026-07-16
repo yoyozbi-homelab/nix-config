@@ -1,5 +1,27 @@
 # Plan: TOML-driven host configuration restructure
 
+## STATUS (updated 2026-07-16, branch `refactor/toml-hosts`)
+
+- **Phase 0: DONE** — baseline drvPaths in `.claude/plans/pre-drvs.txt`.
+  - `laptop-nix` does NOT evaluate on main (pre-existing: "OpenJDK 24 was removed",
+    thrown from `nixos/_mixins/users/yohan`). Fix separately before/while migrating it.
+  - `vm-nix` has no `toplevel` (VM-only, no root fs) — use `config.system.build.vm`.
+- **Phase 1: DONE** — `lib/hosts.nix` loader + 9 `hosts/*/host.toml` + flake `checks`
+  parity assertions (`nix build .#checks.x86_64-linux.host-toml`). Zero behavior change,
+  verified with nix-diff (see below).
+- **Phases 2-5: TODO** (handed off).
+- Schema decision vs §3 sketch: `[network]` keys use the *exact* option names from
+  `hosts.nix` (`internalIp`, `traefik-dashboard.dashboardUrl`, …) so the data passes
+  through with zero mapping. `[host]` keys are kebab-case (`build-home`, `state-version`).
+  An explicit `home = true` flag (not in the original sketch) marks hosts that get a
+  standalone homeConfiguration; servers don't have one.
+- **VALIDATION CAVEAT discovered in Phase 1**: strict drvPath equality is impossible in
+  this repo. `nix.registry`/`nix.nixPath` (nixos/default.nix) and the home-manager
+  equivalent pin `self` — the repo's own source store path — into every closure, so ANY
+  repo edit flips every drvPath. Use `nix run nixpkgs#nix-diff -- <pre.drv> <post.drv>`
+  and require that all diffs trace back to the `self` source pin (etc-nix-registry.json,
+  NIX_PATH / set-environment, home-manager's equivalents). Anything else is real drift.
+
 **Complexity**: Large (touches every file, but mechanical after the machinery exists)
 **Goal**: A host is fully described by one `host.toml`. Day-to-day changes (add a package, enable a role, add a host) never require touching Nix code. The Nix machinery that makes this work is allowed to be dense and write-once.
 

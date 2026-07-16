@@ -1,0 +1,22 @@
+[host]
+username = "nix"
+platform = "aarch64-linux"
+
+# k3s config is host-specific (nixos/rp/k3s.nix; becomes hosts/rp/k3s.nix in Phase 3)
+roles = [
+  "cachix",
+  "openssh",
+]
+
+[network]
+internalIp = "192.168.1.2"
+externalIp = "192.168.1.2"
+mac = "dc:a6:32:21:28:99"
+
+[network.traefik-dashboard]
+enabled = true
+dashboardUrl = "traefik-rp.yohanzbinden.ch"
+
+[network.argocd]
+enabled = true
+dashboardUrl = "argo-rp.yohanzbinden.ch"

@@ -1,0 +1,6 @@
+# VM-only host: build with .#nixosConfigurations.vm-nix.config.system.build.vm
+[host]
+username = "yohan"
+desktop = "noctalia"
+home = true
+build-home = true

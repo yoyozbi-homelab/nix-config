@@ -1,0 +1,21 @@
+# Transcribed from flake.nix allHosts + nixos/laptop-nix/default.nix imports.
+# `roles`/`hardware` mirror today's _mixins imports; they go live in Phase 3.
+[host]
+username = "yohan"
+desktop = "kde"
+home = true
+
+roles = [
+  "boot-systemd",
+  "bluetooth",
+  "firewall",
+  "fwupd",
+  "docker",
+  "thunderbolt",
+  "boxes",
+  "virtualbox",
+  "focusrite",
+  "desktop/hyprland",
+]
+
+hardware = ["dell-xps-15-9520-nvidia"]

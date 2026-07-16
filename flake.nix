@@ -129,5 +129,60 @@
       ) allHosts;
 
       overlays = import ./overlays { inherit inputs; };
+
+      # Phase 1 of the TOML restructure (.claude/plans/toml-host-restructure.plan.md):
+      # hosts/*/host.toml must stay in sync with the legacy attrsets above until
+      # the flake outputs are generated from TOML (Phase 3+).
+      checks =
+        nixpkgs.lib.genAttrs
+          [
+            "x86_64-linux"
+            "aarch64-linux"
+          ]
+          (
+            system:
+            let
+              toml = libx.hosts;
+              expectHome = [
+                "laptop-nix"
+                "laptop-omarchy"
+                "surface-nix"
+                "vm-nix"
+                "wsl-nix"
+              ];
+              expectNetwork = [
+                "ocr1"
+                "rp"
+                "tiny1"
+                "tiny2"
+              ];
+              parity = builtins.all (
+                n:
+                let
+                  t = toml.all.${n};
+                  f = allHosts.${n};
+                in
+                t.username == f.username
+                && t.platform == f.platform
+                && t.desktop == (f.desktop or null)
+                && t.buildHome == (f.buildHome or false)
+              ) (builtins.attrNames allHosts);
+            in
+            {
+              host-toml =
+                assert nixpkgs.lib.assertMsg (
+                  builtins.attrNames toml.nixos == builtins.attrNames allHosts
+                ) "host.toml nixos hosts != flake allHosts";
+                assert nixpkgs.lib.assertMsg (
+                  builtins.attrNames toml.home == expectHome
+                ) "host.toml home hosts != legacy homeConfigurations";
+                assert nixpkgs.lib.assertMsg (
+                  builtins.attrNames toml.network == expectNetwork
+                ) "host.toml network sections != legacy hosts.nix data";
+                assert nixpkgs.lib.assertMsg parity
+                  "host.toml fields (username/platform/desktop/build-home) diverge from flake allHosts";
+                nixpkgs.legacyPackages.${system}.writeText "host-toml-check" (builtins.toJSON toml.all);
+            }
+          );
     };
 }

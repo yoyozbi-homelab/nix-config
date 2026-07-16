@@ -1,0 +1,16 @@
+[host]
+username = "nix"
+
+roles = [
+  "boot-grub",
+  "cachix",
+  "openssh",
+  "networkmanager",
+  "ocr-cluster",
+  "k3s-agent",
+]
+
+[network]
+internalIp = "10.0.0.127"
+externalIp = "152.67.75.190"
+mac = "02:00:17:00:de:09"
