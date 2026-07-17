@@ -27,13 +27,13 @@ _: {
         };
 
         tiny1 = {
-          HostName = "152.67.78.81";
+          HostName = "152.67.75.190";
           User = "nix";
           IdentityFile = "/home/yohan/.ssh/id_github";
         };
 
         tiny2 = {
-          HostName = "152.67.67.251";
+          HostName = "144.24.234.135";
           User = "nix";
           IdentityFile = "/home/yohan/.ssh/id_github";
         };
