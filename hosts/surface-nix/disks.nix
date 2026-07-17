@@ -22,15 +22,44 @@
               content = {
                 type = "luks";
                 name = "crypted";
-                settings.crypttabExtraOpts = [ "tpm2-device=auto" "tpm2-pcrs=7" "token-timeout=10" ];
+                settings.crypttabExtraOpts = [
+                  "tpm2-device=auto"
+                  "tpm2-pcrs=7"
+                  "token-timeout=10"
+                ];
                 content = {
                   type = "btrfs";
-                  extraArgs = [ "-L" "nixos" "-f" ];
+                  extraArgs = [
+                    "-L"
+                    "nixos"
+                    "-f"
+                  ];
                   subvolumes = {
-                    "/root" = { mountpoint = "/"; mountOptions = [ "compress=zstd" "noatime" ]; };
-                    "/home" = { mountpoint = "/home"; mountOptions = [ "compress=zstd" "noatime" ]; };
-                    "/nix"  = { mountpoint = "/nix";  mountOptions = [ "compress=zstd" "noatime" ]; };
-                    "/swap" = { mountpoint = "/.swapvol"; swap.swapfile.size = "10G"; };
+                    "/root" = {
+                      mountpoint = "/";
+                      mountOptions = [
+                        "compress=zstd"
+                        "noatime"
+                      ];
+                    };
+                    "/home" = {
+                      mountpoint = "/home";
+                      mountOptions = [
+                        "compress=zstd"
+                        "noatime"
+                      ];
+                    };
+                    "/nix" = {
+                      mountpoint = "/nix";
+                      mountOptions = [
+                        "compress=zstd"
+                        "noatime"
+                      ];
+                    };
+                    "/swap" = {
+                      mountpoint = "/.swapvol";
+                      swap.swapfile.size = "10G";
+                    };
                   };
                 };
               };

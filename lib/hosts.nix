@@ -129,10 +129,12 @@ let
       getKey =
         key: spec:
         if hostSection ? ${key} then
-          (if typeChecks.${spec.type} hostSection.${key} then
-            hostSection.${key}
-          else
-            err "key '${key}' must be a ${spec.type}")
+          (
+            if typeChecks.${spec.type} hostSection.${key} then
+              hostSection.${key}
+            else
+              err "key '${key}' must be a ${spec.type}"
+          )
         else
           spec.default or (err "missing required key '${key}'");
 
@@ -203,9 +205,9 @@ in
 {
   inherit all;
 
-  nixos   = lib.filterAttrs (_: h: h.nixos) all;
-  home    = lib.filterAttrs (_: h: h.home) all;
-  deploy  = lib.filterAttrs (_: h: h.nixos && h.desktop == null) all;
+  nixos = lib.filterAttrs (_: h: h.nixos) all;
+  home = lib.filterAttrs (_: h: h.home) all;
+  deploy = lib.filterAttrs (_: h: h.nixos && h.desktop == null) all;
   network = networkData;
 
   # --- Resolution helpers ---------------------------------------------------
@@ -226,42 +228,53 @@ in
     inputs.nixpkgs.lib.nixosSystem {
       specialArgs = {
         inherit inputs outputs stateVersion;
-        inherit (data) hostname username desktop platform;
+        inherit (data)
+          hostname
+          username
+          desktop
+          platform
+          ;
       };
-      modules =
-        [
-          ../nixos/core
-          { networking.hostName = data.hostname;
-            nixpkgs.hostPlatform = lib.mkDefault data.platform;
-            networking.yoyozbi.hosts = networkData; }
-          ../nixos/users/root
-        ]
-        ++ lib.optional
-             (builtins.pathExists (../hosts + "/${data.hostname}/hardware.nix"))
-             (../hosts + "/${data.hostname}/hardware.nix")
-        ++ lib.optional
-             (builtins.pathExists (../nixos/users + "/${data.username}"))
-             (../nixos/users + "/${data.username}")
-        ++ map hardwareModule data.hardware
-        ++ map (roleModule ../nixos/roles) data.roles
-        ++ lib.optionals (data.desktop != null) [
-             ../nixos/roles/desktop
-             (../nixos/roles/desktop + "/${data.desktop}.nix")
-           ]
-        ++ lib.optionals data.buildHome [
-             inputs.home-manager.nixosModules.home-manager
-             {
-               home-manager = {
-                 useGlobalPkgs = false;
-                 useUserPackages = true;
-                 extraSpecialArgs = {
-                   inherit inputs outputs stateVersion;
-                   inherit (data) hostname username desktop platform;
-                 };
-                 users.${data.username} = import ../home;
-               };
-             }
-           ];
+      modules = [
+        ../nixos/core
+        {
+          networking.hostName = data.hostname;
+          nixpkgs.hostPlatform = lib.mkDefault data.platform;
+          networking.yoyozbi.hosts = networkData;
+        }
+        ../nixos/users/root
+      ]
+      ++ lib.optional (builtins.pathExists (../hosts + "/${data.hostname}/hardware.nix")) (
+        ../hosts + "/${data.hostname}/hardware.nix"
+      )
+      ++ lib.optional (builtins.pathExists (../nixos/users + "/${data.username}")) (
+        ../nixos/users + "/${data.username}"
+      )
+      ++ map hardwareModule data.hardware
+      ++ map (roleModule ../nixos/roles) data.roles
+      ++ lib.optionals (data.desktop != null) [
+        ../nixos/roles/desktop
+        (../nixos/roles/desktop + "/${data.desktop}.nix")
+      ]
+      ++ lib.optionals data.buildHome [
+        inputs.home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = false;
+            useUserPackages = true;
+            extraSpecialArgs = {
+              inherit inputs outputs stateVersion;
+              inherit (data)
+                hostname
+                username
+                desktop
+                platform
+                ;
+            };
+            users.${data.username} = import ../home;
+          };
+        }
+      ];
     };
 
   mkHomeFromToml =
@@ -270,7 +283,12 @@ in
       pkgs = inputs.nixpkgs.legacyPackages.${data.platform};
       extraSpecialArgs = {
         inherit inputs outputs stateVersion;
-        inherit (data) hostname username desktop platform;
+        inherit (data)
+          hostname
+          username
+          desktop
+          platform
+          ;
       };
       modules = [ ../home ];
     };

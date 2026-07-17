@@ -6,7 +6,10 @@
   ];
 
   boot.initrd = {
-    availableKernelModules = [ "xhci_pci" "virtio_scsi" ];
+    availableKernelModules = [
+      "xhci_pci"
+      "virtio_scsi"
+    ];
     kernelModules = [ "dm-snapshot" ];
   };
 }

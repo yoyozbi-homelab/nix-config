@@ -51,140 +51,35 @@
     }@inputs:
     let
       inherit (self) outputs;
-      
-      # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
       stateVersion = "25.05";
       libx = import ./lib { inherit inputs outputs stateVersion; };
-      
-      # Hosts still using the legacy mkHost generator (shrinks as Phase 3 proceeds)
-      # All hosts migrated — allHosts will be removed in Phase 5 cleanup
-      allHosts = { };
-
-      # Filter server hosts (those without desktop)
-      serverHosts = nixpkgs.lib.filterAttrs (name: cfg: (cfg.desktop or null) == null) allHosts;
-
-      # TOML-migrated server hosts (grows as Phase 3 proceeds)
-      migratedServerHosts = nixpkgs.lib.filterAttrs
-        (name: data: data.nixos && data.desktop == null)
-        { inherit (libx.hosts.all) tiny1 tiny2 ocr1 rp; };
     in
-    flake-utils.lib.eachDefaultSystem (system:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
         cachix-deploy-lib = cachix-deploy.lib pkgs;
-
-        # Legacy servers for this system
-        serversForSystem = nixpkgs.lib.filterAttrs (name: cfg: cfg.platform == system) serverHosts;
-        # TOML-migrated servers for this system
-        migratedServersForSystem = nixpkgs.lib.filterAttrs (name: data: data.platform == system) migratedServerHosts;
-
-        # Build agents for this system as derivation paths (legacy + TOML-migrated)
-        agentPaths =
-          builtins.mapAttrs (hostname: cfg:
-            (libx.mkHost {
-              inherit hostname;
-              inherit (cfg) username;
-              platform = cfg.platform;
-            }).config.system.build.toplevel
-          ) serversForSystem
-          //
-          builtins.mapAttrs (hostname: data:
-            (libx.mkHostFromToml data).config.system.build.toplevel
-          ) migratedServersForSystem;
+        agentPaths = builtins.mapAttrs (
+          hostname: data: (libx.mkHostFromToml data).config.system.build.toplevel
+        ) (nixpkgs.lib.filterAttrs (_: data: data.platform == system) libx.hosts.deploy);
       in
       {
-        defaultPackage = cachix-deploy-lib.spec {
-          agents = agentPaths;
-        };
+        defaultPackage = cachix-deploy-lib.spec { agents = agentPaths; };
       }
-    ) // {
-      homeConfigurations = {
-        "yohan@laptop-nix"  = libx.mkHomeFromToml libx.hosts.all.laptop-nix;
-        "yohan@surface-nix" = libx.mkHomeFromToml libx.hosts.all.surface-nix;
-        "yohan@vm-nix" = libx.mkHomeFromToml libx.hosts.all.vm-nix;
-        "yohan@wsl-nix"        = libx.mkHomeFromToml libx.hosts.all.wsl-nix;
-        "yohan@laptop-omarchy" = libx.mkHomeFromToml libx.hosts.all.laptop-omarchy;
-      };
-      
-      nixosConfigurations =
-        builtins.mapAttrs (hostname: cfg:
-          libx.mkHost {
-            inherit hostname;
-            inherit (cfg) username;
-            desktop = cfg.desktop or null;
-            buildHome = cfg.buildHome or false;
-          }
-        ) allHosts
-        // {
-          vm-nix = libx.mkHostFromToml libx.hosts.all.vm-nix;
-          tiny1  = libx.mkHostFromToml libx.hosts.all.tiny1;
-          tiny2  = libx.mkHostFromToml libx.hosts.all.tiny2;
-          ocr1        = libx.mkHostFromToml libx.hosts.all.ocr1;
-          rp          = libx.mkHostFromToml libx.hosts.all.rp;
-          surface-nix = libx.mkHostFromToml libx.hosts.all.surface-nix;
-          laptop-nix  = libx.mkHostFromToml libx.hosts.all.laptop-nix;
-        };
+    )
+    // {
+      nixosConfigurations = builtins.mapAttrs (_: libx.mkHostFromToml) libx.hosts.nixos;
+
+      homeConfigurations = nixpkgs.lib.mapAttrs' (
+        hostname: data: nixpkgs.lib.nameValuePair "${data.username}@${hostname}" (libx.mkHomeFromToml data)
+      ) libx.hosts.home;
 
       overlays = import ./overlays { inherit inputs; };
 
-      # Phase 1 of the TOML restructure (.claude/plans/toml-host-restructure.plan.md):
-      # hosts/*/host.toml must stay in sync with the legacy attrsets above until
-      # the flake outputs are generated from TOML (Phase 3+).
-      checks =
-        nixpkgs.lib.genAttrs
-          [
-            "x86_64-linux"
-            "aarch64-linux"
-          ]
-          (
-            system:
-            let
-              toml = libx.hosts;
-              # Hosts fully migrated to mkHostFromToml (grows during Phase 3)
-              migratedHosts = [ "laptop-nix" "ocr1" "rp" "surface-nix" "tiny1" "tiny2" "vm-nix" ];
-              allHostNames =
-                nixpkgs.lib.sort nixpkgs.lib.lessThan
-                  (builtins.attrNames allHosts ++ migratedHosts);
-              expectHome = [
-                "laptop-nix"
-                "laptop-omarchy"
-                "surface-nix"
-                "vm-nix"
-                "wsl-nix"
-              ];
-              expectNetwork = [
-                "ocr1"
-                "rp"
-                "tiny1"
-                "tiny2"
-              ];
-              parity = builtins.all (
-                n:
-                let
-                  t = toml.all.${n};
-                  f = allHosts.${n};
-                in
-                t.username == f.username
-                && t.platform == f.platform
-                && t.desktop == (f.desktop or null)
-                && t.buildHome == (f.buildHome or false)
-              ) (builtins.attrNames allHosts);
-            in
-            {
-              host-toml =
-                assert nixpkgs.lib.assertMsg
-                  (nixpkgs.lib.sort nixpkgs.lib.lessThan (builtins.attrNames toml.nixos) == allHostNames)
-                  "host.toml nixos hosts != nixosConfigurations";
-                assert nixpkgs.lib.assertMsg (
-                  builtins.attrNames toml.home == expectHome
-                ) "host.toml home hosts != legacy homeConfigurations";
-                assert nixpkgs.lib.assertMsg (
-                  builtins.attrNames toml.network == expectNetwork
-                ) "host.toml network sections != legacy hosts.nix data";
-                assert nixpkgs.lib.assertMsg parity
-                  "host.toml fields (username/platform/desktop/build-home) diverge from flake allHosts";
-                nixpkgs.legacyPackages.${system}.writeText "host-toml-check" (builtins.toJSON toml.all);
-            }
-          );
+      checks = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (system: {
+        host-toml = nixpkgs.legacyPackages.${system}.writeText "host-toml-check" (
+          builtins.toJSON libx.hosts.all
+        );
+      });
     };
 }

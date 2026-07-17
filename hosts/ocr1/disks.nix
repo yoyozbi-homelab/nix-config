@@ -25,10 +25,21 @@ _: {
                 type = "btrfs";
                 extraArgs = [ "-f" ];
                 subvolumes = {
-                  "/rootfs" = { mountpoint = "/"; };
-                  "/home" = { mountOptions = [ "compress=zstd" ]; mountpoint = "/home"; };
+                  "/rootfs" = {
+                    mountpoint = "/";
+                  };
+                  "/home" = {
+                    mountOptions = [ "compress=zstd" ];
+                    mountpoint = "/home";
+                  };
                   "/home/user" = { };
-                  "/nix" = { mountOptions = [ "compress=zstd" "noatime" ]; mountpoint = "/nix"; };
+                  "/nix" = {
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                    ];
+                    mountpoint = "/nix";
+                  };
                   "/test" = { };
                   "/swap" = {
                     mountpoint = "/.swapvol";

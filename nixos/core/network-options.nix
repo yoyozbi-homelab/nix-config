@@ -11,51 +11,102 @@
 let
   traefikOptions = lib.types.submodule {
     options = {
-      enabled = lib.mkOption { type = lib.types.bool; default = false; };
-      dashboardUrl = lib.mkOption { type = lib.types.str; default = "traefik.${hostname}.local"; };
+      enabled = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+      };
+      dashboardUrl = lib.mkOption {
+        type = lib.types.str;
+        default = "traefik.${hostname}.local";
+      };
     };
   };
   longhornOptions = lib.types.submodule {
     options = {
-      enabled = lib.mkOption { type = lib.types.bool; default = false; };
-      dashboardUrl = lib.mkOption { type = lib.types.str; default = "longhorn.${hostname}.local"; };
+      enabled = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+      };
+      dashboardUrl = lib.mkOption {
+        type = lib.types.str;
+        default = "longhorn.${hostname}.local";
+      };
     };
   };
   argocdOptions = lib.types.submodule {
     options = {
-      enabled = lib.mkOption { type = lib.types.bool; default = false; };
-      dashboardUrl = lib.mkOption { type = lib.types.str; default = "argocd.${hostname}.local"; };
+      enabled = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+      };
+      dashboardUrl = lib.mkOption {
+        type = lib.types.str;
+        default = "argocd.${hostname}.local";
+      };
     };
   };
   fluxOptions = lib.types.submodule {
     options = {
-      enabled = lib.mkOption { type = lib.types.bool; default = false; };
-      dashboardUrl = lib.mkOption { type = lib.types.str; default = "flux.${hostname}.local"; };
+      enabled = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+      };
+      dashboardUrl = lib.mkOption {
+        type = lib.types.str;
+        default = "flux.${hostname}.local";
+      };
     };
   };
   portainerOptions = lib.types.submodule {
     options = {
-      enabled = lib.mkOption { type = lib.types.bool; default = false; };
-      dashboardUrl = lib.mkOption { type = lib.types.str; default = "portainer.${hostname}.local"; };
+      enabled = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+      };
+      dashboardUrl = lib.mkOption {
+        type = lib.types.str;
+        default = "portainer.${hostname}.local";
+      };
     };
   };
   hostOptions = with lib; {
     internalIp = mkOption { type = types.str; };
-    externalIp  = mkOption { type = types.str; };
-    mac         = mkOption { type = types.nullOr types.str; default = null; };
-    rancher     = mkOption { type = types.bool; default = false; };
-    "traefik-dashboard" = mkOption { type = types.nullOr traefikOptions; default = null; };
-    portainer   = mkOption { type = types.nullOr portainerOptions; default = null; };
-    argocd      = mkOption { type = types.nullOr argocdOptions; default = null; };
-    flux        = mkOption { type = types.nullOr fluxOptions; default = null; };
-    longhorn    = mkOption { type = types.nullOr longhornOptions; default = null; };
+    externalIp = mkOption { type = types.str; };
+    mac = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+    };
+    rancher = mkOption {
+      type = types.bool;
+      default = false;
+    };
+    "traefik-dashboard" = mkOption {
+      type = types.nullOr traefikOptions;
+      default = null;
+    };
+    portainer = mkOption {
+      type = types.nullOr portainerOptions;
+      default = null;
+    };
+    argocd = mkOption {
+      type = types.nullOr argocdOptions;
+      default = null;
+    };
+    flux = mkOption {
+      type = types.nullOr fluxOptions;
+      default = null;
+    };
+    longhorn = mkOption {
+      type = types.nullOr longhornOptions;
+      default = null;
+    };
   };
 in
 {
   options = with lib; {
     networking.yoyozbi.hosts = mkOption {
       type = with types; attrsOf (submodule [ { options = hostOptions; } ]);
-      default = {};
+      default = { };
       description = "Cluster hosts keyed by hostname";
     };
     networking.yoyozbi.currentHost = mkOption {
@@ -64,7 +115,7 @@ in
       description = "The host described by this configuration";
     };
   };
-  config.warnings = lib.optional (
-    !(config.networking.yoyozbi.hosts ? ${hostname}) && desktop == null
-  ) "No network config for ${hostname} in hosts TOML — add a [network] section to hosts/${hostname}/host.toml";
+  config.warnings =
+    lib.optional (!(config.networking.yoyozbi.hosts ? ${hostname}) && desktop == null)
+      "No network config for ${hostname} in hosts TOML — add a [network] section to hosts/${hostname}/host.toml";
 }

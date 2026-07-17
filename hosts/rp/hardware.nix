@@ -7,8 +7,15 @@
   boot = {
     loader.grub.enable = false;
     loader.generic-extlinux-compatible.enable = true;
-    initrd.availableKernelModules = [ "xhci_pci" "usbhid" ];
-    kernelParams = [ "cgroup_enable=cpuset" "cgroup_memory=1" "cgroup_enable=memory" ];
+    initrd.availableKernelModules = [
+      "xhci_pci"
+      "usbhid"
+    ];
+    kernelParams = [
+      "cgroup_enable=cpuset"
+      "cgroup_memory=1"
+      "cgroup_enable=memory"
+    ];
   };
 
   fileSystems = {
@@ -27,9 +34,20 @@
   swapDevices = [ ];
 
   networking = {
-    interfaces.end0.ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
-    defaultGateway = { address = "192.168.1.1"; interface = "end0"; };
-    nameservers = [ "1.1.1.1" "1.0.0.1" ];
+    interfaces.end0.ipv4.addresses = [
+      {
+        address = "192.168.1.2";
+        prefixLength = 24;
+      }
+    ];
+    defaultGateway = {
+      address = "192.168.1.1";
+      interface = "end0";
+    };
+    nameservers = [
+      "1.1.1.1"
+      "1.0.0.1"
+    ];
     useDHCP = lib.mkDefault true;
   };
 
