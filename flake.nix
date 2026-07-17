@@ -102,14 +102,8 @@
         "yohan@laptop-nix"  = libx.mkHomeFromToml libx.hosts.all.laptop-nix;
         "yohan@surface-nix" = libx.mkHomeFromToml libx.hosts.all.surface-nix;
         "yohan@vm-nix" = libx.mkHomeFromToml libx.hosts.all.vm-nix;
-        "yohan@wsl-nix" = libx.mkHome {
-          hostname = "wsl-nix";
-          username = "yohan";
-        };
-        "yohan@laptop-omarchy" = libx.mkHome {
-            hostname = "laptop-omarchy";
-            username = "yohan";
-        };
+        "yohan@wsl-nix"        = libx.mkHomeFromToml libx.hosts.all.wsl-nix;
+        "yohan@laptop-omarchy" = libx.mkHomeFromToml libx.hosts.all.laptop-omarchy;
       };
       
       nixosConfigurations =
