@@ -51,83 +51,43 @@
     }@inputs:
     let
       inherit (self) outputs;
-      
-      # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
       stateVersion = "25.05";
       libx = import ./lib { inherit inputs outputs stateVersion; };
-      
-      # Define all hosts in one place
-      allHosts = {
-        laptop-nix = { username = "yohan"; desktop = "kde"; platform = "x86_64-linux"; };
-        surface-nix = { username = "yohan"; desktop = "gnome"; platform = "x86_64-linux"; };
-        vm-nix = { username = "yohan"; desktop = "noctalia"; platform = "x86_64-linux"; buildHome = true; };
-        ocr1 = { username = "nix"; platform = "aarch64-linux"; };
-        tiny1 = { username = "nix"; platform = "x86_64-linux"; };
-        tiny2 = { username = "nix"; platform = "x86_64-linux"; };
-        rp = { username = "nix"; platform = "aarch64-linux"; };
-      };
-      
-      # Filter server hosts (those without desktop)
-      serverHosts = nixpkgs.lib.filterAttrs (name: cfg: (cfg.desktop or null) == null) allHosts;
     in
-    flake-utils.lib.eachDefaultSystem (system:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
         cachix-deploy-lib = cachix-deploy.lib pkgs;
-        
-        # Filter servers for this system only
-        serversForSystem = nixpkgs.lib.filterAttrs (name: cfg: cfg.platform == system) serverHosts;
-        
-        # Build agents for this system as derivation paths
-        agentPaths = builtins.mapAttrs (hostname: cfg:
-          (libx.mkHost {
-            inherit hostname;
-            inherit (cfg) username;
-            platform = cfg.platform;
-          }).config.system.build.toplevel
-        ) serversForSystem;
+        agentPaths = builtins.mapAttrs (
+          hostname: data: (libx.mkHostFromToml data).config.system.build.toplevel
+        ) (nixpkgs.lib.filterAttrs (_: data: data.platform == system) libx.hosts.deploy);
       in
       {
-        defaultPackage = cachix-deploy-lib.spec {
-          agents = agentPaths;
+        formatter = pkgs.writeShellApplication {
+          name = "fmt";
+          runtimeInputs = [ pkgs.nixfmt ];
+          text = ''
+            find "$@" -name '*.nix' -not -path '*/.git/*' -print0 \
+              | xargs -0 nixfmt
+          '';
         };
+        defaultPackage = cachix-deploy-lib.spec { agents = agentPaths; };
       }
-    ) // {
-      homeConfigurations = {
-        "yohan@laptop-nix" = libx.mkHome {
-          hostname = "laptop-nix";
-          username = "yohan";
-          desktop = "kde";
-        };
-        "yohan@surface-nix" = libx.mkHome {
-          hostname = "surface-nix";
-          username = "yohan";
-          desktop = "gnome";
-        };
-        "yohan@vm-nix" = libx.mkHome {
-          hostname = "vm-nix";
-          username = "yohan";
-          desktop = "noctalia";
-        };
-        "yohan@wsl-nix" = libx.mkHome {
-          hostname = "wsl-nix";
-          username = "yohan";
-        };
-        "yohan@laptop-omarchy" = libx.mkHome {
-            hostname = "laptop-omarchy";
-            username = "yohan";
-        };
-      };
-      
-      nixosConfigurations = builtins.mapAttrs (hostname: cfg:
-        libx.mkHost {
-          inherit hostname;
-          inherit (cfg) username;
-          desktop = cfg.desktop or null;
-          buildHome = cfg.buildHome or false;
-        }
-      ) allHosts;
+    )
+    // {
+      nixosConfigurations = builtins.mapAttrs (_: libx.mkHostFromToml) libx.hosts.nixos;
+
+      homeConfigurations = nixpkgs.lib.mapAttrs' (
+        hostname: data: nixpkgs.lib.nameValuePair "${data.username}@${hostname}" (libx.mkHomeFromToml data)
+      ) libx.hosts.home;
 
       overlays = import ./overlays { inherit inputs; };
+
+      checks = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (system: {
+        host-toml = nixpkgs.legacyPackages.${system}.writeText "host-toml-check" (
+          builtins.toJSON libx.hosts.all
+        );
+      });
     };
 }

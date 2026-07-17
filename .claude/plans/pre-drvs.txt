@@ -1,0 +1,16 @@
+# Phase 0 baseline drvPaths, captured on branch refactor/toml-hosts (parent commit 5d26321).
+# Compare with: nix eval --raw .#nixosConfigurations.<h>.config.system.build.toplevel.drvPath
+# Identical drvPath == identical closure.
+nixos/laptop-nix EVALFAIL (pre-existing on main: "OpenJDK 24 was removed as it has reached its end of life", from nixos/_mixins/users/yohan — fix separately, not part of the restructure)
+nixos/surface-nix /nix/store/mc0k745rd28sqcpr0mlyzqbpf4nxq2s9-nixos-system-surface-nix-26.05.20260630.95ca1e2.drv
+nixos/vm-nix(toplevel) EVALFAIL (pre-existing: no root fileSystems — VM-only host, use system.build.vm)
+nixos/vm-nix(vm) /nix/store/8n004jqbd3yk001fyxw7vfp66w1a39s1-nixos-vm.drv
+nixos/ocr1 /nix/store/vgzk9zw41sfsj5cd8qzfn8p1h573faf9-nixos-system-ocr1-26.05.20260630.95ca1e2.drv
+nixos/tiny1 /nix/store/fy6nnsp76ljir445p3i5h0kahckj7bap-nixos-system-tiny1-26.05.20260630.95ca1e2.drv
+nixos/tiny2 /nix/store/xanzl7gi8gxidch0mqsliidnpf1nginq-nixos-system-tiny2-26.05.20260630.95ca1e2.drv
+nixos/rp /nix/store/mcy9qji9i77c60xz56l37mdmhlcyw7kf-nixos-system-rp-26.05.20260630.95ca1e2.drv
+home/yohan@laptop-nix /nix/store/h4b1fwdzdakz629ki5czay8mj8zjc4av-home-manager-generation.drv
+home/yohan@surface-nix /nix/store/mkr8v3xsx5qafay39wzpcbfwll246505-home-manager-generation.drv
+home/yohan@vm-nix /nix/store/dk0blszlpglk5l48pqyysmljzrwa0bga-home-manager-generation.drv
+home/yohan@wsl-nix /nix/store/lgrwa8l06fvwk27cmvv891nv91kig5ws-home-manager-generation.drv
+home/yohan@laptop-omarchy /nix/store/lgrwa8l06fvwk27cmvv891nv91kig5ws-home-manager-generation.drv

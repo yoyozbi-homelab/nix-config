@@ -1,0 +1,5 @@
+# home-manager-only host (Omarchy/Arch machine, only $HOME is managed here)
+[host]
+username = "yohan"
+nixos = false
+home = true

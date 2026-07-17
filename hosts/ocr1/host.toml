@@ -1,0 +1,39 @@
+[host]
+username = "nix"
+platform = "aarch64-linux"
+
+roles = [
+  "boot-grub",
+  "cachix",
+  "openssh",
+  "networkmanager",
+  "netdata",
+  "ocr-cluster",
+  "k3s-server",
+  "tmux",
+]
+
+[network]
+internalIp = "10.0.0.93"
+externalIp = "144.24.253.246"
+mac = "02:00:17:00:a1:bb"
+
+[network.traefik-dashboard]
+enabled = true
+dashboardUrl = "traefik-ocr1.yohanzbinden.ch"
+
+[network.flux]
+enabled = true
+dashboardUrl = "flux.yohanzbinden.ch"
+
+[network.argocd]
+enabled = false
+dashboardUrl = "argocd.yohanzbinden.ch"
+
+[network.portainer]
+enabled = true
+dashboardUrl = "portainer.yohanzbinden.ch"
+
+[network.longhorn]
+enabled = true
+dashboardUrl = "longhorn.yohanzbinden.ch"
