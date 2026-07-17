@@ -57,10 +57,8 @@
       libx = import ./lib { inherit inputs outputs stateVersion; };
       
       # Hosts still using the legacy mkHost generator (shrinks as Phase 3 proceeds)
-      allHosts = {
-        laptop-nix = { username = "yohan"; desktop = "kde"; platform = "x86_64-linux"; };
-        surface-nix = { username = "yohan"; desktop = "gnome"; platform = "x86_64-linux"; };
-      };
+      # All hosts migrated — allHosts will be removed in Phase 5 cleanup
+      allHosts = { };
 
       # Filter server hosts (those without desktop)
       serverHosts = nixpkgs.lib.filterAttrs (name: cfg: (cfg.desktop or null) == null) allHosts;
@@ -101,16 +99,8 @@
       }
     ) // {
       homeConfigurations = {
-        "yohan@laptop-nix" = libx.mkHome {
-          hostname = "laptop-nix";
-          username = "yohan";
-          desktop = "kde";
-        };
-        "yohan@surface-nix" = libx.mkHome {
-          hostname = "surface-nix";
-          username = "yohan";
-          desktop = "gnome";
-        };
+        "yohan@laptop-nix"  = libx.mkHomeFromToml libx.hosts.all.laptop-nix;
+        "yohan@surface-nix" = libx.mkHomeFromToml libx.hosts.all.surface-nix;
         "yohan@vm-nix" = libx.mkHomeFromToml libx.hosts.all.vm-nix;
         "yohan@wsl-nix" = libx.mkHome {
           hostname = "wsl-nix";
@@ -135,8 +125,10 @@
           vm-nix = libx.mkHostFromToml libx.hosts.all.vm-nix;
           tiny1  = libx.mkHostFromToml libx.hosts.all.tiny1;
           tiny2  = libx.mkHostFromToml libx.hosts.all.tiny2;
-          ocr1   = libx.mkHostFromToml libx.hosts.all.ocr1;
-          rp     = libx.mkHostFromToml libx.hosts.all.rp;
+          ocr1        = libx.mkHostFromToml libx.hosts.all.ocr1;
+          rp          = libx.mkHostFromToml libx.hosts.all.rp;
+          surface-nix = libx.mkHostFromToml libx.hosts.all.surface-nix;
+          laptop-nix  = libx.mkHostFromToml libx.hosts.all.laptop-nix;
         };
 
       overlays = import ./overlays { inherit inputs; };
@@ -155,7 +147,7 @@
             let
               toml = libx.hosts;
               # Hosts fully migrated to mkHostFromToml (grows during Phase 3)
-              migratedHosts = [ "ocr1" "rp" "tiny1" "tiny2" "vm-nix" ];
+              migratedHosts = [ "laptop-nix" "ocr1" "rp" "surface-nix" "tiny1" "tiny2" "vm-nix" ];
               allHostNames =
                 nixpkgs.lib.sort nixpkgs.lib.lessThan
                   (builtins.attrNames allHosts ++ migratedHosts);

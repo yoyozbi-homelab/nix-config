@@ -189,6 +189,11 @@ let
     else
       throw "role '${role}' not found under ${toString rolesDir} (expected ${role}.nix or ${role}/default.nix)";
 
+  hardwareModule =
+    name:
+    inputs.nixos-hardware.nixosModules.${name}
+      or (throw "'${name}' is not an inputs.nixos-hardware.nixosModules attribute");
+
 in
 {
   inherit all;
@@ -200,16 +205,11 @@ in
 
   # --- Resolution helpers ---------------------------------------------------
 
-  inherit roleModule;
+  inherit roleModule hardwareModule;
 
   resolvePackage =
     pkgs: path:
     lib.attrByPath (lib.splitString "." path) (throw "package '${path}' not found in pkgs") pkgs;
-
-  hardwareModule =
-    name:
-    inputs.nixos-hardware.nixosModules.${name}
-      or (throw "'${name}' is not an inputs.nixos-hardware.nixosModules attribute");
 
   overlay =
     name: outputs.overlays.${name} or (throw "'${name}' is not an outputs.overlays attribute");
@@ -236,6 +236,7 @@ in
         ++ lib.optional
              (builtins.pathExists (../nixos/users + "/${data.username}"))
              (../nixos/users + "/${data.username}")
+        ++ map hardwareModule data.hardware
         ++ map (roleModule ../nixos/roles) data.roles
         ++ lib.optionals (data.desktop != null) [
              ../nixos/roles/desktop
