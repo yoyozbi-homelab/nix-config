@@ -15,14 +15,8 @@
   imports = [
     inputs.disko.nixosModules.disko
     inputs.sops-nix.nixosModules.sops
-    ../hosts.nix
-    ./${hostname}
-    ./users/root
-  ]
-  ++ lib.optional (builtins.pathExists (
-    ./. + "/users/${username}"
-  )) ./users/${username}
-  ++ lib.optional (desktop != null) ./roles/desktop;
+    ../../hosts.nix
+  ];
   nixpkgs = {
     overlays = [
       # Add overlays your own flake exports (from overlays and pkgs dir):

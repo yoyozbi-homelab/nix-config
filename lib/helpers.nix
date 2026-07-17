@@ -52,9 +52,15 @@
           ;
       };
       modules = [
-        ../nixos
+        ../nixos/core
+        (../nixos + "/${hostname}")
+        ../nixos/users/root
         #inputs.agenix.nixosModules.default
       ]
+      ++ inputs.nixpkgs.lib.optional
+           (builtins.pathExists (../nixos + "/users/${username}"))
+           (../nixos + "/users/${username}")
+      ++ inputs.nixpkgs.lib.optional (desktop != null) ../nixos/roles/desktop
       ++ (inputs.nixpkgs.lib.optionals (installer != null) [ installer ])
       ++ (inputs.nixpkgs.lib.optionals buildHome [
         inputs.home-manager.nixosModules.home-manager

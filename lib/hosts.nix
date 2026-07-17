@@ -179,27 +179,7 @@ let
   ) (builtins.attrNames dirEntries);
 
   all = lib.genAttrs hostNames loadHost;
-in
-{
-  inherit all;
 
-  # Hosts that produce a nixosConfigurations entry
-  nixos = lib.filterAttrs (_: h: h.nixos) all;
-
-  # Hosts that produce a standalone homeConfigurations."<user>@<host>" entry
-  home = lib.filterAttrs (_: h: h.home) all;
-
-  # Cachix-deploy agents: NixOS hosts without a desktop (same rule as the
-  # legacy serverHosts filter in flake.nix — agent names must not change)
-  deploy = lib.filterAttrs (_: h: h.nixos && h.desktop == null) all;
-
-  # hostname -> [network] table, aggregated across all hosts. Phase 4 feeds
-  # this to networking.yoyozbi.hosts, replacing the data half of hosts.nix.
-  network = lib.mapAttrs (_: h: h.network) (lib.filterAttrs (_: h: h.network != null) all);
-
-  # --- Resolution helpers, consumed from Phase 3 onward -------------------
-
-  # roleModule ../nixos/roles "desktop/hyprland" -> path to module
   roleModule =
     rolesDir: role:
     if builtins.pathExists (rolesDir + "/${role}.nix") then
@@ -209,18 +189,82 @@ in
     else
       throw "role '${role}' not found under ${toString rolesDir} (expected ${role}.nix or ${role}/default.nix)";
 
-  # resolvePackage pkgs "unstable.discord" -> derivation
+in
+{
+  inherit all;
+
+  nixos = lib.filterAttrs (_: h: h.nixos) all;
+  home = lib.filterAttrs (_: h: h.home) all;
+  deploy = lib.filterAttrs (_: h: h.nixos && h.desktop == null) all;
+  network = lib.mapAttrs (_: h: h.network) (lib.filterAttrs (_: h: h.network != null) all);
+
+  # --- Resolution helpers ---------------------------------------------------
+
+  inherit roleModule;
+
   resolvePackage =
     pkgs: path:
     lib.attrByPath (lib.splitString "." path) (throw "package '${path}' not found in pkgs") pkgs;
 
-  # hardwareModule "dell-xps-15-9520-nvidia" -> nixos-hardware module
   hardwareModule =
     name:
     inputs.nixos-hardware.nixosModules.${name}
       or (throw "'${name}' is not an inputs.nixos-hardware.nixosModules attribute");
 
-  # overlay "additions" -> overlay function from outputs.overlays
   overlay =
     name: outputs.overlays.${name} or (throw "'${name}' is not an outputs.overlays attribute");
+
+  # --- TOML-driven generators (Phase 3+) -----------------------------------
+
+  mkHostFromToml =
+    data:
+    inputs.nixpkgs.lib.nixosSystem {
+      specialArgs = {
+        inherit inputs outputs stateVersion;
+        inherit (data) hostname username desktop platform;
+      };
+      modules =
+        [
+          ../nixos/core
+          { networking.hostName = data.hostname;
+            nixpkgs.hostPlatform = lib.mkDefault data.platform; }
+          ../nixos/users/root
+        ]
+        ++ lib.optional
+             (builtins.pathExists (../hosts + "/${data.hostname}/hardware.nix"))
+             (../hosts + "/${data.hostname}/hardware.nix")
+        ++ lib.optional
+             (builtins.pathExists (../nixos/users + "/${data.username}"))
+             (../nixos/users + "/${data.username}")
+        ++ map (roleModule ../nixos/roles) data.roles
+        ++ lib.optionals (data.desktop != null) [
+             ../nixos/roles/desktop
+             (../nixos/roles/desktop + "/${data.desktop}.nix")
+           ]
+        ++ lib.optionals data.buildHome [
+             inputs.home-manager.nixosModules.home-manager
+             {
+               home-manager = {
+                 useGlobalPkgs = false;
+                 useUserPackages = true;
+                 extraSpecialArgs = {
+                   inherit inputs outputs stateVersion;
+                   inherit (data) hostname username desktop platform;
+                 };
+                 users.${data.username} = import ../home;
+               };
+             }
+           ];
+    };
+
+  mkHomeFromToml =
+    data:
+    inputs.home-manager.lib.homeManagerConfiguration {
+      pkgs = inputs.nixpkgs.legacyPackages.${data.platform};
+      extraSpecialArgs = {
+        inherit inputs outputs stateVersion;
+        inherit (data) hostname username desktop platform;
+      };
+      modules = [ ../home ];
+    };
 }

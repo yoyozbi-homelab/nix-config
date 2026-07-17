@@ -56,11 +56,10 @@
       stateVersion = "25.05";
       libx = import ./lib { inherit inputs outputs stateVersion; };
       
-      # Define all hosts in one place
+      # Hosts still using the legacy mkHost generator (shrinks as Phase 3 proceeds)
       allHosts = {
         laptop-nix = { username = "yohan"; desktop = "kde"; platform = "x86_64-linux"; };
         surface-nix = { username = "yohan"; desktop = "gnome"; platform = "x86_64-linux"; };
-        vm-nix = { username = "yohan"; desktop = "noctalia"; platform = "x86_64-linux"; buildHome = true; };
         ocr1 = { username = "nix"; platform = "aarch64-linux"; };
         tiny1 = { username = "nix"; platform = "x86_64-linux"; };
         tiny2 = { username = "nix"; platform = "x86_64-linux"; };
@@ -104,11 +103,7 @@
           username = "yohan";
           desktop = "gnome";
         };
-        "yohan@vm-nix" = libx.mkHome {
-          hostname = "vm-nix";
-          username = "yohan";
-          desktop = "noctalia";
-        };
+        "yohan@vm-nix" = libx.mkHomeFromToml libx.hosts.all.vm-nix;
         "yohan@wsl-nix" = libx.mkHome {
           hostname = "wsl-nix";
           username = "yohan";
@@ -119,14 +114,18 @@
         };
       };
       
-      nixosConfigurations = builtins.mapAttrs (hostname: cfg:
-        libx.mkHost {
-          inherit hostname;
-          inherit (cfg) username;
-          desktop = cfg.desktop or null;
-          buildHome = cfg.buildHome or false;
-        }
-      ) allHosts;
+      nixosConfigurations =
+        builtins.mapAttrs (hostname: cfg:
+          libx.mkHost {
+            inherit hostname;
+            inherit (cfg) username;
+            desktop = cfg.desktop or null;
+            buildHome = cfg.buildHome or false;
+          }
+        ) allHosts
+        // {
+          vm-nix = libx.mkHostFromToml libx.hosts.all.vm-nix;
+        };
 
       overlays = import ./overlays { inherit inputs; };
 
@@ -143,6 +142,11 @@
             system:
             let
               toml = libx.hosts;
+              # Hosts fully migrated to mkHostFromToml (grows during Phase 3)
+              migratedHosts = [ "vm-nix" ];
+              allHostNames =
+                nixpkgs.lib.sort nixpkgs.lib.lessThan
+                  (builtins.attrNames allHosts ++ migratedHosts);
               expectHome = [
                 "laptop-nix"
                 "laptop-omarchy"
@@ -170,9 +174,9 @@
             in
             {
               host-toml =
-                assert nixpkgs.lib.assertMsg (
-                  builtins.attrNames toml.nixos == builtins.attrNames allHosts
-                ) "host.toml nixos hosts != flake allHosts";
+                assert nixpkgs.lib.assertMsg
+                  (nixpkgs.lib.sort nixpkgs.lib.lessThan (builtins.attrNames toml.nixos) == allHostNames)
+                  "host.toml nixos hosts != nixosConfigurations";
                 assert nixpkgs.lib.assertMsg (
                   builtins.attrNames toml.home == expectHome
                 ) "host.toml home hosts != legacy homeConfigurations";
