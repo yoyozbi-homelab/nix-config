@@ -61,30 +61,40 @@
         laptop-nix = { username = "yohan"; desktop = "kde"; platform = "x86_64-linux"; };
         surface-nix = { username = "yohan"; desktop = "gnome"; platform = "x86_64-linux"; };
         ocr1 = { username = "nix"; platform = "aarch64-linux"; };
-        tiny1 = { username = "nix"; platform = "x86_64-linux"; };
-        tiny2 = { username = "nix"; platform = "x86_64-linux"; };
         rp = { username = "nix"; platform = "aarch64-linux"; };
       };
-      
+
       # Filter server hosts (those without desktop)
       serverHosts = nixpkgs.lib.filterAttrs (name: cfg: (cfg.desktop or null) == null) allHosts;
+
+      # TOML-migrated server hosts (grows as Phase 3 proceeds)
+      migratedServerHosts = nixpkgs.lib.filterAttrs
+        (name: data: data.nixos && data.desktop == null)
+        { inherit (libx.hosts.all) tiny1 tiny2; };
     in
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
         cachix-deploy-lib = cachix-deploy.lib pkgs;
-        
-        # Filter servers for this system only
+
+        # Legacy servers for this system
         serversForSystem = nixpkgs.lib.filterAttrs (name: cfg: cfg.platform == system) serverHosts;
-        
-        # Build agents for this system as derivation paths
-        agentPaths = builtins.mapAttrs (hostname: cfg:
-          (libx.mkHost {
-            inherit hostname;
-            inherit (cfg) username;
-            platform = cfg.platform;
-          }).config.system.build.toplevel
-        ) serversForSystem;
+        # TOML-migrated servers for this system
+        migratedServersForSystem = nixpkgs.lib.filterAttrs (name: data: data.platform == system) migratedServerHosts;
+
+        # Build agents for this system as derivation paths (legacy + TOML-migrated)
+        agentPaths =
+          builtins.mapAttrs (hostname: cfg:
+            (libx.mkHost {
+              inherit hostname;
+              inherit (cfg) username;
+              platform = cfg.platform;
+            }).config.system.build.toplevel
+          ) serversForSystem
+          //
+          builtins.mapAttrs (hostname: data:
+            (libx.mkHostFromToml data).config.system.build.toplevel
+          ) migratedServersForSystem;
       in
       {
         defaultPackage = cachix-deploy-lib.spec {
@@ -125,6 +135,8 @@
         ) allHosts
         // {
           vm-nix = libx.mkHostFromToml libx.hosts.all.vm-nix;
+          tiny1  = libx.mkHostFromToml libx.hosts.all.tiny1;
+          tiny2  = libx.mkHostFromToml libx.hosts.all.tiny2;
         };
 
       overlays = import ./overlays { inherit inputs; };
@@ -143,7 +155,7 @@
             let
               toml = libx.hosts;
               # Hosts fully migrated to mkHostFromToml (grows during Phase 3)
-              migratedHosts = [ "vm-nix" ];
+              migratedHosts = [ "tiny1" "tiny2" "vm-nix" ];
               allHostNames =
                 nixpkgs.lib.sort nixpkgs.lib.lessThan
                   (builtins.attrNames allHosts ++ migratedHosts);
