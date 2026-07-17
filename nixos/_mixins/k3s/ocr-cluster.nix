@@ -19,6 +19,5 @@ _: {
     "homepage/vikunja-api-key" = { };
     "vikunja/user" = { };
     "vikunja/password" = { };
-    "kDrive/api-key" = { };
   };
 }
