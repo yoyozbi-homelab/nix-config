@@ -6,6 +6,7 @@ platform = "aarch64-linux"
 roles = [
   "cachix",
   "openssh",
+  "k3s-server",
 ]
 
 [network]

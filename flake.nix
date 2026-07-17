@@ -60,8 +60,6 @@
       allHosts = {
         laptop-nix = { username = "yohan"; desktop = "kde"; platform = "x86_64-linux"; };
         surface-nix = { username = "yohan"; desktop = "gnome"; platform = "x86_64-linux"; };
-        ocr1 = { username = "nix"; platform = "aarch64-linux"; };
-        rp = { username = "nix"; platform = "aarch64-linux"; };
       };
 
       # Filter server hosts (those without desktop)
@@ -70,7 +68,7 @@
       # TOML-migrated server hosts (grows as Phase 3 proceeds)
       migratedServerHosts = nixpkgs.lib.filterAttrs
         (name: data: data.nixos && data.desktop == null)
-        { inherit (libx.hosts.all) tiny1 tiny2; };
+        { inherit (libx.hosts.all) tiny1 tiny2 ocr1 rp; };
     in
     flake-utils.lib.eachDefaultSystem (system:
       let
@@ -137,6 +135,8 @@
           vm-nix = libx.mkHostFromToml libx.hosts.all.vm-nix;
           tiny1  = libx.mkHostFromToml libx.hosts.all.tiny1;
           tiny2  = libx.mkHostFromToml libx.hosts.all.tiny2;
+          ocr1   = libx.mkHostFromToml libx.hosts.all.ocr1;
+          rp     = libx.mkHostFromToml libx.hosts.all.rp;
         };
 
       overlays = import ./overlays { inherit inputs; };
@@ -155,7 +155,7 @@
             let
               toml = libx.hosts;
               # Hosts fully migrated to mkHostFromToml (grows during Phase 3)
-              migratedHosts = [ "tiny1" "tiny2" "vm-nix" ];
+              migratedHosts = [ "ocr1" "rp" "tiny1" "tiny2" "vm-nix" ];
               allHostNames =
                 nixpkgs.lib.sort nixpkgs.lib.lessThan
                   (builtins.attrNames allHosts ++ migratedHosts);
