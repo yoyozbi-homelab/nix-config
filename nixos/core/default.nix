@@ -15,7 +15,7 @@
   imports = [
     inputs.disko.nixosModules.disko
     inputs.sops-nix.nixosModules.sops
-    ../../hosts.nix
+    ./network-options.nix
   ];
   nixpkgs = {
     overlays = [

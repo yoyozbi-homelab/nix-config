@@ -194,14 +194,19 @@ let
     inputs.nixos-hardware.nixosModules.${name}
       or (throw "'${name}' is not an inputs.nixos-hardware.nixosModules attribute");
 
+  # Network data derived from TOML [network] sections, keyed by hostname.
+  # Passed as an inline module to mkHostFromToml so networking.yoyozbi.hosts
+  # is always populated without needing to thread it through specialArgs.
+  networkData = lib.mapAttrs (_: h: h.network) (lib.filterAttrs (_: h: h.network != null) all);
+
 in
 {
   inherit all;
 
-  nixos = lib.filterAttrs (_: h: h.nixos) all;
-  home = lib.filterAttrs (_: h: h.home) all;
-  deploy = lib.filterAttrs (_: h: h.nixos && h.desktop == null) all;
-  network = lib.mapAttrs (_: h: h.network) (lib.filterAttrs (_: h: h.network != null) all);
+  nixos   = lib.filterAttrs (_: h: h.nixos) all;
+  home    = lib.filterAttrs (_: h: h.home) all;
+  deploy  = lib.filterAttrs (_: h: h.nixos && h.desktop == null) all;
+  network = networkData;
 
   # --- Resolution helpers ---------------------------------------------------
 
@@ -227,7 +232,8 @@ in
         [
           ../nixos/core
           { networking.hostName = data.hostname;
-            nixpkgs.hostPlatform = lib.mkDefault data.platform; }
+            nixpkgs.hostPlatform = lib.mkDefault data.platform;
+            networking.yoyozbi.hosts = networkData; }
           ../nixos/users/root
         ]
         ++ lib.optional
