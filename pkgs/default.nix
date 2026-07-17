@@ -7,7 +7,4 @@
   #distrobox = pkgs.callPackage ./distrobox.nix { };
   kDrive = pkgs.callPackage ./kDrive { };
   sddm-themes = pkgs.callPackage ./sddm-themes.nix { };
-  superProductivity = pkgs.callPackage ./superProductivity.nix { };
-  devToys = pkgs.callPackage ./devToys.nix { };
-  appflowy = pkgs.callPackage ./appflowy.nix { };
 }
