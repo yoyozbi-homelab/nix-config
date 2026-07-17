@@ -1,4 +1,9 @@
-{ inputs, pkgs, hostname, ... }:
+{
+  inputs,
+  pkgs,
+  hostname,
+  ...
+}:
 let
   # Hyprland needs software-GL fallback and software cursors to run inside a
   # plain QEMU VM (virtio-gpu has no HW cursor planes). Only the VM host needs
@@ -26,8 +31,8 @@ in
   ];
 
   wayland.windowManager.hyprland = {
-    enable      = true;
-    configType    = "lua";
+    enable = true;
+    configType = "lua";
     # These are assigned as GLOBALS (no `local`) on purpose: `require("conf/dms")`
     # loads main.lua in its own scope, and Lua locals from this chunk are not
     # visible there. Only globals cross the require boundary, so `local` here

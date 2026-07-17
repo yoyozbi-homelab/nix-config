@@ -64,6 +64,14 @@
         ) (nixpkgs.lib.filterAttrs (_: data: data.platform == system) libx.hosts.deploy);
       in
       {
+        formatter = pkgs.writeShellApplication {
+          name = "fmt";
+          runtimeInputs = [ pkgs.nixfmt ];
+          text = ''
+            find "$@" -name '*.nix' -not -path '*/.git/*' -print0 \
+              | xargs -0 nixfmt
+          '';
+        };
         defaultPackage = cachix-deploy-lib.spec { agents = agentPaths; };
       }
     )

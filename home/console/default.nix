@@ -228,7 +228,7 @@ in
           defaultBranch = "main";
         };
       };
-     
+
       lfs = {
         enable = true;
       };

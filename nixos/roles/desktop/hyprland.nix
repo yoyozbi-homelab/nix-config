@@ -50,7 +50,7 @@ in
 
   services = {
     greetd = {
-      enable = true; 
+      enable = true;
       settings = {
         default_session = {
           # Use uwsm so the session lands in systemd graphical-session.target

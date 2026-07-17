@@ -1,4 +1,9 @@
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 {
   home.packages = with pkgs; [
     acpi
@@ -11,19 +16,20 @@
   ];
 
   wayland.windowManager.hyprland = {
-    package       = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-    portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-    enable        = true;
-    configType    = "lua";
-    extraConfig   = ''
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    portalPackage =
+      inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    enable = true;
+    configType = "lua";
+    extraConfig = ''
       require("conf/main")
     '';
   };
 
   xdg.configFile = {
-    "hypr/conf/main.lua".source      = ./lua/main.lua;
-    "hypr/conf/binds.lua".source     = ./lua/binds.lua;
-    "hypr/conf/rules.lua".source     = ./lua/rules.lua;
+    "hypr/conf/main.lua".source = ./lua/main.lua;
+    "hypr/conf/binds.lua".source = ./lua/binds.lua;
+    "hypr/conf/rules.lua".source = ./lua/rules.lua;
     "hypr/conf/autostart.lua".source = ./lua/autostart.lua;
   };
 

@@ -72,7 +72,10 @@ in
   # The official cloudflared image is distroless (no /bin/sh), so shell substitution
   # to read a hostPath file doesn't work — TUNNEL_TOKEN env var is used instead.
   system.activationScripts.cloudflaredSecret = {
-    deps = [ "setupSecrets" "k3s" ];
+    deps = [
+      "setupSecrets"
+      "k3s"
+    ];
     text = ''
       if [ -f /run/secrets/cloudflared-token ]; then
         token=$(cat /run/secrets/cloudflared-token)

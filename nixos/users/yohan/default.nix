@@ -44,7 +44,7 @@ let
       claude-code
 
       # Dotnet
-      dotnet-sdk_9
+      dotnet-sdk_10
 
       # Rust
       rustup
@@ -55,8 +55,8 @@ let
 
       # Java
       jdk24
-#      unstable.jetbrains.idea-ultimate
-#      unstable.android-studio
+      #unstable.jetbrains.idea-ultimate
+      #unstable.android-studio
       gradle
       imagej
       turbovnc
@@ -66,7 +66,7 @@ let
       gopls
 
       # C/C++
-#      jetbrains.clion
+      #jetbrains.clion
       mesa # Opengl
       autoconf # vcpkg
       pkgconf
@@ -81,8 +81,8 @@ let
       wget
       icu63
 
-#      godot
-#      pixelorama
+      #godot
+      #pixelorama
 
       # Dev
       bruno
@@ -94,13 +94,13 @@ let
       vlc
 
       # Photos
-#      unstable.darktable
-#      hugin
-#      digikam
+      #unstable.darktable
+      #hugin
+      #digikam
       exiftool
-#      gimp
+      #gimp
 
-#      kdePackages.kdenlive
+      #kdePackages.kdenlive
       ffmpeg
       SDL
       xml2
@@ -117,13 +117,13 @@ let
       blender
 
       unstable.argocd
-#      cloudflared
+      #cloudflared
       zotero
 
       # Games and co
-#      discord
-#      steam
-#      heroic
+      #discord
+      #steam
+      #heroic
     ]
     ++ lib.optionals (desktop != null && hostname == "surface-nix") [
     ];
@@ -136,7 +136,6 @@ in
 
   environment.localBinInPath = true;
   environment.systemPackages = stable-packages;
-
 
   programs.zsh.enable = true;
   programs.nix-ld.enable = true;
