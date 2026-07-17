@@ -131,7 +131,7 @@ let
 in
 {
   imports = lib.optionals (desktop != null) [
-    ../../services/appimage.nix
+    ../../roles/appimage.nix
   ];
 
   environment.localBinInPath = true;

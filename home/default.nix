@@ -13,11 +13,11 @@
 }:
 {
   imports =
-    lib.optional (builtins.isPath (./. + "/_mixins/users/${username}")) ./_mixins/users/${username}
+    lib.optional (builtins.pathExists (./. + "/users/${username}")) ./users/${username}
     ++ lib.optional (builtins.pathExists (
-      ./. + "/_mixins/users/${username}/hosts/${hostname}.nix"
-    )) ./_mixins/users/${username}/hosts/${hostname}.nix
-    ++ lib.optional (desktop != null) ./_mixins/desktop;
+      ./. + "/users/${username}/hosts/${hostname}.nix"
+    )) ./users/${username}/hosts/${hostname}.nix
+    ++ lib.optional (desktop != null) ./desktops;
   home = {
     # activation.report-changes = config.lib.dag.entryAnywhere ''
     # 	${pkgs.nvd}/bin/nvd diff $oldGenPath $newGenPath

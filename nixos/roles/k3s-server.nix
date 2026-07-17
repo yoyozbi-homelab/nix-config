@@ -2,12 +2,12 @@
 let
   inherit (config.networking.yoyozbi) currentHost;
 
-  rancher = if currentHost.rancher then builtins.readFile ./manifests/rancher.yaml else "";
+  rancher = if currentHost.rancher then builtins.readFile ./k3s/manifests/rancher.yaml else "";
 
   traefik-dashboard =
     if currentHost.traefik-dashboard != null && currentHost.traefik-dashboard.enabled then
       builtins.replaceStrings [ "<HOSTNAME>" ] [ currentHost.traefik-dashboard.dashboardUrl ] (
-        builtins.readFile ./manifests/traefik.yaml
+        builtins.readFile ./k3s/manifests/traefik.yaml
       )
     else
       "";
@@ -15,7 +15,7 @@ let
   argocd =
     if currentHost.argocd != null && currentHost.argocd.enabled then
       builtins.replaceStrings [ "<HOSTNAME>" ] [ currentHost.argocd.dashboardUrl ] (
-        builtins.readFile ./manifests/argocd.yaml
+        builtins.readFile ./k3s/manifests/argocd.yaml
       )
     else
       "";
@@ -23,7 +23,7 @@ let
   longhorn =
     if currentHost.longhorn != null && currentHost.longhorn.enabled then
       builtins.replaceStrings [ "<HOSTNAME>" ] [ currentHost.longhorn.dashboardUrl ] (
-        builtins.readFile ./manifests/longhorn.yaml
+        builtins.readFile ./k3s/manifests/longhorn.yaml
       )
     else
       "";
@@ -31,7 +31,7 @@ let
   portainer =
     if currentHost.portainer != null && currentHost.portainer.enabled then
       builtins.replaceStrings [ "<HOSTNAME>" ] [ currentHost.portainer.dashboardUrl ] (
-        builtins.readFile ./manifests/portainer.yaml
+        builtins.readFile ./k3s/manifests/portainer.yaml
       )
     else
       "";
@@ -39,14 +39,14 @@ let
   flux =
     if currentHost.flux != null && currentHost.flux.enabled then
       builtins.replaceStrings [ "<HOSTNAME>" ] [ currentHost.flux.dashboardUrl ] (
-        builtins.readFile ./manifests/flux.yaml
+        builtins.readFile ./k3s/manifests/flux.yaml
       )
     else
       "";
 
 in
 {
-  imports = [ ./. ];
+  imports = [ ./k3s ];
 
   services.k3s = {
     role = "server";
@@ -60,7 +60,7 @@ in
     clusterInit = true;
   };
 
-  environment.etc."k3s.yaml".text = builtins.readFile ./manifests/default.yaml;
+  environment.etc."k3s.yaml".text = builtins.readFile ./k3s/manifests/default.yaml;
   environment.etc."rancher.yaml".text = rancher;
   environment.etc."traefik-dashboard.yaml".text = traefik-dashboard;
   environment.etc."argocd.yaml".text = argocd;

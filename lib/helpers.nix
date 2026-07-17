@@ -26,7 +26,7 @@
           stateVersion
           ;
       };
-      modules = [ ../home-manager ];
+      modules = [ ../home ];
     };
 
   # Helper function for generating host configs
@@ -76,7 +76,7 @@
                 stateVersion
                 ;
             };
-            users.${username} = import ../home-manager;
+            users.${username} = import ../home;
           };
         }
       ]);

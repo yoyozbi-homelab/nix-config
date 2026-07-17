@@ -22,8 +22,8 @@ let
 in
 {
   imports = [
-    ../services/networkmanager.nix
-    ../services/pipewire.nix
+    ../networkmanager.nix
+    ../pipewire.nix
   ];
   programs = {
     hyprland = {

@@ -12,17 +12,17 @@ in
 {
   imports = [
     #./hardware-configuration.nix
-    ../_mixins/hardware/systemdboot.nix
+    ../roles/boot-systemd.nix
     inputs.nixos-hardware.nixosModules.dell-xps-15-9520-nvidia
-    ../_mixins/services/bluetooth.nix
-    ../_mixins/services/firewall.nix
-    ../_mixins/services/fwupd.nix
-    ../_mixins/services/docker.nix
-    ../_mixins/services/thunderbolt.nix
-    ../_mixins/services/boxes.nix
-    ../_mixins/services/virtualbox.nix
-    ../_mixins/services/focusrite.nix
-    ../_mixins/desktop/hyprland.nix
+    ../roles/bluetooth.nix
+    ../roles/firewall.nix
+    ../roles/fwupd.nix
+    ../roles/docker.nix
+    ../roles/thunderbolt.nix
+    ../roles/boxes.nix
+    ../roles/virtualbox.nix
+    ../roles/focusrite.nix
+    ../roles/desktop/hyprland.nix
   ];
 
   fileSystems = {

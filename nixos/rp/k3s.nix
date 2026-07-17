@@ -5,6 +5,6 @@ _: {
   };
 
   imports = [
-    ../_mixins/k3s/server.nix
+    ../roles/k3s-server.nix
   ];
 }

@@ -6,8 +6,8 @@
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    ../_mixins/services/openssh.nix
-    ../_mixins/services/cachix.nix
+    ../roles/openssh.nix
+    ../roles/cachix.nix
     ./k3s.nix
   ];
 

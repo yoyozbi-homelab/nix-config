@@ -10,15 +10,15 @@
   imports = [
     ./disks.nix
     #./hardware-configuration.nix
-    ../_mixins/hardware/lanzaboote.nix
+    ../roles/boot-lanzaboote.nix
     inputs.nixos-hardware.nixosModules.microsoft-surface-pro-intel
-    ../_mixins/services/cachix.nix
-    ../_mixins/services/bluetooth.nix
-    ../_mixins/services/firewall.nix
-    ../_mixins/services/fwupd.nix
-    ../_mixins/services/tpm.nix
-    ../_mixins/services/touchpad.nix
-    ../_mixins/services/openssh.nix
+    ../roles/cachix.nix
+    ../roles/bluetooth.nix
+    ../roles/firewall.nix
+    ../roles/fwupd.nix
+    ../roles/tpm.nix
+    ../roles/touchpad.nix
+    ../roles/openssh.nix
   ];
 
   boot = {

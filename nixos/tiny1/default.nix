@@ -11,12 +11,12 @@
     #		inputs.nixos-hardware.common-pc
     #		inputs.nixos-hardware.common-pc-ssd
     (import ./disks.nix { })
-    ../_mixins/hardware/grub.nix
-    ../_mixins/services/cachix.nix
-    ../_mixins/services/openssh.nix
-    ../_mixins/services/networkmanager.nix
-    ../_mixins/k3s/ocr-cluster.nix
-    ../_mixins/k3s/agent.nix
+    ../roles/boot-grub.nix
+    ../roles/cachix.nix
+    ../roles/openssh.nix
+    ../roles/networkmanager.nix
+    ../roles/ocr-cluster
+    ../roles/k3s-agent.nix
   ];
 
   boot = {

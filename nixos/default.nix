@@ -17,12 +17,12 @@
     inputs.sops-nix.nixosModules.sops
     ../hosts.nix
     ./${hostname}
-    ./_mixins/users/root
+    ./users/root
   ]
   ++ lib.optional (builtins.pathExists (
-    ./. + "/_mixins/users/${username}"
-  )) ./_mixins/users/${username}
-  ++ lib.optional (desktop != null) ./_mixins/desktop;
+    ./. + "/users/${username}"
+  )) ./users/${username}
+  ++ lib.optional (desktop != null) ./roles/desktop;
   nixpkgs = {
     overlays = [
       # Add overlays your own flake exports (from overlays and pkgs dir):

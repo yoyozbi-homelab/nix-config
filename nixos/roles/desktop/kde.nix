@@ -1,8 +1,8 @@
 { ... }:
 {
   imports = [
-    ../services/networkmanager.nix
-    ../services/pipewire.nix
+    ../networkmanager.nix
+    ../pipewire.nix
   ];
   services = {
     xserver.enable = true;

@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   imports = [
-    ../services/networkmanager.nix
+    ../networkmanager.nix
   ];
   services = {
     xserver = {
