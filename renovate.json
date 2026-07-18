@@ -35,6 +35,17 @@
       ],
       "datasourceTemplate": "docker",
       "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Update Docker images in K3s manifests",
+      "managerFilePatterns": [
+        "nixos/roles/k3s/manifests/*.yaml"
+      ],
+      "matchStrings": [
+        "image: (?<depName>[^:\\s]+):(?<currentValue>[^\\s#]+)"
+      ],
+      "datasourceTemplate": "docker"
     }
   ],
   "packageRules": [
