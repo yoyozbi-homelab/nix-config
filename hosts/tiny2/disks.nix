@@ -1,10 +1,10 @@
 _: {
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/9947-500A";
+    device = "/dev/disk/by-label/UEFI";
     fsType = "vfat";
   };
   fileSystems."/" = {
-    device = "/dev/sda1";
+    device = "/dev/disk/by-label/cloudimg-rootfs";
     fsType = "ext4";
   };
 }

@@ -78,7 +78,7 @@ sudo netdata-claim.sh
  4. Run the [nixos-infect](https://github.com/elitak/nixos-infect) script:
 
  ```bash
- curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | NIX_CHANNEL=nixos-23.05 bash -x
+ curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | NIX_CHANNEL=nixos-24.05 bash -x
  ```
 
  1. Connect via the root user and change nix-config partitions uuids by looking at the `hardware-configuration.nix` file

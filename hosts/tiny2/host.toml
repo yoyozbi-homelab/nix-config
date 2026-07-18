@@ -3,15 +3,13 @@ username = "nix"
 
 roles = [
   "boot-grub",
+  "boot-efi-mountpoint",
   "cachix",
   "openssh",
   "networkmanager",
-  "ocr-cluster",
-  "k3s-agent",
-  "tmux",
 ]
 
 [network]
 internalIp = "10.0.0.84"
-externalIp = "144.24.234.135"
-mac = "02:00:17:18:8c:69"
+externalIp = "144.24.239.84"
+mac = "02:00:17:00:7c:72"

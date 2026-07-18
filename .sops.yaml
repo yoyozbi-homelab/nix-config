@@ -1,8 +1,8 @@
 keys:
   - &laptop age1lfpdcqsgcsa294c0kypu6ny5syavfp9ls3cj8mf06awrf7237pssazlfan
   - &ocr1 age1r46e0k2t89dpqf93vqerkatq9jevl8pj2lhv7d06axw5q3svs53sgy2da8
-  - &tiny1 age1nsc70q3w3qdscy2vrjy6ktrsnj3l3pjrgk9yt2j8c7mcmc0x65es79mm8h
-  - &tiny2 age1qvtyyp98sf4ncmdev0uf3mdes7t48epny7kn85d4k86awjzs8qxq5mkh9j
+  - &tiny1 age1my58mgua3z2tz9mfzurmnsvcncj68268wz85crw9mggxj8d0sq3qt0mskr
+  - &tiny2 age1wyggh6p77q5g00e784psmvtm2m8j96nsnzry4cpj9g70agexmatquped2e
   - &rp age1nhga0r9ra03thhj30939fqyh5zek4xuzj5ra8lkdsgpeztvgrguqcv09fz
 creation_rules:
   - path_regex: secrets.yml$
