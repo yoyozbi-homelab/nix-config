@@ -102,7 +102,23 @@ in
   '';
 
   sops.templates."netbird-proxy.env".content = ''
+    # NetBird Proxy Configuration
+    NB_PROXY_DEBUG_LOGS=false
+    # Reach management over the internal docker network (avoids hairpin NAT).
+    NB_PROXY_MANAGEMENT_ADDRESS=http://netbird-server:80
+    NB_PROXY_ALLOW_INSECURE=true
+    # Public URL where this proxy is reachable (cluster registration).
+    NB_PROXY_DOMAIN=netbird.yohanzbinden.ch
+    NB_PROXY_ADDRESS=:8443
     NB_PROXY_TOKEN=${config.sops.placeholder.netbird-proxy-token}
+    NB_PROXY_CERTIFICATE_DIRECTORY=/certs
+    NB_PROXY_ACME_CERTIFICATES=true
+    NB_PROXY_ACME_CHALLENGE_TYPE=tls-alpn-01
+    NB_PROXY_FORWARDED_PROTO=https
+    # PROXY protocol preserves client IPs through Traefik's TCP passthrough.
+    NB_PROXY_PROXY_PROTOCOL=true
+    # Trust Traefik's static ingress IP for PROXY protocol headers.
+    NB_PROXY_TRUSTED_PROXIES=172.30.0.10
     NB_PROXY_CROWDSEC_API_URL=http://crowdsec:8080
     NB_PROXY_CROWDSEC_API_KEY=${config.sops.placeholder.netbird-crowdsec-bouncer-key}
   '';
