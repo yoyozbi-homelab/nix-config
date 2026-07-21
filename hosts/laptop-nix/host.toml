@@ -16,6 +16,7 @@ roles = [
   "virtualbox",
   "focusrite",
   "desktop/hyprland",
+  "netbird-client",
 ]
 
 hardware = ["dell-xps-15-9520-nvidia"]

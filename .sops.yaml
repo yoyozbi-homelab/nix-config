@@ -17,3 +17,11 @@ creation_rules:
       - age:
           - *laptop
           - *rp
+  - path_regex: netbird-client-secrets.yml$
+    key_groups:
+      - age:
+          - *laptop
+          - *tiny1
+          - *tiny2
+          - *ocr1
+          - *rp

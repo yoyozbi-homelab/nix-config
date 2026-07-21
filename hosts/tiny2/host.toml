@@ -6,6 +6,7 @@ roles = [
   "cachix",
   "openssh",
   "networkmanager",
+  "netbird-client",
 ]
 
 [network]
