@@ -13,7 +13,7 @@
     };
     config.ManagementURL = {
       Scheme = "https";
-      Host = "netbird.yohanzbinden.ch";
+      Host = "netbird.yohanzbinden.ch:443";
     };
   };
 }
