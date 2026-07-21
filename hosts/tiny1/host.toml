@@ -7,6 +7,8 @@ roles = [
   "cachix",
   "openssh",
   "networkmanager",
+  "docker",
+  "docker/netbird",
 ]
 
 [network]

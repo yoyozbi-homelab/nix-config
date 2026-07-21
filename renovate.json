@@ -46,6 +46,17 @@
         "image: (?<depName>[^:\\s]+):(?<currentValue>[^\\s#]+)"
       ],
       "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Update Docker images in arion stacks",
+      "managerFilePatterns": [
+        "nixos/roles/docker/**/*.nix"
+      ],
+      "matchStrings": [
+        "image\\s*=\\s*\"(?<depName>[^:\"\\s]+):(?<currentValue>[^\"\\s#]+)\""
+      ],
+      "datasourceTemplate": "docker"
     }
   ],
   "packageRules": [
@@ -62,6 +73,14 @@
       ],
       "groupName": "Kubernetes and Helm Charts",
       "commitMessagePrefix": "chore(k8s): "
+    },
+    {
+      "description": "Group arion Docker image updates (override the custom.regex k8s group)",
+      "matchFileNames": [
+        "nixos/roles/docker/**"
+      ],
+      "groupName": "arion Docker images",
+      "commitMessagePrefix": "chore(docker): "
     },
     {
       "description": "GitHub Actions updates",
