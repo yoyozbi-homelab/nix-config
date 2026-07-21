@@ -3,7 +3,6 @@ username = "nix"
 
 roles = [
   "boot-grub",
-  "boot-efi-mountpoint",
   "cachix",
   "openssh",
   "networkmanager",
