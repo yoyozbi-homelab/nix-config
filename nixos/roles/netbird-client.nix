@@ -13,10 +13,7 @@
         setupKeyFile = config.sops.secrets.netbird-setup-key.path;
         systemdDependencies = [ "sops-install-secrets.service" ];
       };
-      config.ManagementURL = {
-        Scheme = "https";
-        Host = "netbird.yohanzbinden.ch:443";
-      };
+      config.ManagementURL = "https://netbird.yohanzbinden.ch:443";
     };
   };
 }
