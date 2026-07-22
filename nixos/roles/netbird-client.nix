@@ -1,10 +1,11 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   sops.secrets.netbird-setup-key = {
     sopsFile = ./netbird-client-secrets.yml;
   };
 
   services.netbird.clients.default = {
+    package = pkgs.unstable.netbird;
     port = 51820;
     login = {
       enable = true;
