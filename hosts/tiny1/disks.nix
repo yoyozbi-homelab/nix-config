@@ -1,4 +1,6 @@
 _: {
+  boot.loader.efi.efiSysMountPoint = "/boot";
+
   fileSystems."/boot" = {
     device = "/dev/disk/by-label/UEFI";
     fsType = "vfat";
