@@ -13,5 +13,5 @@ roles = [
 
 [network]
 internalIp = "10.0.0.127"
-externalIp = "144.24.255.32"
-mac = "02:00:17:18:26:cb"
+externalIp = "140.238.221.62"
+mac = "02:00:17:18:ab:39"
