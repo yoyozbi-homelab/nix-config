@@ -80,6 +80,10 @@ let
       type = types.bool;
       default = false;
     };
+    "tls-sans" = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+    };
     "traefik-dashboard" = mkOption {
       type = types.nullOr traefikOptions;
       default = null;

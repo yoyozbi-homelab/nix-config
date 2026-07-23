@@ -50,12 +50,15 @@ in
 
   services.k3s = {
     role = "server";
-    extraFlags = toString [
-      "--node-external-ip=${currentHost.externalIp}"
-      "--node-ip=${currentHost.internalIp}"
-      "--advertise-address=${currentHost.internalIp}"
-      "--tls-san=${currentHost.externalIp}"
-    ];
+    extraFlags = toString (
+      [
+        "--node-external-ip=${currentHost.externalIp}"
+        "--node-ip=${currentHost.internalIp}"
+        "--advertise-address=${currentHost.internalIp}"
+        "--tls-san=${currentHost.externalIp}"
+      ]
+      ++ map (san: "--tls-san=${san}") currentHost."tls-sans"
+    );
     tokenFile = config.sops.secrets.k3s-server-token.path;
     clusterInit = true;
   };
