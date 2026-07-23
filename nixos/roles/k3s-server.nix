@@ -88,9 +88,12 @@ in
   };
 
   # Link the file to k3s manifest directory
+  environment.etc."phone-access.yaml".text = builtins.readFile ./k3s/manifests/phone-access.yaml;
+
   system.activationScripts.k3s.text = ''
        mkdir -p /var/lib/rancher/k3s/server/manifests
        ln -sf /etc/k3s.yaml /var/lib/rancher/k3s/server/manifests/init.yaml
+       ln -sf /etc/phone-access.yaml /var/lib/rancher/k3s/server/manifests/phone-access.yaml
 
        if [ -s /etc/rancher.yaml ]; then
     ln -sf /etc/rancher.yaml /var/lib/rancher/k3s/server/manifests/rancher.yaml
