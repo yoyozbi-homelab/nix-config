@@ -22,7 +22,7 @@ spec:
         app: cloudflared
     spec:
       containers:
-        - image: cloudflare/cloudflared:2026.3.0 #{"$imagescan": "cloudflared-scan"}
+        - image: cloudflare/cloudflared:2026.7.3 #{"$imagescan": "cloudflared-scan"}
           name: cloudflared
           command: ["cloudflared", "tunnel", "--no-autoupdate", "run"]
           env:
