@@ -56,7 +56,7 @@ jobs:
       # A cache hit means this exact spec was already deployed -> skip.
       - name: Check x86_64 deploy state
         id: cache-x86
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: .deploy-marker
           key: cachix-deploy-x86-${{ steps.hash-x86.outputs.hash }}
@@ -64,7 +64,7 @@ jobs:
 
       - name: Check aarch64 deploy state
         id: cache-aarch64
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: .deploy-marker
           key: cachix-deploy-aarch64-${{ steps.hash-aarch64.outputs.hash }}
@@ -130,7 +130,7 @@ jobs:
       - name: Record deployed state
         run: touch .deploy-marker
 
-      - uses: actions/cache/save@v4
+      - uses: actions/cache/save@v6
         with:
           path: .deploy-marker
           key: cachix-deploy-x86-${{ needs.changes.outputs.x86_hash }}
@@ -177,7 +177,7 @@ jobs:
       - name: Record deployed state
         run: touch .deploy-marker
 
-      - uses: actions/cache/save@v4
+      - uses: actions/cache/save@v6
         with:
           path: .deploy-marker
           key: cachix-deploy-aarch64-${{ needs.changes.outputs.aarch64_hash }}
