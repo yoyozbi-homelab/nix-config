@@ -32,9 +32,11 @@ in
         nerd-fonts.jetbrains-mono
         nerd-fonts.ubuntu-mono
 
-        cargo
-        rustc
+        unstable.cargo
+        unstable.rustc
+        unstable.rust-analyzer
         statix
+        nixfmt
 
         iosevka-comfy.comfy
         lua-language-server
