@@ -14,6 +14,11 @@ _: {
           IdentityFile = "/home/yohan/.ssh/id_github";
         };
 
+        "codeberg.org" = {
+          HostName = "codeberg.org";
+          IdentityFile = "/home/yohan/.ssh/id_github";
+        };
+
         rp = {
           HostName = "192.168.1.2";
           User = "nix";
