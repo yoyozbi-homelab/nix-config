@@ -42,7 +42,7 @@ in
 
   sops = {
     secrets = {
-      pangolin.server-secret.sopsFile = secretsFile;
+      pangolin-server-secret.sopsFile = secretsFile;
     };
   };
 

@@ -18,7 +18,7 @@
         base_domain: "${baseDomain}"
 
     server:
-      secret: "${config.sops.placeholder.pangolin.server-secret}" # REPLACE WITH SECURE SECRET
+      secret: "${config.sops.placeholder.pangolin-server-secret}"
       cors:
         origins: ["https://${pangolinDomain}"]
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH"]
