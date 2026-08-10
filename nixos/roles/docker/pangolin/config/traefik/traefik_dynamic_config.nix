@@ -6,7 +6,7 @@
   ...
 }:
 {
-  sops.templates."traefik_dynamic.yaml".content = ''
+  sops.templates."traefik_dynamic.yml".content = ''
     http:
       middlewares:
         badger:

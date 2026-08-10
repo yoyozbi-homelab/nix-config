@@ -6,7 +6,7 @@
   ...
 }:
 {
-  sops.templates."traefik_config.yaml".content = ''
+  sops.templates."traefik_config.yml".content = ''
     api:
       insecure: true
       dashboard: true
