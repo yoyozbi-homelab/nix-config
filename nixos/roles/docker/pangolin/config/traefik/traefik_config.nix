@@ -1,4 +1,10 @@
-{config, pangolinDomain, baseDomain, email, ...}:
+{
+  config,
+  pangolinDomain,
+  baseDomain,
+  email,
+  ...
+}:
 {
   sops.templates."traefik_config.yaml".content = ''
     api:
@@ -58,5 +64,5 @@
 
     ping:
       entryPoint: "web"
-    '';
+  '';
 }

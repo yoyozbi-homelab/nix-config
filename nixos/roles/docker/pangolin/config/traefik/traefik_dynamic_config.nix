@@ -1,4 +1,10 @@
-{config, pangolinDomain, baseDomain, email, ...}:
+{
+  config,
+  pangolinDomain,
+  baseDomain,
+  email,
+  ...
+}:
 {
   sops.templates."traefik_dynamic.yaml".content = ''
     http:
@@ -70,5 +76,5 @@
         pp-transport-v2:
           proxyProtocol:
             version: 2
-   ''; 
+  '';
 }

@@ -1,4 +1,9 @@
-{config, pangolinDomain, baseDomain, ...}:
+{
+  config,
+  pangolinDomain,
+  baseDomain,
+  ...
+}:
 {
   sops.templates."pangolin-config.yaml".content = ''
     # To see all available options, please visit the docs:

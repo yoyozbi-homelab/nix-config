@@ -1,4 +1,4 @@
-{config, inputs, ...}:
+{ config, inputs, ... }:
 let
   stateDir = "/var/lib/pangolin";
   secretsFile = ./pangolin-secrets.yml;
@@ -10,13 +10,28 @@ in
   imports = [
     inputs.arion.nixosModules.arion
     (import ./config/config.nix {
-      inherit config baseDomain pangolinDomain email;
+      inherit
+        config
+        baseDomain
+        pangolinDomain
+        email
+        ;
     })
     (import ./config/traefik/traefik_config.nix {
-      inherit config baseDomain pangolinDomain email;
+      inherit
+        config
+        baseDomain
+        pangolinDomain
+        email
+        ;
     })
     (import ./config/traefik/traefik_dynamic_config.nix {
-      inherit config baseDomain pangolinDomain email;
+      inherit
+        config
+        baseDomain
+        pangolinDomain
+        email
+        ;
     })
   ];
 
@@ -52,7 +67,7 @@ in
       driver = "bridge";
       ipam.config = [
         {
-subnet = "172.31.0.0/24";
+          subnet = "172.31.0.0/24";
           gateway = "172.32.0.1";
 
         }
@@ -69,7 +84,12 @@ subnet = "172.31.0.0/24";
           "${stateDir}/config:/app/config:rw"
         ];
         healthcheck = {
-          test = ["CMD" "curl" "-f" "http://localhost:3001/api/v1"];
+          test = [
+            "CMD"
+            "curl"
+            "-f"
+            "http://localhost:3001/api/v1"
+          ];
           interval = "10s";
           timeout = "10s";
           retries = 15;
@@ -94,7 +114,10 @@ subnet = "172.31.0.0/24";
           "${config.sops.templates."pangolin-config.yaml".path}:/app/config/config.yaml:ro"
           "${stateDir}/config:/var/config:rw"
         ];
-        cap_add = ["NET_ADMIN" "SYS_MODULE"];
+        capabilities = {
+          NET_ADMIN = true;
+          SYS_MODULE = true;
+        };
         ports = [
           "51820:51820/udp"
           "21820:21820/udp"
