@@ -16,7 +16,7 @@
         endpoint: "http://pangolin:3001/api/v1/traefik-config"
         pollInterval: "5s"
       file:
-        filename: "/etc/traefik/dynamic.yaml"
+        filename: "/etc/traefik/dynamic.yml"
 
     experimental:
       plugins:

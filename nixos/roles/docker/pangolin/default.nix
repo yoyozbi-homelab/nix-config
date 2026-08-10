@@ -7,10 +7,6 @@ let
   email = "yohan@${baseDomain}";
 in
 {
-  environment.systemPackages =  [
-    inputs.arion.packages.${platform}.arion
-  ];
-
   imports = [
     inputs.arion.nixosModules.arion
     (import ./config/config.nix {
@@ -147,8 +143,8 @@ in
         volumes = [
           "${config.sops.templates."traefik_config.yml".path}:/etc/traefik/traefik_config.yml:ro"
           "${config.sops.templates."traefik_dynamic.yml".path}:/etc/traefik/dynamic.yml:ro"
-          "${stateDir}/config/letsencrypt:/etc/letsencrypt:rw"
-          "${stateDir}/config/traefik/logs:/var/lib/traefik:rw"
+          "${stateDir}/config/letsencrypt:/letsencrypt:rw"
+          "${stateDir}/config/traefik/logs:/var/log/traefik:rw"
         ];
       };
     };
