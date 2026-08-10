@@ -1,4 +1,4 @@
-{ config, inputs, ... }:
+{ config, inputs, platform , ... }:
 let
   stateDir = "/var/lib/pangolin";
   secretsFile = ./pangolin-secrets.yml;
@@ -7,6 +7,10 @@ let
   email = "yohan@${baseDomain}";
 in
 {
+  environment.systemPackages =  [
+    inputs.arion.packages.${platform}.arion
+  ];
+
   imports = [
     inputs.arion.nixosModules.arion
     (import ./config/config.nix {
