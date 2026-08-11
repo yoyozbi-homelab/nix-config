@@ -76,7 +76,7 @@ in
 
     services = {
       pangolin.service = {
-        image = "docker.io/fosrl/pangolin:1.21.1";
+        image = "docker.io/fosrl/pangolin:ee-1.21.1";
         container_name = "pangolin";
         restart = "unless-stopped";
         volumes = [
