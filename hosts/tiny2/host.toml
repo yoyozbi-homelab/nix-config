@@ -1,13 +1,7 @@
 [host]
 username = "nix"
 
-roles = [
-  "boot-grub",
-  "cachix",
-  "openssh",
-  "networkmanager",
-  "netbird-client",
-]
+roles = ["boot-grub", "cachix", "openssh", "networkmanager"]
 
 [network]
 internalIp = "10.0.0.84"

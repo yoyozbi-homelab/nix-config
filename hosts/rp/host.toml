@@ -3,12 +3,7 @@ username = "nix"
 platform = "aarch64-linux"
 
 # k3s config is host-specific (nixos/rp/k3s.nix; becomes hosts/rp/k3s.nix in Phase 3)
-roles = [
-  "cachix",
-  "openssh",
-  "k3s-server",
-  "netbird-client",
-]
+roles = ["cachix", "openssh", "k3s-server"]
 
 [network]
 internalIp = "192.168.1.2"
