@@ -80,8 +80,9 @@ spec:
       access:
         enabled: true
 
-    dashboard:
-      enabled: true
+    ingressRoute:
+      dashboard:
+        enabled: true
 
     additionalArguments:
       - "--entryPoints.web.proxyProtocol.insecure"
