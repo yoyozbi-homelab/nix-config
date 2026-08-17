@@ -128,7 +128,7 @@ in
       };
 
       traefik.service = {
-        image = "docker.io/traefik:v3.6";
+        image = "docker.io/traefik:v3.7";
         container_name = "traefik";
         restart = "unless-stopped";
         network_mode = "service:gerbil";
