@@ -10,8 +10,8 @@ metadata:
   annotations:
     helmcharts.cattle.io/managed-by: helm-controller
   finalizers:
-  - wrangler.cattle.io/on-helm-chart-remove
-  generation: 1
+    - wrangler.cattle.io/on-helm-chart-remove
+  generation: 2
   namespace: default
 spec:
   targetNamespace: flux-system
@@ -28,7 +28,7 @@ spec:
             paths:
               - path: /
                 pathType: Prefix
-          
+
 ---
 apiVersion: fluxcd.controlplane.io/v1
 kind: FluxInstance
@@ -69,7 +69,7 @@ spec:
             path: /spec/template/spec/tolerations
             value:
               - key: "CriticalAddonsOnly"
-                operator: "Exists"          
+                operator: "Exists"
   sync:
     kind: GitRepository
     url: "https://github.com/yoyozbi-homelab/k8s-config"
