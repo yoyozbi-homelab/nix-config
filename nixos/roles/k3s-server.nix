@@ -146,11 +146,17 @@ in
         # amplification vector on a publicly exposed instance. With it, ArgoCD
         # verifies the X-Hub-Signature-256 HMAC and drops everything else.
         #
-        # This adds one key to the chart-managed argocd-secret. Safe because the
-        # chart emits that Secret with no data: field while every configs.secret.*
-        # value is empty, so helm never touches data — the same reason ArgoCD's own
-        # server.secretkey and admin.password survive upgrades. Kept out of
-        # valuesContent so the shared secret never reaches the nix store.
+        # This adds one key to argocd-secret, which the argo-cd chart also owns.
+        # The Helm ownership labels/annotations are mandatory: on a fresh install
+        # this manifest lands before helm-controller runs, and Helm aborts on a
+        # pre-existing resource it cannot prove it owns. With them it adopts the
+        # Secret instead.
+        #
+        # Our key then survives upgrades because the chart emits argocd-secret with
+        # no data: field while every configs.secret.* value is empty, so helm never
+        # reconciles data — the same reason ArgoCD's own server.secretkey and
+        # admin.password survive. Kept out of valuesContent so the shared secret
+        # never reaches the world-readable nix store.
         if [ -f /run/secrets/argocd-webhook-secret ]; then
           webhook=$(printf '%s' "$(cat /run/secrets/argocd-webhook-secret)" | base64 -w 0)
 
@@ -160,6 +166,11 @@ in
         metadata:
           name: argocd-secret
           namespace: argocd
+          labels:
+            app.kubernetes.io/managed-by: Helm
+          annotations:
+            meta.helm.sh/release-name: argocd
+            meta.helm.sh/release-namespace: argocd
         type: Opaque
         data:
           webhook.github.secret: $webhook
@@ -216,6 +227,12 @@ in
             path: .
             directory:
               recurse: true
+              # Only the per-app Application manifests. Without this the root app
+              # also renders every */manifests/ file, so each child app's resources
+              # end up owned by both root and the dedicated app (SharedResourceWarning).
+              # Two patterns: ArgoCD has matched this glob against the base name in
+              # some versions and the repo-relative path in others.
+              include: '{application.yaml,*/application.yaml}'
           destination:
             server: https://kubernetes.default.svc
             namespace: argocd
