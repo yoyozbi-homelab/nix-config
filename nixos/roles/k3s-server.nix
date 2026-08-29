@@ -141,6 +141,32 @@ in
           chmod 600 "$manifests/bw-auth-token.yaml"
         fi
 
+        # GitHub webhook shared secret. Without it ArgoCD's /api/webhook accepts
+        # unauthenticated payloads and refreshes apps on every request, a cheap
+        # amplification vector on a publicly exposed instance. With it, ArgoCD
+        # verifies the X-Hub-Signature-256 HMAC and drops everything else.
+        #
+        # This adds one key to the chart-managed argocd-secret. Safe because the
+        # chart emits that Secret with no data: field while every configs.secret.*
+        # value is empty, so helm never touches data — the same reason ArgoCD's own
+        # server.secretkey and admin.password survive upgrades. Kept out of
+        # valuesContent so the shared secret never reaches the nix store.
+        if [ -f /run/secrets/argocd-webhook-secret ]; then
+          webhook=$(printf '%s' "$(cat /run/secrets/argocd-webhook-secret)" | base64 -w 0)
+
+          cat > "$manifests/argocd-webhook-secret.yaml" <<EOF
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: argocd-secret
+          namespace: argocd
+        type: Opaque
+        data:
+          webhook.github.secret: $webhook
+        EOF
+          chmod 600 "$manifests/argocd-webhook-secret.yaml"
+        fi
+
         if [ -f /run/secrets/argocd-repo-url ] \
           && [ -f /run/secrets/argocd-repo-username ] \
           && [ -f /run/secrets/argocd-repo-password ]; then
@@ -166,14 +192,14 @@ in
         EOF
           chmod 600 "$manifests/argocd-repo-creds.yaml"
 
-          # Bootstrap "app of apps". ArgoCD does not scan registered repos, so
-          # this is the one Application that cannot live in the GitOps repo
-          # itself: it is what discovers everything that does. Every
-          # application.yaml committed under the repo root is picked up here.
+          # Bootstrap "app of apps". ArgoCD does not scan registered repos, so this
+          # is the one Application that cannot live in the GitOps repo itself: it is
+          # what discovers everything that does. Every application.yaml committed
+          # under the repo root is picked up from here.
           #
-          # It reads the same secret as the credential above, so the two URLs
-          # cannot drift — a mismatch would stop ArgoCD associating
-          # argocd-repo-creds with this source.
+          # It reads the same secret as the credential above, so the two URLs cannot
+          # drift — a mismatch would stop ArgoCD associating argocd-repo-creds with
+          # this source.
           cat > "$manifests/argocd-root-app.yaml" <<EOF
         apiVersion: argoproj.io/v1alpha1
         kind: Application

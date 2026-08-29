@@ -61,4 +61,5 @@
   sops.secrets.argocd-repo-url.sopsFile = ./rp-sec.yml;
   sops.secrets.argocd-repo-username.sopsFile = ./rp-sec.yml;
   sops.secrets.argocd-repo-password.sopsFile = ./rp-sec.yml;
+  sops.secrets.argocd-webhook-secret.sopsFile = ./rp-sec.yml;
 }

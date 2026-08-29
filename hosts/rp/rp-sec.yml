@@ -4,6 +4,7 @@ bws-access-token: ENC[AES256_GCM,data:N/BJXrD7xZq+E/o7ENnT1AhSMNnmtgYOGE5sZPjYhn
 argocd-repo-url: ENC[AES256_GCM,data:k95EdKiZTlGViR5BzVYFQdzJJEFAfH70/TYTbMndk37fBdj9wkKU2Lu2qJQfKVVzb+YJhg==,iv:1+cRggwhZ95lpDkdQbgxaIqR+Yz2ytSXgmdRs7iH+rE=,tag:sRQ67ZGWdxwlpoym41cZgw==,type:str]
 argocd-repo-username: ENC[AES256_GCM,data:kNTfRHUqFw==,iv:GmxrxsANSsZP9e3KpeimqcECIq69C6lYNzq5/Ld5NDk=,tag:LWrRVCurDmdrCk++FSdG5w==,type:str]
 argocd-repo-password: ENC[AES256_GCM,data:t67iuJCv/5ZaOdB/ZwzB5cCKqOSDCBRDUp+ffogK2OGbTQ5/f7B1sRODs+yO+EPcvy5sIVaJCNA881NcTCWTLsBUKRo8yBdBITaWGiO0l2p4viZxhDjVbDu0WA9+,iv:cpca66tqFJ0g+ErgTdyuoQW73u49ontrGvRJEgI2X+Y=,tag:syXRpiR99JbhvHar7JaqKw==,type:str]
+argocd-webhook-secret: ENC[AES256_GCM,data:Dr/eUxvh+v42C1kQrvAq5n/zBwz9dZ5KeS4MRxty,iv:7jY0bQXMHvMYKb2mSlZzD0zmVLUg5NX3l/lb1aK4DDQ=,tag:if3bUq2jrcMEXDZ6u/S08A==,type:str]
 sops:
     age:
         - enc: |
@@ -24,7 +25,7 @@ sops:
             SD1iIqu9J/kCoUteNTR0lyLfSLypHEJBl1SR/c6mO+E86N2Bq3/0Lg==
             -----END AGE ENCRYPTED FILE-----
           recipient: age178awgylrm9ftvhhus2v83d3ry88ut6e5wvpyl8h9uzwmad6ywq3qfccj0r
-    lastmodified: "2026-08-29T07:55:03Z"
-    mac: ENC[AES256_GCM,data:04PsDwpUwZ9X5Ih6gBN4wmbrdjGOzhq+YYlGyeJcpt7ZCTPG94F3cI8q3TDjAJswufNKb+FaiD5U1RR9ygNlzP/0js596TQbD/EPKSk11Vo4aa+HfCHV3BBeL4CQKXrfPIUIDya0lnkwJJNt8gB4oBNiOVoe4ajgiq0AvflSb4U=,iv:3jgvqcaMBZSVgNi1mXhQ+VH/zdaEOQeNxofQSNNIpF0=,tag:58O9c2EUZ5IPOGZQ12W+aw==,type:str]
+    lastmodified: "2026-08-29T08:59:52Z"
+    mac: ENC[AES256_GCM,data:SBHuCR9KHOMJqm3h+0T2XBdalOrAaVHzpbD3hkWw1YVN8JIiR65DdwcY4LoIESAz0XA9cPFniVxvPaDfCIMEozEUz9Bc2Hi0T6jhUdnRP7yJGaYTZLANiyd9EWTVMPfayssKggD5emaBR5+HLZwQwUdArRjij2LsXvY3nQZe9/E=,iv:MtaWs8UvV7ASBhlKqOHyCRJ1DxnDlYEfMjSQY8QTxjI=,tag:TzqN69gkythrZ+vkn9KQhw==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.13.3
