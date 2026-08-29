@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sm-operator-system
+---
+# Bitwarden Secrets Manager operator. Ships the BitwardenSecret CRD in its
+# own templates, so no separate CRD manifest is needed.
+# The bw-auth-token Secret it authenticates with is written by
+# system.activationScripts.bitwardenSecrets in nixos/roles/k3s-server.nix.
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: sm-operator
+spec:
+  repo: https://charts.bitwarden.com/
+  targetNamespace: sm-operator-system
+  chart: sm-operator
+  version: 2.0.3
+  valuesContent: |-
+    settings:
+      # EU region -> api.bitwarden.eu / identity.bitwarden.eu
+      cloudRegion: en
+      bwSecretsManagerRefreshInterval: 300
+      replicas: 1

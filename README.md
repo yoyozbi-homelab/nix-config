@@ -45,22 +45,50 @@ nix-shell -p sops --run "sops updatekeys nixos/_mixins/k3s/ocr-secrets.yml"
 
  1. Updates hosts in `hosts.nix`
 
- 2. If the host is a k3s master with argocd:
+ 2. If the host is a k3s master with argocd, add these to its SOPS file
+    (e.g. `hosts/rp/rp-sec.yml`). The activation script in
+    `nixos/roles/k3s-server.nix` turns them into Kubernetes Secrets on
+    every rebuild — nothing is created by hand:
 
- ```bash
-# Create argocd namespace if it doesn't exist
-kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
+ ```yaml
+# ArgoCD's git repository credentials -> Secret argocd-repo-creds in ns argocd,
+# labelled argocd.argoproj.io/secret-type: repository
+argocd-repo-url: https://github.com/<org>/<repo>
+argocd-repo-username: <username, or "git">
+argocd-repo-password: <personal access token>
 
-# Convert SSH host key to age private key
-nix-shell -p ssh-to-age --run 'ssh-to-age -private-key -i /root/.ssh/ssh_host_ed25519_key' > age.key
+# Bitwarden Secrets Manager machine account -> Secret bw-auth-token in ns
+# sm-operator-system. Only needed when [network] bitwarden = true.
+bws-access-token: <machine account access token>
+ ```
 
-# Create the secret
-kubectl create secret generic sops-age \
-  --namespace=argocd \
-  --from-file=keys.txt=age.key
+ The Bitwarden token is mirrored by [reflector](https://github.com/emberstack/kubernetes-reflector)
+ into every namespace labelled `bitwarden-secrets: enabled`. To consume
+ secrets in a new namespace, label it and add a `BitwardenSecret` in the
+ GitOps repo — no change to this repository is needed:
 
-# Clean up the temporary file
-rm age.key
+ ```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: myapp
+  labels:
+    bitwarden-secrets: enabled
+---
+apiVersion: k8s.bitwarden.com/v1
+kind: BitwardenSecret
+metadata:
+  name: myapp-secrets
+  namespace: myapp
+spec:
+  organizationId: "<org uuid>"
+  projectId: "<project uuid>"
+  secretName: myapp-secrets
+  useSecretNames: true
+  onlyMappedSecrets: false
+  authToken:
+    secretName: bw-auth-token
+    secretKey: token
  ```
 
  1. If the host has  `netdata` run the following command to enroll the node

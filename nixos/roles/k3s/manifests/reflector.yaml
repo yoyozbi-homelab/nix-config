@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: reflector
+---
+# Mirrors the bw-auth-token Secret into every namespace labelled
+# bitwarden-secrets=enabled, so the GitOps repo can add namespaces without
+# a nix-config change. See the annotations on the source Secret in
+# nixos/roles/k3s-server.nix.
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: reflector
+spec:
+  repo: https://emberstack.github.io/helm-charts
+  targetNamespace: reflector
+  chart: reflector
+  version: 10.0.65
+  valuesContent: |-
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        memory: 128Mi

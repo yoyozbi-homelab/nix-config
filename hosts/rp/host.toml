@@ -9,6 +9,7 @@ roles = ["cachix", "openssh", "k3s-server"]
 internalIp = "192.168.1.2"
 externalIp = "192.168.1.2"
 mac = "dc:a6:32:21:28:99"
+bitwarden = true
 
 [network.traefik-dashboard]
 enabled = true
