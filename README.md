@@ -57,6 +57,10 @@ argocd-repo-url: https://github.com/<org>/<repo>
 argocd-repo-username: <username, or "git">
 argocd-repo-password: <personal access token>
 
+# GitHub webhook shared secret -> key webhook.github.secret in argocd-secret.
+# Without it /api/webhook accepts unauthenticated refresh requests.
+argocd-webhook-secret: <random string, same value as the GitHub webhook>
+
 # Bitwarden Secrets Manager machine account -> Secret bw-auth-token in ns
 # sm-operator-system. Only needed when [network] bitwarden = true.
 bws-access-token: <machine account access token>
