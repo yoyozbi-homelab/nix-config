@@ -1,4 +1,9 @@
-{ lib, modulesPath, ... }:
+{
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
@@ -18,16 +23,31 @@
     ];
   };
 
+  console.enable = false;
+
+  environment.systemPackages = with pkgs; [
+    libraspberrypi
+    raspberrypi-eeprom
+  ];
+
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-label/NIXOS_SD";
       fsType = "ext4";
       options = [ "noatime" ];
     };
+    "/boot/firmware" = {
+      device = "/dev/disk/by-label/FIRMWARE";
+      fsType = "vfat";
+      options = [ "nofail" ];
+    };
     "/mnt" = {
       device = "/dev/sdb1";
       fsType = "ext4";
-      options = [ "noatime " ];
+      options = [
+        "noatime"
+        "nofail"
+      ];
     };
   };
 
@@ -50,16 +70,20 @@
     ];
     useDHCP = lib.mkDefault true;
   };
+  sops = {
+    secrets = {
 
-  sops.secrets.k3s-server-token.sopsFile = ./rp-sec.yml;
-  sops.secrets.cloudflared-token.sopsFile = ./rp-sec.yml;
+      k3s-server-token.sopsFile = ./rp-sec.yml;
+      cloudflared-token.sopsFile = ./rp-sec.yml;
 
-  # Bitwarden Secrets Manager machine-account token + ArgoCD git repo
-  # credentials. Both are turned into k8s Secrets by
-  # system.activationScripts.bitwardenSecrets in nixos/roles/k3s-server.nix.
-  sops.secrets.bws-access-token.sopsFile = ./rp-sec.yml;
-  sops.secrets.argocd-repo-url.sopsFile = ./rp-sec.yml;
-  sops.secrets.argocd-repo-username.sopsFile = ./rp-sec.yml;
-  sops.secrets.argocd-repo-password.sopsFile = ./rp-sec.yml;
-  sops.secrets.argocd-webhook-secret.sopsFile = ./rp-sec.yml;
+      # Bitwarden Secrets Manager machine-account token + ArgoCD git repo
+      # credentials. Both are turned into k8s Secrets by
+      # system.activationScripts.bitwardenSecrets in nixos/roles/k3s-server.nix.
+      bws-access-token.sopsFile = ./rp-sec.yml;
+      argocd-repo-url.sopsFile = ./rp-sec.yml;
+      argocd-repo-username.sopsFile = ./rp-sec.yml;
+      argocd-repo-password.sopsFile = ./rp-sec.yml;
+      argocd-webhook-secret.sopsFile = ./rp-sec.yml;
+    };
+  };
 }
