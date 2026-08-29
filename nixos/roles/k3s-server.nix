@@ -165,6 +165,41 @@ in
           password: $password
         EOF
           chmod 600 "$manifests/argocd-repo-creds.yaml"
+
+          # Bootstrap "app of apps". ArgoCD does not scan registered repos, so
+          # this is the one Application that cannot live in the GitOps repo
+          # itself: it is what discovers everything that does. Every
+          # application.yaml committed under the repo root is picked up here.
+          #
+          # It reads the same secret as the credential above, so the two URLs
+          # cannot drift — a mismatch would stop ArgoCD associating
+          # argocd-repo-creds with this source.
+          cat > "$manifests/argocd-root-app.yaml" <<EOF
+        apiVersion: argoproj.io/v1alpha1
+        kind: Application
+        metadata:
+          name: root
+          namespace: argocd
+          finalizers:
+            - resources-finalizer.argocd.argoproj.io
+        spec:
+          project: default
+          source:
+            repoURL: $(cat /run/secrets/argocd-repo-url)
+            targetRevision: main
+            path: .
+            directory:
+              recurse: true
+          destination:
+            server: https://kubernetes.default.svc
+            namespace: argocd
+          syncPolicy:
+            automated:
+              prune: true
+              selfHeal: true
+            syncOptions:
+              - CreateNamespace=true
+        EOF
         fi
       '';
     };
