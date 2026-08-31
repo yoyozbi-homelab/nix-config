@@ -77,7 +77,7 @@ in
       };
 
       cadvisor.service = {
-        image = "gcr.io/cadvisor/cadvisor:v0.60.5";
+        image = "ghcr.io/google/cadvisor:v0.60.5";
         container_name = "cadvisor";
         restart = "unless-stopped";
         privileged = true;
