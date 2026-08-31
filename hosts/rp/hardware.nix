@@ -75,17 +75,17 @@
 
     secrets = {
 
-      k3s-server-token.sopsFile = { };
-      cloudflared-token.sopsFile = { };
+      k3s-server-token = { };
+      cloudflared-token = { };
 
       # Bitwarden Secrets Manager machine-account token + ArgoCD git repo
       # credentials. Both are turned into k8s Secrets by
       # system.activationScripts.bitwardenSecrets in nixos/roles/k3s-server.nix.
-      bws-access-token.sopsFile = { };
-      argocd-repo-url.sopsFile = { };
-      argocd-repo-username.sopsFile = { };
-      argocd-repo-password.sopsFile = { };
-      argocd-webhook-secret.sopsFile = { };
+      bws-access-token = { };
+      argocd-repo-url = { };
+      argocd-repo-username = { };
+      argocd-repo-password = { };
+      argocd-webhook-secret = { };
     };
   };
 }
