@@ -36,4 +36,6 @@
       disable_user_create_org: false
       allow_raw_resources: true
   '';
+
+  sops.templates."pangolin-config.yaml".restartUnits = [ "arion-pangolin.service" ];
 }

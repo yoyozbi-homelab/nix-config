@@ -77,4 +77,6 @@
           proxyProtocol:
             version: 2
   '';
+
+  sops.templates."traefik_dynamic.yml".restartUnits = [ "arion-pangolin.service" ];
 }

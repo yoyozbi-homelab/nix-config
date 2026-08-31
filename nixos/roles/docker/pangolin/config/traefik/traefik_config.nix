@@ -65,4 +65,6 @@
     ping:
       entryPoint: "web"
   '';
+
+  sops.templates."traefik_config.yml".restartUnits = [ "arion-pangolin.service" ];
 }
