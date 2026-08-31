@@ -21,4 +21,11 @@
     domain = "";
     firewall.enable = lib.mkForce false;
   };
+
+  sops = {
+    defaultSopsFile = ./tiny1-sec.yml;
+    secrets = {
+      pangolin-server-secret = { };
+    };
+  };
 }

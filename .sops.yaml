@@ -12,8 +12,13 @@ creation_rules:
           - *tiny1
           - *tiny2
           - *laptop
-  - path_regex: rp-sec.yml$
+  - path_regex: hosts/rp/rp-sec.yml$
     key_groups:
       - age:
           - *laptop
           - *rp
+  - path_regex: hosts/tiny1/tiny1-sec.yml$
+    key_groups:
+      - age:
+          - *laptop
+          - *tiny1

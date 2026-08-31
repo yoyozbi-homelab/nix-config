@@ -1,0 +1,25 @@
+pangolin-server-secret: ENC[AES256_GCM,data:BSgpMg4jAVhbFOIYryg531tG8im1WYVso9usvIgLyhe3xRTHcJ0ncXDv0iSjcZSgBLsQcaYTEGVcuc1GyA9lKA==,iv:nk2Krb9tlwGvyEa3LNTAHMPHFAGVU4WBCSvD6SN7rS4=,tag:+k7kddo0t9BlmI1SdFkrnw==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBWWFpvanZKeHRqZW51Vm45
+            SE5qWWZ1K2MrVVJyM2pyR0Z2Z214VFU3MXprCjNUUXhmOWZoU3BUL0hyVU1FZ0RU
+            RHlMK0wyY3diUDFKbGxqSXF5SHIrSkEKLS0tIEZxZ0JhRHFrOFhXZmwxbGlUZTAv
+            MVdPM2o0ODl6UnNUNXc1SlAxdTAvOUEK39+Pz/NIXSiMKWdW0ZOukDxLBKwWL0EB
+            shIhDrcoZu/krdZIWcc1lxi7zFOzSiqBD/unpuwk/kSOqxAo6gsegw==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1lfpdcqsgcsa294c0kypu6ny5syavfp9ls3cj8mf06awrf7237pssazlfan
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsODZCcnh5M20yKzBYQ0wr
+            UEFEbmFQNkdMaEtNdGtySEdhOEpjYTdrd0NNClJQWjNtZkFXMTEwbTBoNW16MGVH
+            RTZqeGIyNUN5T1ZUdlBrYXNKeDFkenMKLS0tIE9FU2tQSmt3T0dzVVlaYU02b2s1
+            S3VuMTkxcnZWajFIWVE2cVFEcEx6TkUK6MwbZOJXCOwoecrUh92QWhcHoBIgmh8v
+            QGboNSJfw35dFX+dJeTWehzWjcgzGO5+3A5Al1U2JuHLs61lNfPQjw==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1m3gcq6a43fht8rt5k90k9ydlsr7d037lrqqx9lsyd92chfus6pss34q9jw
+    lastmodified: "2026-08-31T07:34:46Z"
+    mac: ENC[AES256_GCM,data:6oPdTV0mZstDCdqqA3pez6Ifyal0oA+dxSc1MKfHPl822yooI3DqUF3vPsfCBvVGCVGR1FNlDqRLC+ygpaQ05b4G4A7/07FndFQ6YLKfARoAa8vbyz55aHbI5Y3IkONMIID0dQYBlyIgzS0gkiR4qIBIuc745su88mqxQDIrDhQ=,iv:oElFBHvYBVUVR53CxJqQzLahAVmUXAHCYrEZ7lFbNO0=,tag:eS8TShyyTNmPX3FfX9ykvA==,type:str]
+    unencrypted_suffix: _unencrypted
+    version: 3.13.3
