@@ -1,6 +1,7 @@
 [host]
 username = "nix"
 platform = "aarch64-linux"
+hardware = ["raspberry-pi-4"]
 
 # k3s config is host-specific (nixos/rp/k3s.nix; becomes hosts/rp/k3s.nix in Phase 3)
 roles = ["cachix", "openssh", "k3s-server"]

@@ -71,19 +71,21 @@
     useDHCP = lib.mkDefault true;
   };
   sops = {
+    defaultSopsFile = ./rp-sec.yml;
+
     secrets = {
 
-      k3s-server-token.sopsFile = ./rp-sec.yml;
-      cloudflared-token.sopsFile = ./rp-sec.yml;
+      k3s-server-token.sopsFile = { };
+      cloudflared-token.sopsFile = { };
 
       # Bitwarden Secrets Manager machine-account token + ArgoCD git repo
       # credentials. Both are turned into k8s Secrets by
       # system.activationScripts.bitwardenSecrets in nixos/roles/k3s-server.nix.
-      bws-access-token.sopsFile = ./rp-sec.yml;
-      argocd-repo-url.sopsFile = ./rp-sec.yml;
-      argocd-repo-username.sopsFile = ./rp-sec.yml;
-      argocd-repo-password.sopsFile = ./rp-sec.yml;
-      argocd-webhook-secret.sopsFile = ./rp-sec.yml;
+      bws-access-token.sopsFile = { };
+      argocd-repo-url.sopsFile = { };
+      argocd-repo-username.sopsFile = { };
+      argocd-repo-password.sopsFile = { };
+      argocd-webhook-secret.sopsFile = { };
     };
   };
 }
