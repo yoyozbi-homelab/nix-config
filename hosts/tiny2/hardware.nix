@@ -21,4 +21,11 @@
     domain = "";
     firewall.enable = lib.mkForce false;
   };
+
+  sops = {
+    defaultSopsFile = ./tiny2-sec.yml;
+    secrets = {
+      grafana-admin-password = { };
+    };
+  };
 }

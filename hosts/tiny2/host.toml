@@ -1,7 +1,14 @@
 [host]
 username = "nix"
 
-roles = ["boot-grub", "cachix", "openssh", "networkmanager"]
+roles = [
+  "boot-grub",
+  "cachix",
+  "openssh",
+  "networkmanager",
+  "docker",
+  "docker/stats",
+]
 
 [network]
 internalIp = "10.0.0.84"

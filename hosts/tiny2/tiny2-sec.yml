@@ -1,0 +1,25 @@
+grafana-admin-password: ENC[AES256_GCM,data:Z57VYXXXNA7pOutX0UJ7,iv:SndEXl3r7WP4R6jcF1c4oBdaP7dLQ+Ip4lnurLsPbVM=,tag:xpRQUIzrenhrYGYIv/cLsw==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBIVW1BcGo4RlNMRzk3eWNV
+            R0dXVmczcU5xdzZsaHVvRmJHaVNXR2IrbmdZCkwxZkFNTm00a1BIR2NYSjlib0t6
+            MURtZjFvRHBiOGdQaXRiclBVNHFkRE0KLS0tIG1CWWNlZTcrQlNFOS82Z0lRcTMw
+            OHRDSGl0UURSVEJ4NnFralM1SVZHYm8K5YIYNXM6FMDwkY3DLCyuPHR8PPPy+ipR
+            OTgTb+MxnPmuQjNpCJxRp2eBm3kog7qG37KAT/a/jMvOXGvjBiRppw==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1lfpdcqsgcsa294c0kypu6ny5syavfp9ls3cj8mf06awrf7237pssazlfan
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAyMGVscThvTGVMaGhDUXpx
+            L0VCcGFSYzFpVUpwZlAveVhJY3VIZDAvZXdzCnpDelpFWDFaZ05PT2FReHJ6MUhi
+            UHJNYzRBVFVVTEFsT1FYR3R5TTBkVmMKLS0tIHZURnIxLzdDZUxHR0JMbmxYNTRZ
+            di9ZZitpaVRoQUhJdS94aFFGa0ZoblUKKlIa/N1VLBQ55BopLj70F7qtfMPzUZBc
+            +w5aGMNxDt4HdgfXqTqcMrdkqTBz2EE1tOKdPp3/JcfuTfqLmMLNaA==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1wyggh6p77q5g00e784psmvtm2m8j96nsnzry4cpj9g70agexmatquped2e
+    lastmodified: "2026-08-31T09:01:29Z"
+    mac: ENC[AES256_GCM,data:JfioPqREa/JJGwfTEB5eN933LvQXNC+36Q+SugxDA0rWPVGGEE7foGkny5FN6FB/PLi9hcIyEz99o/oYZ+hIG4vId2XGkE4XIK7D3msuC1E+pk6jLXggROEKmm2g8cUMzY3yCLmkFHTsIEZgqzg71QWwSJSbKchh5wbZ4CgZyzs=,iv:I3VxhgD3t3RbacfP9HZ4GxaVopG1zvCNEyAHh4BPtIQ=,tag:oB0OQbIeAZR5p4nGatBhcA==,type:str]
+    unencrypted_suffix: _unencrypted
+    version: 3.13.3

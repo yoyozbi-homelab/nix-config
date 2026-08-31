@@ -22,3 +22,8 @@ creation_rules:
       - age:
           - *laptop
           - *tiny1
+  - path_regex: hosts/tiny2/tiny2-sec.yml$
+    key_groups:
+      - age:
+          - *laptop
+          - *tiny2
