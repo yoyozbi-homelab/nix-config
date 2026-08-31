@@ -8,6 +8,7 @@ roles = [
   "networkmanager",
   "docker",
   "docker/stats",
+  "docker/newt",
 ]
 
 [network]

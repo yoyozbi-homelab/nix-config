@@ -1,4 +1,7 @@
 grafana-admin-password: ENC[AES256_GCM,data:Z57VYXXXNA7pOutX0UJ7,iv:SndEXl3r7WP4R6jcF1c4oBdaP7dLQ+Ip4lnurLsPbVM=,tag:xpRQUIzrenhrYGYIv/cLsw==,type:str]
+newt-endpoint: ENC[AES256_GCM,data:/ACmoIMwVaG+Elpt3EkAMHn5U1jcYacB3X87oc3lvvI=,iv:B9dGWSVPjCXkVwwjGYaMcMrCADLeV/x4ffyf/wNhRWs=,tag:F3pZjQeckddVoC+WYFt1RA==,type:str]
+newt-id: ENC[AES256_GCM,data:L/rvXVLzSabTp5W1jjSn,iv:Eknon+WJ7ZLG9q20HPkv9O0b0Ax7yDi9MCUdDdzAiKc=,tag:RFlpe9+Ycy8nxufRSmzJog==,type:str]
+newt-secret: ENC[AES256_GCM,data:QZ0Un39VRPcoXq+qtNYMuzOCr9egFHhO9KXCbyoi7vkF93nUuqveHTfzJac6vZVZ,iv:JLCXPc7QalVvM2MbKLn12UPBIht4KKPjMN6JL/lpO48=,tag:+2FucI0A8Ew9WTaGoLQgSQ==,type:str]
 sops:
     age:
         - enc: |
@@ -19,7 +22,7 @@ sops:
             +w5aGMNxDt4HdgfXqTqcMrdkqTBz2EE1tOKdPp3/JcfuTfqLmMLNaA==
             -----END AGE ENCRYPTED FILE-----
           recipient: age1wyggh6p77q5g00e784psmvtm2m8j96nsnzry4cpj9g70agexmatquped2e
-    lastmodified: "2026-08-31T09:01:29Z"
-    mac: ENC[AES256_GCM,data:JfioPqREa/JJGwfTEB5eN933LvQXNC+36Q+SugxDA0rWPVGGEE7foGkny5FN6FB/PLi9hcIyEz99o/oYZ+hIG4vId2XGkE4XIK7D3msuC1E+pk6jLXggROEKmm2g8cUMzY3yCLmkFHTsIEZgqzg71QWwSJSbKchh5wbZ4CgZyzs=,iv:I3VxhgD3t3RbacfP9HZ4GxaVopG1zvCNEyAHh4BPtIQ=,tag:oB0OQbIeAZR5p4nGatBhcA==,type:str]
+    lastmodified: "2026-08-31T09:44:01Z"
+    mac: ENC[AES256_GCM,data:+fiDb4xWMlKkyqKHktFX1kXfhY3eA8I4uqbXfpj7FaO4OzOY2rQxumNzhMH2YRe7Gssng/KJeglRDgehH3cCOkd4V9zIMU1xTOMFi5MPUDqCkDzsgiJ4OZydn1It2sKHMi+jk5xlaxe4MrSKXVyNxNFOBWt2jOSCJaMQUYK0lLs=,iv:7ffmDB+XbMhRRzh1BmzFqBFW/kodRo6Jlk9EHCEWqcY=,tag:tl5JGWXrNxDrPXQNRoAmnQ==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.13.3

@@ -26,6 +26,9 @@
     defaultSopsFile = ./tiny2-sec.yml;
     secrets = {
       grafana-admin-password = { };
+      newt-endpoint = { };
+      newt-id = { };
+      newt-secret = { };
     };
   };
 }
