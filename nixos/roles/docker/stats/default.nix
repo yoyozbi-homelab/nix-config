@@ -1,6 +1,8 @@
 { inputs, config, ... }:
 let
   stateDir = "/var/lib/monitoring";
+  grafanaUid = 472;
+  prometheusUid = 65534; # nobody
 in
 {
   imports = [
@@ -26,10 +28,12 @@ in
     9090 # Prometheus
   ];
 
+  # Both images drop privileges, so the bind-mounted state dirs must be owned by
+  # the container uid: grafana runs as 472, prometheus as nobody (65534).
   systemd.tmpfiles.rules = [
     "d ${stateDir} 0750 root root -"
-    "d ${stateDir}/grafana 0750 root root -"
-    "d ${stateDir}/prometheus 0750 root root -"
+    "d ${stateDir}/grafana 0750 ${toString grafanaUid} ${toString grafanaUid} -"
+    "d ${stateDir}/prometheus 0750 ${toString prometheusUid} ${toString prometheusUid} -"
   ];
 
   virtualisation.arion.projects.monitoring.settings = {
