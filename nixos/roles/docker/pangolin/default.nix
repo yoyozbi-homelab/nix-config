@@ -97,7 +97,7 @@ in
       };
 
       gerbil.service = {
-        image = "docker.io/fosrl/gerbil:1.4.3";
+        image = "docker.io/fosrl/gerbil:1.5.0";
         container_name = "gerbil";
         restart = "unless-stopped";
         depends_on = {
@@ -128,7 +128,7 @@ in
       };
 
       traefik.service = {
-        image = "docker.io/traefik:v3.6";
+        image = "docker.io/traefik:v3.7";
         container_name = "traefik";
         restart = "unless-stopped";
         network_mode = "service:gerbil";
