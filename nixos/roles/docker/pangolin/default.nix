@@ -1,7 +1,7 @@
-{ config, inputs, platform , ... }:
+# This requires a sops secret named pangolin-server-secret !
+{ config, inputs, ... }:
 let
   stateDir = "/var/lib/pangolin";
-  secretsFile = ./pangolin-secrets.yml;
   baseDomain = "yohanzbinden.ch";
   pangolinDomain = "pangolin.${baseDomain}";
   email = "yohan@${baseDomain}";
@@ -35,6 +35,17 @@ in
     })
   ];
 
+  assertions = [
+    {
+      assertion = config.sops.secrets ? pangolin-server-secret;
+      message = ''
+        The pangolin role requires a SOPS secret named `pangolin-server-secret`.
+        Declare it on the host, e.g. in hosts/<host>/hardware.nix:
+          sops.secrets.pangolin-server-secret = { };
+      '';
+    }
+  ];
+
   virtualisation.arion.backend = "docker";
 
   networking.firewall.allowedTCPPorts = [
@@ -54,12 +65,6 @@ in
     "d ${stateDir}/config/letsencrypt 0750 root root -"
     "d ${stateDir}/config/traefik 0750 root root -"
   ];
-
-  sops = {
-    secrets = {
-      pangolin-server-secret.sopsFile = secretsFile;
-    };
-  };
 
   virtualisation.arion.projects.pangolin.settings = {
     networks.pangolin = {

@@ -23,7 +23,7 @@
         base_domain: "${baseDomain}"
 
     server:
-      secret: "${config.sops.placeholder.pangolin-server-secret}"
+      secret: "${config.sops.placeholder.pangolin-server-secret or ""}"
       cors:
         origins: ["https://${pangolinDomain}"]
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH"]
