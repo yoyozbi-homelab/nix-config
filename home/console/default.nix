@@ -31,6 +31,7 @@ in
         nerd-fonts.fira-code
         nerd-fonts.jetbrains-mono
         nerd-fonts.ubuntu-mono
+        devenv
 
         unstable.cargo
         unstable.rustc
