@@ -102,7 +102,7 @@ in
       };
 
       gerbil.service = {
-        image = "docker.io/fosrl/gerbil:1.5.0";
+        image = "docker.io/fosrl/gerbil:1.5.1";
         container_name = "gerbil";
         restart = "unless-stopped";
         depends_on = {
