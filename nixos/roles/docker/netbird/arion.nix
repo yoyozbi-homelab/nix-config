@@ -95,7 +95,7 @@ in
 
       # UI dashboard.
       dashboard.service = {
-        image = "netbirdio/dashboard:v2.91.1";
+        image = "netbirdio/dashboard:v2.92.0";
         container_name = "netbird-dashboard";
         restart = "unless-stopped";
         networks = [ "netbird" ];
@@ -114,7 +114,7 @@ in
 
       # Combined server (Management + Signal + Relay + STUN + embedded Dex).
       netbird-server.service = {
-        image = "netbirdio/netbird-server:0.77.1";
+        image = "netbirdio/netbird-server:0.78.1";
         container_name = "netbird-server";
         restart = "unless-stopped";
         networks = [ "netbird" ];
@@ -155,7 +155,7 @@ in
       # NB_PROXY_TOKEN and the CrowdSec bouncer key are provisioned post-deploy
       # (see ../netbird.nix header) and delivered via the sops-rendered proxy.env.
       proxy.service = {
-        image = "netbirdio/reverse-proxy:0.77.1";
+        image = "netbirdio/reverse-proxy:0.78.1";
         container_name = "netbird-proxy";
         restart = "unless-stopped";
         networks = [ "netbird" ];
@@ -182,7 +182,7 @@ in
       # CrowdSec LAPI. The linux collection reinstalls on start via COLLECTIONS;
       # decisions and the registered proxy bouncer persist in the crowdsec-db volume.
       crowdsec.service = {
-        image = "crowdsecurity/crowdsec:v1.7.8";
+        image = "crowdsecurity/crowdsec:v1.8.1";
         container_name = "netbird-crowdsec";
         restart = "unless-stopped";
         networks = [ "netbird" ];
