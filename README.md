@@ -11,7 +11,7 @@ Updates are built by github actions and deployed to servers using cachix-deploy
 | ocr1 | oci | arm64 4cpu 24G ram 60G ssd | k3s master |
 | tiny1 | oci | amd64 2cpu 1G ram 60G ssd | docker (pangolin manager) |
 | tiny2 | oci | amd64 2cpu 1G ram 60G ssd | docker (homelab-wide monitoring: grafana, prometheus, newt) |
-| rp | home | rpi4b with 4gb ram | docker (newt, cloudflared, paperless) |
+| rp | home | rpi4b with 4gb ram | docker (newt, cloudflared, paperless), nightly backups ([restore](hosts/rp/README.md)) |
 | ❌ laptop-nix | with me | dell xps16 9520 (i7 12700H 32G ram 1TB ssd) | daily driver |
 | ❄️ laptop-omarchy | with me | ⬆️, running omarchy | daily driver |
 | ❄️ wsl-nix | with me | ⬆️, running archlinux inside WSL | daily driver |

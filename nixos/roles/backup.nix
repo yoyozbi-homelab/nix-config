@@ -14,9 +14,7 @@
 #   NTFY_URL           optional, e.g. https://ntfy.sh/<topic>
 #   NTFY_TOKEN         optional, for protected topics
 #
-# Restore (as root, with the same variables exported):
-#   duplicity restore --path-to-restore mnt/data/paperless/media \
-#     "$BACKUP_TARGET_URL" /tmp/restore [--time 3D]
+# Restoring rp's paperless is documented in hosts/rp/README.md.
 {
   config,
   lib,
