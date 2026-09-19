@@ -39,7 +39,7 @@ Every host is defined by a `hosts/<hostname>/host.toml` file. `flake.nix` reads 
 
 ### Host Types
 - **Desktop hosts**: `laptop-nix` (KDE+Hyprland), `surface-nix` (GNOME), `vm-nix` (Noctalia/Hyprland)
-- **Server hosts**: `ocr1` (K3s master/aarch64), `tiny1`/`tiny2` (K3s agents), `rp` (RPi4 K3s/aarch64)
+- **Server hosts**: `ocr1` (K3s master/aarch64), `tiny1` (docker: Pangolin manager), `tiny2` (docker: monitoring for the whole homelab), `rp` (RPi4 docker/aarch64: newt + cloudflared + paperless, secrets from Bitwarden SM)
 - **Home-only hosts**: `wsl-nix`, `laptop-omarchy` (no NixOS, only `homeConfigurations`)
 
 ## host.toml Schema

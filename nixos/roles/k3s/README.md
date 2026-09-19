@@ -1,6 +1,6 @@
 # K3s cluster setup
 
-`ocr1` runs a cluster, `rp` runs another one.
+`ocr1` runs the cluster.
 
 ## Phone access (read-only + pod restart)
 

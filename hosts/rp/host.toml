@@ -3,19 +3,18 @@ username = "nix"
 platform = "aarch64-linux"
 hardware = ["raspberry-pi-4"]
 
-# k3s config is host-specific (nixos/rp/k3s.nix; becomes hosts/rp/k3s.nix in Phase 3)
-roles = ["cachix", "openssh", "k3s-server"]
+# Stack wiring and Bitwarden secret IDs live in hosts/rp/services.nix.
+roles = [
+  "cachix",
+  "openssh",
+  "bitwarden-secrets",
+  "docker",
+  "docker/newt",
+  "docker/cloudflared",
+  "docker/paperless",
+]
 
 [network]
 internalIp = "192.168.1.2"
 externalIp = "192.168.1.2"
 mac = "dc:a6:32:21:28:99"
-bitwarden = true
-
-[network.traefik-dashboard]
-enabled = true
-dashboardUrl = "traefik-rp.yohanzbinden.ch"
-
-[network.argocd]
-enabled = true
-dashboardUrl = "argo-rp.yohanzbinden.ch"
