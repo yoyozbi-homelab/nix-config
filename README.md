@@ -9,9 +9,9 @@ Updates are built by github actions and deployed to servers using cachix-deploy
 | Name | location | hardware | role |
 | ------ | ---------- | ---------- | ------ |
 | ocr1 | oci | arm64 4cpu 24G ram 60G ssd | k3s master |
-| tiny1 | oci | amd64 2cpu 1G ram 60G ssd | k3s agent |
-| tiny2 | oci | amd64 2cpu 1G ram 60G ssd | k3s agent |
-| rp | home | rpi4b with 4gb ram | k3s cluster (solo) |
+| tiny1 | oci | amd64 2cpu 1G ram 60G ssd | docker (pangolin manager) |
+| tiny2 | oci | amd64 2cpu 1G ram 60G ssd | docker (homelab-wide monitoring: grafana, prometheus, newt) |
+| rp | home | rpi4b with 4gb ram | docker (newt, cloudflared, paperless) |
 | ❌ laptop-nix | with me | dell xps16 9520 (i7 12700H 32G ram 1TB ssd) | daily driver |
 | ❄️ laptop-omarchy | with me | ⬆️, running omarchy | daily driver |
 | ❄️ wsl-nix | with me | ⬆️, running archlinux inside WSL | daily driver |
@@ -46,7 +46,7 @@ nix-shell -p sops --run "sops updatekeys nixos/_mixins/k3s/ocr-secrets.yml"
  1. Updates hosts in `hosts.nix`
 
  2. If the host is a k3s master with argocd, add these to its SOPS file
-    (e.g. `hosts/rp/rp-sec.yml`). The activation script in
+    (e.g. `hosts/<host>/<host>-sec.yml`). The activation script in
     `nixos/roles/k3s-server.nix` turns them into Kubernetes Secrets on
     every rebuild — nothing is created by hand:
 
@@ -130,3 +130,7 @@ nix run nixpkgs#nixos-generators -- -f sd-aarch64 --flake .#rp --system aarch64-
 ```
 
 1. Make common modifications
+1. Add the Bitwarden Secrets Manager machine-account token to `hosts/rp/rp-sec.yml`
+   as `bws-access-token`. The `bitwarden-secrets` role uses it at boot to fetch
+   the newt credentials and paperless secret key (IDs in `hosts/rp/services.nix`)
+   into `/run/bitwarden-secrets`.

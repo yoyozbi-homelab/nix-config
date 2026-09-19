@@ -7,6 +7,7 @@
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
+    ./services.nix
   ];
 
   boot = {
@@ -74,18 +75,10 @@
     defaultSopsFile = ./rp-sec.yml;
 
     secrets = {
-
-      k3s-server-token = { };
-      cloudflared-token = { };
-
-      # Bitwarden Secrets Manager machine-account token + ArgoCD git repo
-      # credentials. Both are turned into k8s Secrets by
-      # system.activationScripts.bitwardenSecrets in nixos/roles/k3s-server.nix.
+      # Bitwarden Secrets Manager machine-account token, used by the
+      # bitwarden-secrets role to fetch everything else (see services.nix).
       bws-access-token = { };
-      argocd-repo-url = { };
-      argocd-repo-username = { };
-      argocd-repo-password = { };
-      argocd-webhook-secret = { };
+      cloudflared-token = { };
     };
   };
 }
