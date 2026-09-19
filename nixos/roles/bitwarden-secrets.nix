@@ -74,7 +74,7 @@ in
   options.yoyozbi.bitwardenSecrets = with lib; {
     serverUrl = mkOption {
       type = types.str;
-      default = "https://vault.bitwarden.eu";
+      default = "https://vault.bitwarden.com";
       description = "Bitwarden server the access token belongs to.";
     };
 
