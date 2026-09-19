@@ -13,10 +13,16 @@
   boot = {
     loader.grub.enable = false;
     loader.generic-extlinux-compatible.enable = true;
+    # Mainline kernel (cached on cache.nixos.org) instead of the
+    # nixos-hardware RPi kernel, which has to be built from source.
     initrd.availableKernelModules = [
       "xhci_pci"
       "usbhid"
+      "pcie_brcmstb" # PCIe bus behind the VL805 USB controller
     ];
+    # The sd-card image profile enables ZFS; not needed here and it would
+    # compile the zfs kernel module.
+    supportedFilesystems.zfs = lib.mkForce false;
     kernelParams = [
       "cgroup_enable=cpuset"
       "cgroup_memory=1"

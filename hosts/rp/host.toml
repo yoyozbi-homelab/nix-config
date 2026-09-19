@@ -1,7 +1,6 @@
 [host]
 username = "nix"
 platform = "aarch64-linux"
-hardware = ["raspberry-pi-4"]
 
 # Stack wiring and Bitwarden secret IDs live in hosts/rp/services.nix.
 roles = [

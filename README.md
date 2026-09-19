@@ -126,7 +126,7 @@ sudo netdata-claim.sh
 1. Build a sd-card image out of the config
 
 ```bash
-nix run nixpkgs#nixos-generators -- -f sd-aarch64 --flake .#rp --system aarch64-linux -o ../pi.sd
+nix build .#nixosConfigurations.rp.config.system.build.images.sd-card  # result/sd-image/*.img.zst
 ```
 
 1. Make common modifications

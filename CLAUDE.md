@@ -134,7 +134,7 @@ nix-shell -p ssh-to-age --run 'ssh-keyscan <hostname> | ssh-to-age'
 ### Server-Specific Commands
 ```bash
 # Build SD card image for Raspberry Pi
-nix run nixpkgs#nixos-generators -- -f sd-aarch64 --flake .#rp --system aarch64-linux -o ../pi.sd
+nix build .#nixosConfigurations.rp.config.system.build.images.sd-card  # result/sd-image/*.img.zst
 
 # Reset K3s node (on server)
 ./nixos/roles/k3s-server/k3s-reset-node
