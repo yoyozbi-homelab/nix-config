@@ -73,8 +73,7 @@ in
       ipam.config = [
         {
           subnet = "172.31.0.0/24";
-          gateway = "172.32.0.1";
-
+          gateway = "172.31.0.1";
         }
       ];
     };
@@ -130,6 +129,20 @@ in
           "443:443/udp" # HTTP 3 traffic (QUIC) for the reverse proxy
           "80:80"
         ];
+        # /healthz only proves gerbil's HTTP API is up; traefik depends on it
+        # being healthy. The image ships wget but not curl.
+        healthcheck = {
+          test = [
+            "CMD"
+            "wget"
+            "-qO-"
+            "http://127.0.0.1:3004/healthz"
+          ];
+          interval = "10s";
+          timeout = "5s";
+          retries = 5;
+          start_period = "10s";
+        };
       };
 
       traefik.service = {
@@ -151,6 +164,19 @@ in
           "${stateDir}/config/letsencrypt:/letsencrypt:rw"
           "${stateDir}/config/traefik/logs:/var/log/traefik:rw"
         ];
+        # Hits /ping on the `web` entrypoint, as enabled in traefik_config.yml.
+        healthcheck = {
+          test = [
+            "CMD"
+            "traefik"
+            "healthcheck"
+            "--configFile=/etc/traefik/traefik_config.yml"
+          ];
+          interval = "10s";
+          timeout = "5s";
+          retries = 5;
+          start_period = "15s";
+        };
       };
     };
   };
