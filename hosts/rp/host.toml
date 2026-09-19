@@ -11,6 +11,7 @@ roles = [
   "docker/newt",
   "docker/cloudflared",
   "docker/paperless",
+  "backup",
 ]
 
 [network]
