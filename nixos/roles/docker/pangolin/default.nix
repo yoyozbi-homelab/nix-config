@@ -1,5 +1,10 @@
-# This requires a sops secret named pangolin-server-secret !
-{ config, inputs, ... }:
+# This requires sops secrets named pangolin-server-secret and crowdsec-bouncer-key !
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 let
   stateDir = "/var/lib/pangolin";
   baseDomain = "yohanzbinden.ch";
@@ -17,6 +22,7 @@ in
         email
         ;
     })
+    (import ./config/crowdsec.nix { inherit config pkgs stateDir; })
     (import ./config/traefik/traefik_config.nix {
       inherit
         config
@@ -44,6 +50,15 @@ in
           sops.secrets.pangolin-server-secret = { };
       '';
     }
+    {
+      assertion = config.sops.secrets ? crowdsec-bouncer-key;
+      message = ''
+        The pangolin role requires a SOPS secret named `crowdsec-bouncer-key`
+        (any random string, e.g. `openssl rand -hex 32`).
+        Declare it on the host, e.g. in hosts/<host>/hardware.nix:
+          sops.secrets.crowdsec-bouncer-key = { };
+      '';
+    }
   ];
 
   virtualisation.arion.backend = "docker";
@@ -64,7 +79,21 @@ in
     "d ${stateDir}/config/db 0750 root root -"
     "d ${stateDir}/config/letsencrypt 0750 root root -"
     "d ${stateDir}/config/traefik 0750 root root -"
+    "d ${stateDir}/config/traefik/logs 0750 root root -"
   ];
+
+  # Traefik never rotates its access log itself; copytruncate keeps the file
+  # handle held by traefik (writer) and crowdsec (reader) valid.
+  services.logrotate.settings.traefik-access-log = {
+    files = "${stateDir}/config/traefik/logs/access.log";
+    frequency = "daily";
+    rotate = 7;
+    compress = true;
+    delaycompress = true;
+    missingok = true;
+    notifempty = true;
+    copytruncate = true;
+  };
 
   virtualisation.arion.projects.pangolin.settings = {
     networks.pangolin = {
@@ -152,6 +181,9 @@ in
         network_mode = "service:gerbil";
         depends_on = {
           gerbil = {
+            condition = "service_healthy";
+          };
+          crowdsec = {
             condition = "service_healthy";
           };
         };

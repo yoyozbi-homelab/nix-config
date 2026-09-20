@@ -57,6 +57,17 @@
         "image\\s*=\\s*\"(?<depName>[^:\"\\s]+):(?<currentValue>[^\"\\s#]+)\""
       ],
       "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Update Traefik plugins in arion stacks",
+      "managerFilePatterns": [
+        "nixos/roles/docker/**/*.nix"
+      ],
+      "matchStrings": [
+        "moduleName:\\s*\"github\\.com/(?<depName>[^\"]+)\"\\s*\\n\\s*version:\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "github-releases"
     }
   ],
   "packageRules": [

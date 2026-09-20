@@ -1,4 +1,5 @@
 pangolin-server-secret: ENC[AES256_GCM,data:BSgpMg4jAVhbFOIYryg531tG8im1WYVso9usvIgLyhe3xRTHcJ0ncXDv0iSjcZSgBLsQcaYTEGVcuc1GyA9lKA==,iv:nk2Krb9tlwGvyEa3LNTAHMPHFAGVU4WBCSvD6SN7rS4=,tag:+k7kddo0t9BlmI1SdFkrnw==,type:str]
+crowdsec-bouncer-key: ENC[AES256_GCM,data:N6BzylfthklftEQL3boy1eJ2yg6Dr9RSMevMaq8pX4ihiJcdG1vbOJrJk8I=,iv:VhAtDh+OX58QvTQGy3v5vYL2hvi2Wf6ECFmCM5fJxa0=,tag:WgN4f0I5D87OO4Ejl5USbA==,type:str]
 sops:
     age:
         - enc: |
@@ -19,7 +20,7 @@ sops:
             QGboNSJfw35dFX+dJeTWehzWjcgzGO5+3A5Al1U2JuHLs61lNfPQjw==
             -----END AGE ENCRYPTED FILE-----
           recipient: age1m3gcq6a43fht8rt5k90k9ydlsr7d037lrqqx9lsyd92chfus6pss34q9jw
-    lastmodified: "2026-08-31T07:34:46Z"
-    mac: ENC[AES256_GCM,data:6oPdTV0mZstDCdqqA3pez6Ifyal0oA+dxSc1MKfHPl822yooI3DqUF3vPsfCBvVGCVGR1FNlDqRLC+ygpaQ05b4G4A7/07FndFQ6YLKfARoAa8vbyz55aHbI5Y3IkONMIID0dQYBlyIgzS0gkiR4qIBIuc745su88mqxQDIrDhQ=,iv:oElFBHvYBVUVR53CxJqQzLahAVmUXAHCYrEZ7lFbNO0=,tag:eS8TShyyTNmPX3FfX9ykvA==,type:str]
+    lastmodified: "2026-09-20T16:06:54Z"
+    mac: ENC[AES256_GCM,data:AUI6O8acUmPew4mCJSibeiJ3AhCdktkB4ZAr/eWfmgbHMncZco5Xa/Of2LOtcnuRQ3a+h8Tpbbh7dpCXbVZ6vKiOmBhFxN4mizL6nHDu5ewCHxsr4SreyGssJf192kPdglxSDG2FgFlApV4+Irjr++ZRsDTWXpSNfkk+mN6wJwc=,iv:OyXI0IrgSqKOU8FbqQZJcEiX2jPZ9o4FMCkol15RA4I=,tag:KPb+ESFzO2gbc9TSwqefDg==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.13.3

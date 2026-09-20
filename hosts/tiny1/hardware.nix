@@ -26,6 +26,7 @@
     defaultSopsFile = ./tiny1-sec.yml;
     secrets = {
       pangolin-server-secret = { };
+      crowdsec-bouncer-key = { };
     };
   };
 }

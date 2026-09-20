@@ -23,6 +23,9 @@
         badger:
           moduleName: "github.com/fosrl/badger"
           version: "v1.4.0" # Check github.com/fosrl/badger for the latest release.
+        crowdsec:
+          moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
+          version: "v1.7.1"
 
     log:
       level: "INFO"
@@ -31,6 +34,18 @@
       maxBackups: 3
       maxAge: 3
       compress: true
+
+    # Read by crowdsec (crowdsecurity/traefik parser). All fields are kept
+    # (the default); only User-Agent is added to the headers, which default
+    # to dropped.
+    accessLog:
+      filePath: "/var/log/traefik/access.log"
+      format: json
+      bufferingSize: 100
+      fields:
+        headers:
+          names:
+            User-Agent: keep
 
     certificatesResolvers:
       letsencrypt:
@@ -55,6 +70,8 @@
         http:
           tls:
             certResolver: "letsencrypt"
+          middlewares:
+            - crowdsec@file
           encodedCharacters:
             allowEncodedSlash: true
             allowEncodedQuestionMark: true

@@ -16,6 +16,32 @@
         redirect-to-https:
           redirectScheme:
             scheme: https
+        # Applied to every router on the websecure entrypoint.
+        # Traefik is the edge (no CDN in front), so forwarded headers are not
+        # trusted: the client IP is always the TCP peer.
+        # Fail-open when crowdsec is down, so a crowdsec outage doesn't take
+        # every exposed service offline.
+        crowdsec:
+          plugin:
+            crowdsec:
+              enabled: true
+              logLevel: INFO
+              crowdsecMode: stream
+              updateIntervalSeconds: 15
+              updateMaxFailure: -1
+              httpTimeoutSeconds: 10
+              crowdsecLapiScheme: http
+              crowdsecLapiHost: crowdsec:8080
+              crowdsecLapiKey: "${config.sops.placeholder.crowdsec-bouncer-key or ""}"
+              crowdsecAppsecEnabled: true
+              crowdsecAppsecHost: crowdsec:7422
+              crowdsecAppsecFailureBlock: true
+              crowdsecAppsecUnreachableBlock: false
+              crowdsecAppsecBodyLimit: 10485760
+              clientTrustedIPs:
+                - "10.0.0.0/8"
+                - "172.16.0.0/12"
+                - "192.168.0.0/16"
 
       routers:
         main-app-router-redirect:
