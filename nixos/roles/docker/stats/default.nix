@@ -39,7 +39,7 @@ in
   virtualisation.arion.projects.monitoring.settings = {
     services = {
       grafana.service = {
-        image = "docker.io/grafana/grafana:13.2.1";
+        image = "docker.io/grafana/grafana:13.2.2";
         container_name = "grafana";
         restart = "unless-stopped";
         volumes = [
@@ -81,7 +81,7 @@ in
       };
 
       cadvisor.service = {
-        image = "ghcr.io/google/cadvisor:v0.60.5";
+        image = "ghcr.io/google/cadvisor:v0.60.6";
         container_name = "cadvisor";
         restart = "unless-stopped";
         privileged = true;

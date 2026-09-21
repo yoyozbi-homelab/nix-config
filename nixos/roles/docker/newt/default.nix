@@ -66,7 +66,7 @@ in
 
     virtualisation.arion.projects.newt.settings = {
       services.newt.service = {
-        image = "docker.io/fosrl/newt:1.16.0";
+        image = "docker.io/fosrl/newt:1.17.0";
         container_name = "newt";
         restart = "unless-stopped";
         volumes = [

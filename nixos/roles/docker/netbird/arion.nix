@@ -114,7 +114,7 @@ in
 
       # Combined server (Management + Signal + Relay + STUN + embedded Dex).
       netbird-server.service = {
-        image = "netbirdio/netbird-server:0.78.1";
+        image = "netbirdio/netbird-server:0.79.0";
         container_name = "netbird-server";
         restart = "unless-stopped";
         networks = [ "netbird" ];
@@ -155,7 +155,7 @@ in
       # NB_PROXY_TOKEN and the CrowdSec bouncer key are provisioned post-deploy
       # (see ../netbird.nix header) and delivered via the sops-rendered proxy.env.
       proxy.service = {
-        image = "netbirdio/reverse-proxy:0.78.1";
+        image = "netbirdio/reverse-proxy:0.79.0";
         container_name = "netbird-proxy";
         restart = "unless-stopped";
         networks = [ "netbird" ];
