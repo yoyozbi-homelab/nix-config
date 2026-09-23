@@ -40,12 +40,26 @@ in
     "d ${crowdsecDir}/data 0750 root root -"
   ];
 
+  # See the `limits` helper in ../default.nix for why these exist. crowdsec is
+  # analysis, not the data path, so it gets the lowest share on a contended box.
+  virtualisation.arion.projects.pangolin.settings.services.crowdsec.out.service = {
+    cpus = "0.40";
+    cpu_shares = 256;
+    mem_limit = "192m";
+    mem_reservation = "64m";
+    pids_limit = 256;
+  };
+
   virtualisation.arion.projects.pangolin.settings.services.crowdsec.service = {
     image = "docker.io/crowdsecurity/crowdsec:v1.8.1";
     container_name = "crowdsec";
     restart = "unless-stopped";
     environment = {
-      COLLECTIONS = "crowdsecurity/traefik crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules";
+      # appsec-generic-rules is deliberately absent: its broad pattern matching
+      # was a large share of the crowdsec + traefik CPU on tiny1, which runs at
+      # 70%+ steal. virtual-patching keeps the targeted CVE rules, and the
+      # traefik collection keeps log-based IP banning, both of which are cheap.
+      COLLECTIONS = "crowdsecurity/traefik crowdsecurity/appsec-virtual-patching";
       PARSERS = "crowdsecurity/whitelists";
     };
     env_file = [ config.sops.templates."crowdsec.env".path ];
@@ -65,7 +79,9 @@ in
         "lapi"
         "status"
       ];
-      interval = "10s";
+      # cscli is a ~16 MB Go binary and every probe spawns one, so this ran at
+      # 10s intervals purely to feed the memory pressure it was competing with.
+      interval = "30s";
       timeout = "5s";
       retries = 5;
       # First start downloads the hub collections before LAPI comes up.

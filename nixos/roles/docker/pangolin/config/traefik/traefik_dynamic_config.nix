@@ -27,7 +27,9 @@
               enabled: true
               logLevel: INFO
               crowdsecMode: stream
-              updateIntervalSeconds: 15
+              # Stream mode only pulls decision deltas; 15s was more LAPI
+              # round-trips than a 1 OCPU box needs for an IP blocklist.
+              updateIntervalSeconds: 60
               updateMaxFailure: -1
               httpTimeoutSeconds: 10
               crowdsecLapiScheme: http
@@ -37,7 +39,10 @@
               crowdsecAppsecHost: crowdsec:7422
               crowdsecAppsecFailureBlock: true
               crowdsecAppsecUnreachableBlock: false
-              crowdsecAppsecBodyLimit: 10485760
+              # Bodies are buffered in traefik before being shipped to appsec.
+              # 10 MiB per in-flight request is not affordable on a 1 GB host;
+              # 1 MiB still covers every form/API payload behind this proxy.
+              crowdsecAppsecBodyLimit: 1048576
               clientTrustedIPs:
                 - "10.0.0.0/8"
                 - "172.16.0.0/12"

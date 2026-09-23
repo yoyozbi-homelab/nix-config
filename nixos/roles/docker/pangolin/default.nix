@@ -10,6 +10,31 @@ let
   baseDomain = "yohanzbinden.ch";
   pangolinDomain = "pangolin.${baseDomain}";
   email = "yohan@${baseDomain}";
+
+  # arion's service submodule has no options for compose's resource keys, so
+  # they go through the documented `out.service` escape hatch.
+  #
+  # tiny1 is a 1 OCPU / 1 GB OCI instance that runs at 70%+ CPU steal, so the
+  # point of these is less to save resources than to decide who loses when the
+  # box is contended: gerbil and traefik carry live proxy traffic and get the
+  # highest shares, pangolin (control plane) and crowdsec (log analysis) yield
+  # to them. mem_reservation biases kswapd away from the data path, which is
+  # the top CPU consumer on this host.
+  limits =
+    {
+      cpus,
+      shares,
+      mem,
+      reserve,
+      pids ? 256,
+    }:
+    {
+      inherit cpus;
+      cpu_shares = shares;
+      mem_limit = mem;
+      mem_reservation = reserve;
+      pids_limit = pids;
+    };
 in
 {
   imports = [
@@ -108,6 +133,12 @@ in
     };
 
     services = {
+      pangolin.out.service = limits {
+        cpus = "0.60";
+        shares = 512;
+        mem = "256m";
+        reserve = "128m";
+      };
       pangolin.service = {
         image = "docker.io/fosrl/pangolin:ee-1.21.1";
         container_name = "pangolin";
@@ -123,12 +154,22 @@ in
             "-f"
             "http://localhost:3001/api/v1"
           ];
-          interval = "10s";
+          # Every probe forks a curl; at 10s that was a measurable share of a
+          # host where kswapd is already the busiest process. start_period
+          # covers the slow first boot that the old retries = 15 paid for.
+          interval = "30s";
           timeout = "10s";
-          retries = 15;
+          retries = 5;
+          start_period = "120s";
         };
       };
 
+      gerbil.out.service = limits {
+        cpus = "0.50";
+        shares = 1024;
+        mem = "96m";
+        reserve = "48m";
+      };
       gerbil.service = {
         image = "docker.io/fosrl/gerbil:1.5.2";
         container_name = "gerbil";
@@ -167,13 +208,19 @@ in
             "-qO-"
             "http://127.0.0.1:3004/healthz"
           ];
-          interval = "10s";
+          interval = "30s";
           timeout = "5s";
           retries = 5;
-          start_period = "10s";
+          start_period = "30s";
         };
       };
 
+      traefik.out.service = limits {
+        cpus = "0.75";
+        shares = 1024;
+        mem = "192m";
+        reserve = "96m";
+      };
       traefik.service = {
         image = "docker.io/traefik:v3.7";
         container_name = "traefik";
@@ -204,10 +251,10 @@ in
             "healthcheck"
             "--configFile=/etc/traefik/traefik_config.yml"
           ];
-          interval = "10s";
+          interval = "30s";
           timeout = "5s";
           retries = 5;
-          start_period = "15s";
+          start_period = "30s";
         };
       };
     };
