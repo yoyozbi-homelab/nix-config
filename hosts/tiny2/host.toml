@@ -7,7 +7,7 @@ roles = [
   "openssh",
   "networkmanager",
   "docker",
-  "docker/stats",
+  "docker/wordpress",
   "docker/newt",
 ]
 

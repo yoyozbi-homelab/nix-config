@@ -22,10 +22,14 @@
     firewall.enable = lib.mkForce false;
   };
 
+  yoyozbi.wordpress = {
+    domain = "teamsolid.ch";
+    acmeEmail = "yohan@yohanzbinden.ch";
+  };
+
   sops = {
     defaultSopsFile = ./tiny2-sec.yml;
     secrets = {
-      grafana-admin-password = { };
       newt-endpoint = { };
       newt-id = { };
       newt-secret = { };
