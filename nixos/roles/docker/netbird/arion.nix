@@ -95,7 +95,7 @@ in
 
       # UI dashboard.
       dashboard.service = {
-        image = "netbirdio/dashboard:v2.92.0";
+        image = "netbirdio/dashboard:v2.93.0";
         container_name = "netbird-dashboard";
         restart = "unless-stopped";
         networks = [ "netbird" ];
