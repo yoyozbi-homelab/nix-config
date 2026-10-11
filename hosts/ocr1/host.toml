@@ -32,7 +32,7 @@ enabled = false
 dashboardUrl = "argocd.yohanzbinden.ch"
 
 [network.portainer]
-enabled = true
+enabled = false
 dashboardUrl = "portainer.yohanzbinden.ch"
 
 [network.longhorn]
