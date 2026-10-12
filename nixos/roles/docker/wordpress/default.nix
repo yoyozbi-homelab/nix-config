@@ -179,7 +179,7 @@ in
         };
 
         db.service = {
-          image = "docker.io/library/mariadb:11.8.9";
+          image = "docker.io/library/mariadb:13.0.2";
           container_name = "wordpress-mariadb";
           restart = "unless-stopped";
           # tiny2 only has 1 GB of RAM; the default 128M pool is more than a
