@@ -79,7 +79,7 @@ in
     virtualisation.arion.projects.paperless.settings = {
       services = {
         broker.service = {
-          image = "docker.io/valkey/valkey:8.1.10-alpine";
+          image = "docker.io/valkey/valkey:9.1.2-alpine";
           container_name = "paperless-valkey";
           restart = "unless-stopped";
           # Holds the celery queue and channel layer, which rebuild themselves:
