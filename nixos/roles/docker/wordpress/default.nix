@@ -115,7 +115,7 @@ in
     virtualisation.arion.projects.wordpress.settings = {
       services = {
         traefik.service = {
-          image = "docker.io/library/traefik:v3.7.14";
+          image = "docker.io/library/traefik:v3.7.16";
           container_name = "wordpress-traefik";
           restart = "unless-stopped";
           command = [
