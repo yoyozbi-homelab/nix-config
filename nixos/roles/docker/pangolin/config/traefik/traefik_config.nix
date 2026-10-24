@@ -22,10 +22,10 @@
       plugins:
         badger:
           moduleName: "github.com/fosrl/badger"
-          version: "v1.7.0" # Check github.com/fosrl/badger for the latest release.
+          version: "v1.8.0" # Check github.com/fosrl/badger for the latest release.
         crowdsec:
           moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
-          version: "v1.7.1"
+          version: "v1.8.1"
 
     log:
       level: "INFO"

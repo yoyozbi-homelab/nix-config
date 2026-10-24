@@ -118,7 +118,7 @@ in
         };
 
         webserver.service = {
-          image = "ghcr.io/paperless-ngx/paperless-ngx:3.3.0";
+          image = "ghcr.io/paperless-ngx/paperless-ngx:3.3.4";
           container_name = "paperless";
           restart = "unless-stopped";
           depends_on = [
