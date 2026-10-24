@@ -39,7 +39,7 @@ in
   virtualisation.arion.projects.monitoring.settings = {
     services = {
       grafana.service = {
-        image = "docker.io/grafana/grafana:13.2.3";
+        image = "docker.io/grafana/grafana:13.2.4";
         container_name = "grafana";
         restart = "unless-stopped";
         volumes = [
@@ -59,7 +59,7 @@ in
       };
 
       prometheus.service = {
-        image = "docker.io/prom/prometheus:v3.15.0";
+        image = "docker.io/prom/prometheus:v3.15.1";
         container_name = "prometheus";
         restart = "unless-stopped";
         volumes = [

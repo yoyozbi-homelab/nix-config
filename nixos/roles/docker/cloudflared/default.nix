@@ -33,7 +33,7 @@ in
 
   virtualisation.arion.projects.cloudflared.settings = {
     services.cloudflared.service = {
-      image = "docker.io/cloudflare/cloudflared:2026.10.0";
+      image = "docker.io/cloudflare/cloudflared:2026.10.3";
       container_name = "cloudflared";
       restart = "unless-stopped";
       # The image entrypoint is already `cloudflared --no-autoupdate`.
