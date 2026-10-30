@@ -39,7 +39,7 @@ in
   virtualisation.arion.projects.monitoring.settings = {
     services = {
       grafana.service = {
-        image = "docker.io/grafana/grafana:13.2.4";
+        image = "docker.io/grafana/grafana:13.3.0";
         container_name = "grafana";
         restart = "unless-stopped";
         volumes = [

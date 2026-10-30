@@ -51,7 +51,7 @@ in
   };
 
   virtualisation.arion.projects.pangolin.settings.services.crowdsec.service = {
-    image = "docker.io/crowdsecurity/crowdsec:v1.8.1";
+    image = "docker.io/crowdsecurity/crowdsec:v1.8.2";
     container_name = "crowdsec";
     restart = "unless-stopped";
     environment = {
