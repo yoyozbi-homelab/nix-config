@@ -155,7 +155,7 @@ in
         };
 
         wordpress.service = {
-          image = "docker.io/library/wordpress:7.1.3-apache";
+          image = "docker.io/library/wordpress:7.1.4-apache";
           container_name = "wordpress";
           restart = "unless-stopped";
           depends_on = {
