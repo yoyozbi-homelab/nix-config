@@ -18,6 +18,9 @@ spec:
   chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
   version: 0.62.1
   valuesContent: |-
+    resources:
+      limits:
+        cpu: 250m
     web:
       enabled: true
       ingress:
@@ -70,6 +73,9 @@ spec:
             value:
               - key: "CriticalAddonsOnly"
                 operator: "Exists"
+          - op: add
+            path: /spec/template/spec/containers/0/resources/limits/cpu
+            value: 250m
   sync:
     kind: GitRepository
     url: "https://github.com/yoyozbi-homelab/k8s-config"
