@@ -95,13 +95,6 @@ spec:
     secretKey: token
  ```
 
- 1. If the host has  `netdata` run the following command to enroll the node
-
-```bash
-sudo netdata-claim.sh
-   
-```
-
 ## For tiny1 or tiny2
 
  1. Provision a new instance with ubuntu

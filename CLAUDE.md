@@ -174,4 +174,6 @@ overlays/              # nixpkgs overlays
 - Cachix deployment configured for automated updates
 - All unfree packages allowed in nixpkgs config
 - Custom overlays defined in `overlays/`
+- Servers (`desktop` absent) only get `nixpkgs` in `nix.registry`. Every registry entry lands in the system closure, so adding `self` or other inputs back makes every commit redeploy every server
+- `bws` comes from the rev-pinned `nixpkgs-bws` input (see `flake.nix` and the `modifications` overlay) because it is unfree and slow to compile on aarch64. `nix flake update` doesn't move it; to bump it, edit the rev in `flake.nix` and run `nix flake lock`
 - `vm-nix` is VM-only: its `toplevel` intentionally fails (no real filesystems); use `system.build.vm`
