@@ -7,7 +7,6 @@ roles = [
   "cachix",
   "openssh",
   "networkmanager",
-  "netdata",
   "ocr-cluster",
   "k3s-server",
   "tmux",

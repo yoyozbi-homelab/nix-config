@@ -15,19 +15,23 @@ env:
   CACHE_NAME: homelab-yohan
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.event_name }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  changes:
-    runs-on: blacksmith-2vcpu-ubuntu-2404
+  deploy:
+    name: deploy (${{ matrix.system }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - system: x86_64-linux
+            runner: blacksmith-8vcpu-ubuntu-2404
+          - system: aarch64-linux
+            runner: blacksmith-8vcpu-ubuntu-2404-arm
+    runs-on: ${{ matrix.runner }}
     permissions:
       contents: read
-    outputs:
-      x86_changed: ${{ steps.x86.outputs.changed }}
-      x86_hash: ${{ steps.hash-x86.outputs.hash }}
-      aarch64_changed: ${{ steps.aarch64.outputs.changed }}
-      aarch64_hash: ${{ steps.hash-aarch64.outputs.hash }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -38,146 +42,52 @@ jobs:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
-      # The deploy spec derivation is a content hash of everything that goes into
-      # the servers of a system, so its .drvPath changes iff a server changes.
-      # Evaluating .drvPath is eval-only (no build).
-      - name: Compute x86_64 spec hash
-        id: hash-x86
-        run: |
-          h=$(basename "$(nix eval --raw .#defaultPackage.x86_64-linux.drvPath)")
-          echo "hash=$h" >> "$GITHUB_OUTPUT"
+      - uses: cachix/cachix-action@v17
+        with:
+          name: ${{ env.CACHE_NAME }}
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-      - name: Compute aarch64 spec hash
-        id: hash-aarch64
+      # The spec's .drvPath is a content hash of everything that goes into the
+      # servers of this system, so it changes iff one of them changes. Arion uses
+      # import-from-derivation, so this has to evaluate on a native runner.
+      # Assigned on its own line so a failed eval fails the step.
+      - name: Compute spec hash
+        id: spec
         run: |
-          h=$(basename "$(nix eval --raw .#defaultPackage.aarch64-linux.drvPath)")
-          echo "hash=$h" >> "$GITHUB_OUTPUT"
+          drv=$(nix eval --raw ".#defaultPackage.${{ matrix.system }}.drvPath")
+          echo "hash=$(basename "$drv")" >> "$GITHUB_OUTPUT"
 
       # A cache hit means this exact spec was already deployed -> skip.
-      - name: Check x86_64 deploy state
-        id: cache-x86
+      - name: Check deploy state
+        id: state
         uses: actions/cache/restore@v6
         with:
           path: .deploy-marker
-          key: cachix-deploy-x86-${{ steps.hash-x86.outputs.hash }}
+          key: cachix-deploy-${{ matrix.system }}-${{ steps.spec.outputs.hash }}
           lookup-only: true
 
-      - name: Check aarch64 deploy state
-        id: cache-aarch64
-        uses: actions/cache/restore@v6
-        with:
-          path: .deploy-marker
-          key: cachix-deploy-aarch64-${{ steps.hash-aarch64.outputs.hash }}
-          lookup-only: true
-
-      - name: Resolve x86_64 changed
-        id: x86
-        run: |
-          if [ "${{ github.event.inputs.force }}" = "true" ] || [ "${{ steps.cache-x86.outputs.cache-hit }}" != "true" ]; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Resolve aarch64 changed
-        id: aarch64
-        run: |
-          if [ "${{ github.event.inputs.force }}" = "true" ] || [ "${{ steps.cache-aarch64.outputs.cache-hit }}" != "true" ]; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          fi
-
-  build-x86_64:
-    needs: changes
-    if: needs.changes.outputs.x86_changed == 'true'
-    runs-on: blacksmith-8vcpu-ubuntu-2404
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-
-      - uses: cachix/install-nix-action@v31
-
-      - uses: cachix/cachix-action@v17
-        with:
-          name: ${{ env.CACHE_NAME }}
-          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
-
-      - name: Build x86_64-linux Cachix Deploy Spec
+      - name: Build and push spec
         id: build
+        if: inputs.force || steps.state.outputs.cache-hit != 'true'
         run: |
-          spec=$(nix build --print-out-paths .#defaultPackage.x86_64-linux)
-          echo "spec=$spec" >> $GITHUB_OUTPUT
+          spec=$(nix build --print-out-paths ".#defaultPackage.${{ matrix.system }}")
+          cachix push "$CACHE_NAME" "$spec"
+          echo "spec=$spec" >> "$GITHUB_OUTPUT"
 
-      - name: Push to Cachix
-        env:
-          CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
-        run: |
-          cachix push ${{ env.CACHE_NAME }} ${{ steps.build.outputs.spec }}
-
-      - name: Deploy x86_64 Servers
+      - name: Deploy
+        if: inputs.force || steps.state.outputs.cache-hit != 'true'
+        timeout-minutes: 30
         env:
           CACHIX_ACTIVATE_TOKEN: ${{ secrets.CACHIX_ACTIVATE_TOKEN }}
-        run: |
-          cachix deploy activate ${{ steps.build.outputs.spec }} --async
+        run: cachix deploy activate "${{ steps.build.outputs.spec }}"
 
-      # Only record the deployed state after a successful activate, so failed
-      # runs correctly retry next time.
+      # Only recorded once the hosts have deployed, so failed runs get retried.
       - name: Record deployed state
+        if: inputs.force || steps.state.outputs.cache-hit != 'true'
         run: touch .deploy-marker
 
       - uses: actions/cache/save@v6
+        if: inputs.force || steps.state.outputs.cache-hit != 'true'
         with:
           path: .deploy-marker
-          key: cachix-deploy-x86-${{ needs.changes.outputs.x86_hash }}
-
-  build-aarch64:
-    needs: changes
-    if: needs.changes.outputs.aarch64_changed == 'true'
-    runs-on: blacksmith-8vcpu-ubuntu-2404-arm
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-
-      - uses: cachix/install-nix-action@v31
-
-      - uses: cachix/cachix-action@v17
-        with:
-          name: ${{ env.CACHE_NAME }}
-          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
-
-      - name: Build aarch64-linux Cachix Deploy Spec
-        id: build
-        run: |
-          spec=$(nix build --print-out-paths .#defaultPackage.aarch64-linux)
-          echo "spec=$spec" >> $GITHUB_OUTPUT
-
-      - name: Push to Cachix
-        env:
-          CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
-        run: |
-          cachix push ${{ env.CACHE_NAME }} ${{ steps.build.outputs.spec }}
-
-      - name: Deploy aarch64 Servers
-        env:
-          CACHIX_ACTIVATE_TOKEN: ${{ secrets.CACHIX_ACTIVATE_TOKEN }}
-        run: |
-          cachix deploy activate ${{ steps.build.outputs.spec }} --async
-
-      # Only record the deployed state after a successful activate, so failed
-      # runs correctly retry next time.
-      - name: Record deployed state
-        run: touch .deploy-marker
-
-      - uses: actions/cache/save@v6
-        with:
-          path: .deploy-marker
-          key: cachix-deploy-aarch64-${{ needs.changes.outputs.aarch64_hash }}
+          key: cachix-deploy-${{ matrix.system }}-${{ steps.spec.outputs.hash }}

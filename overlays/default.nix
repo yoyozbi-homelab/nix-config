@@ -7,21 +7,30 @@
   # This one contains whatever you want to overlay
   # You can change versions, add patches, set compilation flags, anything really.
   # https://nixos.wiki/wiki/Overlays
-  modifications = _final: _prev: {
+  modifications = final: _prev: {
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
+
+    # See the nixpkgs-bws input in flake.nix for why this is pinned.
+    inherit
+      (import inputs.nixpkgs-bws {
+        inherit (final.stdenv.hostPlatform) system;
+        config.allowUnfree = true;
+      })
+      bws
+      ;
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
   # be accessible through 'pkgs.unstable'
   unstable-packages = final: _prev: {
     unstable = import inputs.nixpkgs-unstable {
-      inherit (final) system;
+      inherit (final.stdenv.hostPlatform) system;
       config.allowUnfree = true;
     };
     master = import inputs.nixpkgs-master {
-      inherit (final) system;
+      inherit (final.stdenv.hostPlatform) system;
       config.allowUnfree = true;
     };
   };

@@ -3,6 +3,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
+    # bws is unfree, so cache.nixos.org has no build of it and it takes ~25 min
+    # to compile on aarch64. Pinned to a rev so `nix flake update` leaves it
+    # alone. Security fixes wait for a manual bump: edit the rev, on purpose.
+    nixpkgs-bws.url = "github:NixOS/nixpkgs/08d3a97586f6b6343b3b5e799980773629432610";
     lanzaboote.url = "github:nix-community/lanzaboote";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     cachix-deploy.url = "github:cachix/cachix-deploy-flake";

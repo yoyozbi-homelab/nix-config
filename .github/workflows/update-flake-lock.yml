@@ -2,11 +2,11 @@ name: update-flake-lock
 on: # yamllint disable-line rule:truthy
   workflow_dispatch: # allows manual triggering
   schedule:
-    - cron: "0 1 * * *" # runs every day at 00:00
+    - cron: "0 1 * * *" # runs every day at 01:00 UTC
 
 jobs:
   lockfile:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@v7
       - uses: cachix/install-nix-action@v31
