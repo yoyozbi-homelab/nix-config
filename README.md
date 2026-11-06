@@ -8,7 +8,7 @@ Updates are built by github actions and deployed to servers using cachix-deploy
 
 | Name | location | hardware | role |
 | ------ | ---------- | ---------- | ------ |
-| ocr1 | oci | arm64 4cpu 24G ram 60G ssd | k3s master |
+| ocr1 | oci | arm64 2cpu 12G ram 60G ssd | k3s master |
 | tiny1 | oci | amd64 2cpu 1G ram 60G ssd | docker (pangolin manager) |
 | tiny2 | oci | amd64 2cpu 1G ram 60G ssd | docker (homelab-wide monitoring: grafana, prometheus, newt) |
 | rp | home | rpi4b with 4gb ram | docker (newt, cloudflared, paperless), nightly backups ([restore](hosts/rp/README.md)) |
