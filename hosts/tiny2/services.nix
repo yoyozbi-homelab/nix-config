@@ -121,6 +121,9 @@ in
           headers = builtins.toJSON {
             Host = "paperless.yohanzbinden.ch";
             Authorization = "Token ${config.sops.placeholder.paperless-status-token}";
+            # Kuma sends a browser Accept header by default, and Django REST
+            # Framework then answers with its HTML API page instead of JSON.
+            Accept = "application/json";
           };
           max_redirects = 0;
           accepted_statuscodes = [ "200-299" ];
