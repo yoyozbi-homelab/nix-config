@@ -1,7 +1,7 @@
 pangolin-client-endpoint: ENC[AES256_GCM,data:owI5mtW8eZmIJ60pVTKmCo7KbhvYuc9EEWa+yBBn6R0=,iv:ebtdQZmn8hXtD1HUT5Kj1em8t1PC1MoiBThs+MG2Pwk=,tag:cQjfGhbjOmJLC1XPzS6CcQ==,type:str]
 pangolin-client-id: ENC[AES256_GCM,data:eEP9nPmg3qLqbxT/atuV,iv:0TSJdSy61XyJj/plPHtwCRroJqIx6ibHE+bJ3XAkGks=,tag:cKyMCvckpX6ZOW6CPCHz8g==,type:str]
 pangolin-client-secret: ENC[AES256_GCM,data:SpAQXS83d+vKv7pSr9u1PInN1pYf0ZUnHW6u1Q/+ZFb5baMuhDu+Mx5UqJNde+hT,iv:P70aTgH2l+VzU+R73nhbqGRU8YUkuEnxHO3kekZubcs=,tag:Lc67tabe7yaKH0w+lvwDYg==,type:str]
-uptime-kuma-postgres-password: ENC[AES256_GCM,data:ZoFl7hqV4on528mCwV5H,iv:wh/Sj8clp/uquAwT3zS8gP36caOAe8duf7kMXyCIQbE=,tag:wmXgUkI7sdu1Vd+thl91+A==,type:str]
+uptime-kuma-postgres-password: ENC[AES256_GCM,data:SNTdUh+OAvokmb6iJWg02ag=,iv:mjfGqOlbq/Gu36mv5cA1BcG+J+BthVzr0DQ7fRBVYeY=,tag:K2PzAd2cj5k3ESEYTin18Q==,type:str]
 uptime-kuma-password: ENC[AES256_GCM,data:xcf/jVQv4q7eMjwwsPvo,iv:6OGG/HDvHup0RdjSb9GbuG1Gt5zi3ucwYgIQjJwWiWw=,tag:7LlBykn3YuB9uu+SkzvwQQ==,type:str]
 ntfy-server-url: ENC[AES256_GCM,data:1iT4zWU1SEXcsjNZRcps,iv:RPkmNk8QrMya+7qBCoydisXoj6wsIgk7vGAEw6HD2wU=,tag:Nq1jcfvoueiZBO4DRYnrZQ==,type:str]
 ntfy-topic: ENC[AES256_GCM,data:t30Amox+1liPoChs54wVsw==,iv:BruDgOyC/LYiQaFl3cnatBJOSRnG6MNwx/Hg7miIvYQ=,tag:GE/J91saYRlJK6p80OQ8xw==,type:str]
@@ -26,7 +26,7 @@ sops:
             +w5aGMNxDt4HdgfXqTqcMrdkqTBz2EE1tOKdPp3/JcfuTfqLmMLNaA==
             -----END AGE ENCRYPTED FILE-----
           recipient: age1wyggh6p77q5g00e784psmvtm2m8j96nsnzry4cpj9g70agexmatquped2e
-    lastmodified: "2026-11-07T10:23:47Z"
-    mac: ENC[AES256_GCM,data:AvZ1+seCEEZVqr1+M2QOeIIJRkRXHADkAenGjLEJUbgeZxu4PXcFB9447u5DR7NFg3xR9N9C7H+Myu5a8zYJTOfEbenjYONdZzTp62y6a017tJk91ShQxMJXTZI5ya0CngfTc2xCT5kD0wdTeVuF8TWSYunUC0Cx3aTSemiHw+U=,iv:4FQZG0wJ9oRE+Uqa+LlOJvcmrvYeCo5EQscXLlNt+CM=,tag:unJrUNenSJK2hm9sexqG+g==,type:str]
+    lastmodified: "2026-11-07T10:33:07Z"
+    mac: ENC[AES256_GCM,data:+3aP3vosS1154vS7kQ51lQQ8JnWsZ6C3bGMmNoSuKQeWL3MjSNwlnmrFH+YYIlAq8YxcPsGYp4UWEuiAR5hqiDds5b9uRPwHuwtA9TmN+naI0yoZQ455S9u3lNbXJGxoY7/LanIhamFzttFPPg3bRzQGWLTDiUWGYZbady2w/ro=,iv:kO7ym1IC9/KBGcWSCQE9LuuvZtZOdmVOaZCktAaXUTk=,tag:REdRuKELVoHShaCc7xSTuQ==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.13.3
