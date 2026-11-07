@@ -65,6 +65,7 @@ in
 {
   sops.secrets = {
     uptime-kuma-postgres-password = { };
+    paperless-status-token = { };
     ntfy-server-url = { };
     ntfy-topic = { };
   };
@@ -104,6 +105,34 @@ in
       );
       restartUnits = [ "arion-uptime-kuma.service" ];
     };
+
+    # The plain Paperless check only sees the login redirect, which is served
+    # without touching Postgres or Valkey. /api/status/ reports both, plus the
+    # Celery worker. The token belongs to a Paperless user whose only
+    # permission is "view system monitoring", so it can't read documents.
+    "autokuma-paperless-status.json" = {
+      content = builtins.toJSON (
+        defaults
+        // {
+          type = "json-query";
+          parent_name = "rp";
+          name = "Paperless (Postgres, Valkey, Celery)";
+          url = "http://${rp}:8000/api/status/";
+          headers = builtins.toJSON {
+            Host = "paperless.yohanzbinden.ch";
+            Authorization = "Token ${config.sops.placeholder.paperless-status-token}";
+          };
+          max_redirects = 0;
+          accepted_statuscodes = [ "200-299" ];
+          # JSONata. Joined rather than a boolean, so the failure message
+          # shows which part is down (e.g. "OK,ERROR,OK").
+          json_path = ''$join([database.status, tasks.redis_status, tasks.celery_status], ",")'';
+          json_path_operator = "==";
+          expected_value = "OK,OK,OK";
+        }
+      );
+      restartUnits = [ "arion-uptime-kuma.service" ];
+    };
   };
 
   yoyozbi = {
@@ -121,6 +150,7 @@ in
       secretEntities = {
         ntfy = config.sops.templates."autokuma-ntfy.json".path;
         postgres = config.sops.templates."autokuma-postgres.json".path;
+        rp-paperless-status = config.sops.templates."autokuma-paperless-status.json".path;
       };
 
       entities = {

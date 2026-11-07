@@ -6,6 +6,7 @@ uptime-kuma-password: ENC[AES256_GCM,data:xcf/jVQv4q7eMjwwsPvo,iv:6OGG/HDvHup0Rd
 ntfy-server-url: ENC[AES256_GCM,data:1iT4zWU1SEXcsjNZRcps,iv:RPkmNk8QrMya+7qBCoydisXoj6wsIgk7vGAEw6HD2wU=,tag:Nq1jcfvoueiZBO4DRYnrZQ==,type:str]
 ntfy-topic: ENC[AES256_GCM,data:t30Amox+1liPoChs54wVsw==,iv:BruDgOyC/LYiQaFl3cnatBJOSRnG6MNwx/Hg7miIvYQ=,tag:GE/J91saYRlJK6p80OQ8xw==,type:str]
 cloudflared-token: ENC[AES256_GCM,data:uhJJuixMJrEDJXfQ1WugqfNZR5C6pov8WMBB4MuXHegoIPjs18pvk/o2+c5HMvFgn7Wv3JT+GHAOULbHTFPFikZJPinRyGOL5KW6u00YnGUagF4U5Sg8fhAfWSKp3KBHTCUM9nFnCXCbmirHvMTwXdSZbPQDEEVxiGEjC9OrhbUw4KAWVEdLxkyPy7rE25P+uVbA0pzndPMzeMDGDDnIWKivJax9gzd9BHpcwUnBIuY33XQQTyxsAQ==,iv:Y3gzJdnv13bc3Q+yUxMieTP3CgAG5FHhJ7MBWvTh6rs=,tag:g4hmFyafDX+Sxe0x9tdRug==,type:str]
+paperless-status-token: ENC[AES256_GCM,data:yTrRtvzwu+Y5ma4Gm+X1GuKs9vbtRgsdGYNaEHvDlrAYWfLACOqhgQ==,iv:mSklNu60s5cogqtJSggu555XkmNXh5lF721cvsKd9MY=,tag:O6amlyQX9W9bQOsvRBqI/A==,type:str]
 sops:
     age:
         - enc: |
@@ -26,7 +27,7 @@ sops:
             +w5aGMNxDt4HdgfXqTqcMrdkqTBz2EE1tOKdPp3/JcfuTfqLmMLNaA==
             -----END AGE ENCRYPTED FILE-----
           recipient: age1wyggh6p77q5g00e784psmvtm2m8j96nsnzry4cpj9g70agexmatquped2e
-    lastmodified: "2026-11-07T10:33:07Z"
-    mac: ENC[AES256_GCM,data:+3aP3vosS1154vS7kQ51lQQ8JnWsZ6C3bGMmNoSuKQeWL3MjSNwlnmrFH+YYIlAq8YxcPsGYp4UWEuiAR5hqiDds5b9uRPwHuwtA9TmN+naI0yoZQ455S9u3lNbXJGxoY7/LanIhamFzttFPPg3bRzQGWLTDiUWGYZbady2w/ro=,iv:kO7ym1IC9/KBGcWSCQE9LuuvZtZOdmVOaZCktAaXUTk=,tag:REdRuKELVoHShaCc7xSTuQ==,type:str]
+    lastmodified: "2026-11-07T13:09:19Z"
+    mac: ENC[AES256_GCM,data:FauQ62ue3LlECKlXMO4gHqHalUb9BVSgU5qByyJkjjStj49fdC/1RBSywEFxl6HZhw7xHDrVPfdyP1a0M3VN5ir1Y1qixgMf30CNTaPjqy6h5/QeIEB+u+GWo+0SJSW2eORPXdJ9bjiyxdZ6pTd6J/t4rc0uslPC2XzODqT9Psg=,iv:9KQpm+gc1YY3BESqG2Sdwt1oq4PGjKM4MDVrRnayA/U=,tag:R9vOFCqwypXlja1Df1SSPQ==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.13.3
