@@ -2,8 +2,15 @@
 # Cloudflare dashboard, only the tunnel token is needed here.
 #
 # This requires a sops secret named cloudflared-token !
-{ config, inputs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  ...
+}:
 let
+  cfg = config.yoyozbi.cloudflared;
+
   # The image is distroless and runs as `nonroot`.
   cloudflaredUid = 65532;
 in
@@ -12,40 +19,57 @@ in
     inputs.arion.nixosModules.arion
   ];
 
-  assertions = [
-    {
-      assertion = config.sops.secrets ? cloudflared-token;
-      message = ''
-        The cloudflared role requires a SOPS secret named `cloudflared-token`.
-        Declare it on the host, e.g. in hosts/<host>/hardware.nix:
-          sops.secrets.cloudflared-token = { };
+  options.yoyozbi.cloudflared = with lib; {
+    hostNetwork = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Run the connector in the host's network namespace, so ingress rules can
+        target services that only listen on the host's loopback
+        (e.g. http://localhost:3001).
       '';
-    }
-  ];
-
-  sops.secrets.cloudflared-token = {
-    uid = cloudflaredUid;
-    mode = "0400";
-    restartUnits = [ "arion-cloudflared.service" ];
+    };
   };
 
-  virtualisation.arion.backend = "docker";
+  config = {
+    assertions = [
+      {
+        assertion = config.sops.secrets ? cloudflared-token;
+        message = ''
+          The cloudflared role requires a SOPS secret named `cloudflared-token`.
+          Declare it on the host, e.g. in hosts/<host>/hardware.nix:
+            sops.secrets.cloudflared-token = { };
+        '';
+      }
+    ];
 
-  virtualisation.arion.projects.cloudflared.settings = {
-    services.cloudflared.service = {
-      image = "docker.io/cloudflare/cloudflared:2026.10.6";
-      container_name = "cloudflared";
-      restart = "unless-stopped";
-      # The image entrypoint is already `cloudflared --no-autoupdate`.
-      command = [
-        "tunnel"
-        "run"
-      ];
-      volumes = [
-        "${config.sops.secrets.cloudflared-token.path}:/run/secrets/cloudflared-token:ro"
-      ];
-      # Read from a file so the token never shows up in `docker inspect`.
-      environment.TUNNEL_TOKEN_FILE = "/run/secrets/cloudflared-token";
+    sops.secrets.cloudflared-token = {
+      uid = cloudflaredUid;
+      mode = "0400";
+      restartUnits = [ "arion-cloudflared.service" ];
+    };
+
+    virtualisation.arion.backend = "docker";
+
+    virtualisation.arion.projects.cloudflared.settings = {
+      services.cloudflared.service = {
+        image = "docker.io/cloudflare/cloudflared:2026.10.6";
+        container_name = "cloudflared";
+        restart = "unless-stopped";
+        # The image entrypoint is already `cloudflared --no-autoupdate`.
+        command = [
+          "tunnel"
+          "run"
+        ];
+        volumes = [
+          "${config.sops.secrets.cloudflared-token.path}:/run/secrets/cloudflared-token:ro"
+        ];
+        # Read from a file so the token never shows up in `docker inspect`.
+        environment.TUNNEL_TOKEN_FILE = "/run/secrets/cloudflared-token";
+      }
+      // lib.optionalAttrs cfg.hostNetwork {
+        network_mode = "host";
+      };
     };
   };
 }

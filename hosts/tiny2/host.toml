@@ -1,14 +1,16 @@
 [host]
 username = "nix"
 
+# Uptime Kuma for the whole homelab; monitors live in hosts/tiny2/services.nix.
 roles = [
   "boot-grub",
   "cachix",
   "openssh",
   "networkmanager",
   "docker",
-  "docker/wordpress",
-  "docker/newt",
+  "docker/cloudflared",
+  "docker/pangolin-client",
+  "docker/uptime-kuma",
 ]
 
 [network]

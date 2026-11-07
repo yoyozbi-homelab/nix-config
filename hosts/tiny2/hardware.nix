@@ -3,6 +3,7 @@
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disks.nix
+    ./services.nix
   ];
 
   boot.initrd = {
@@ -22,17 +23,12 @@
     firewall.enable = lib.mkForce false;
   };
 
-  yoyozbi.wordpress = {
-    domain = "teamsolid.ch";
-    acmeEmail = "yohan@yohanzbinden.ch";
-  };
-
   sops = {
     defaultSopsFile = ./tiny2-sec.yml;
     secrets = {
-      newt-endpoint = { };
-      newt-id = { };
-      newt-secret = { };
+      pangolin-client-endpoint = { };
+      pangolin-client-id = { };
+      pangolin-client-secret = { };
     };
   };
 }
