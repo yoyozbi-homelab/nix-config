@@ -59,7 +59,7 @@ in
       };
 
       prometheus.service = {
-        image = "docker.io/prom/prometheus:v3.15.1";
+        image = "docker.io/prom/prometheus:v3.16.0";
         container_name = "prometheus";
         restart = "unless-stopped";
         volumes = [
