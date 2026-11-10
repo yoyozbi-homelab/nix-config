@@ -171,7 +171,7 @@ in
         reserve = "48m";
       };
       gerbil.service = {
-        image = "docker.io/fosrl/gerbil:1.5.2";
+        image = "docker.io/fosrl/gerbil:1.6.0";
         container_name = "gerbil";
         restart = "unless-stopped";
         depends_on = {
