@@ -13,6 +13,9 @@
 #                      unless the URL already carries one)
 #   NTFY_URL           optional, e.g. https://ntfy.sh/<topic>
 #   NTFY_TOKEN         optional, for protected topics
+#   KUMA_PUSH_URL      optional, an Uptime Kuma push URL
+#                      (https://<kuma>/api/push/<token>), told about every run
+#                      so a run that fails or never happens raises an alert
 #
 # Restoring rp's paperless is documented in hosts/rp/README.md.
 {
@@ -42,6 +45,20 @@ let
       curl -fsS --retry 3 -o /dev/null \
         -H "Title: $1" -H "Priority: $2" -H "Tags: $3" "''${auth[@]}" \
         --data-binary "$4" "$NTFY_URL"
+    '';
+  };
+
+  # Reports to KUMA_PUSH_URL if it is set, a no-op otherwise.
+  push = pkgs.writeShellApplication {
+    name = "backup-push";
+    runtimeInputs = [ pkgs.curl ];
+    text = ''
+      # usage: backup-push <up|down> <message>
+      if [ -z "''${KUMA_PUSH_URL:-}" ]; then
+        exit 0
+      fi
+      curl -fsS --retry 3 -o /dev/null -G \
+        --data-urlencode "status=$1" --data-urlencode "msg=$2" "$KUMA_PUSH_URL"
     '';
   };
 
@@ -76,6 +93,7 @@ let
       pkgs.gawk
       pkgs.gnugrep
       notify
+      push
     ];
     text = ''
       : "''${BACKUP_TARGET_URL:?must be set in the environment file}"
@@ -106,6 +124,8 @@ let
       # (which would send a misleading failure notification instead).
       backup-notify "${hostName}: $kind backup done" default floppy_disk "$stats" \
         || echo "Sending the ntfy notification failed" >&2
+      backup-push up "$kind backup done" \
+        || echo "Reporting to Uptime Kuma failed" >&2
     '';
   };
 
@@ -114,6 +134,7 @@ let
     runtimeInputs = [
       pkgs.systemd
       notify
+      push
     ];
     text = ''
       # systemd sets MONITOR_INVOCATION_ID for OnFailure= units, which scopes
@@ -123,7 +144,11 @@ let
       else
         logs="$(journalctl -u duplicity-backup.service -n 15 -o cat --no-pager)"
       fi
-      backup-notify "${hostName}: backup FAILED" high rotating_light "$logs"
+      # Both are attempted even if the first fails.
+      status=0
+      backup-push down "backup failed" || status=$?
+      backup-notify "${hostName}: backup FAILED" high rotating_light "$logs" || status=$?
+      exit "$status"
     '';
   };
 in
