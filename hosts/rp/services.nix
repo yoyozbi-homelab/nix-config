@@ -25,6 +25,7 @@ in
         backup-webdav-password.id = "9d7f52ca-d81a-4412-9a59-b4ca00db28e8";
         backup-passphrase.id = "ada96254-42cf-428b-a6e1-b4ca00daa975";
         backup-ntfy-url.id = "820308d8-9e28-4a49-921b-b4ca00dea4db";
+        backup-kuma-push-url.id = "86870f56-f9ba-4cef-8ad1-b5040124f406";
       };
 
       # Single-quoted so systemd takes the values literally; they must not
@@ -34,6 +35,7 @@ in
         BACKEND_PASSWORD='${bws.placeholder.backup-webdav-password}'
         PASSPHRASE='${bws.placeholder.backup-passphrase}'
         NTFY_URL='${bws.placeholder.backup-ntfy-url}'
+        KUMA_PUSH_URL='${bws.placeholder.backup-kuma-push-url}'
       '';
 
       templates."newt-config.json".content = builtins.toJSON {
