@@ -25,7 +25,7 @@
           version: "v1.8.0" # Check github.com/fosrl/badger for the latest release.
         crowdsec:
           moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
-          version: "v1.8.1"
+          version: "v1.8.2"
 
     log:
       level: "INFO"

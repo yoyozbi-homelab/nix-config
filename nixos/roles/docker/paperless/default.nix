@@ -93,7 +93,7 @@ in
         };
 
         db.service = {
-          image = "docker.io/library/postgres:18.6";
+          image = "docker.io/library/postgres:18.7";
           container_name = "paperless-postgres";
           restart = "unless-stopped";
           volumes = [
