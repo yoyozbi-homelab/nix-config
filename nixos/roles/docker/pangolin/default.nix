@@ -133,16 +133,30 @@ in
     };
 
     services = {
-      pangolin.out.service = limits {
-        cpus = "0.60";
-        shares = 512;
-        mem = "256m";
-        reserve = "128m";
-      };
+      # Without memswap_limit Docker allows twice mem_limit with swap, and on
+      # 2026-11-19 pangolin sat at 256m RAM + 230m swap, hitting its limit
+      # millions of times but never OOM-killed: the box thrashed (80% iowait)
+      # and the API stalled until clients could no longer register. With no
+      # swap allowed, a leak gets the container killed and restarted instead.
+      pangolin.out.service =
+        limits {
+          cpus = "0.60";
+          shares = 512;
+          mem = "256m";
+          reserve = "128m";
+        }
+        // {
+          memswap_limit = "256m";
+        };
       pangolin.service = {
         image = "docker.io/fosrl/pangolin:ee-1.21.1";
         container_name = "pangolin";
         restart = "unless-stopped";
+        # Caps V8's heap well under the 256m container limit (the rest is young
+        # generation, code and buffers), so Node collects garbage harder before
+        # the cgroup has to step in. The image's `npm run start` runs plain
+        # `node`, which reads this.
+        environment.NODE_OPTIONS = "--max-old-space-size=160";
         volumes = [
           "${config.sops.templates."pangolin-config.yaml".path}:/app/config/config.yaml:ro"
           "${stateDir}/config:/app/config:rw"

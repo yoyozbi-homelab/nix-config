@@ -79,7 +79,11 @@ let
     );
   ingressKeyword =
     name: host: path: keyword:
-    ingress name host path // { type = "keyword"; inherit keyword; };
+    ingress name host path
+    // {
+      type = "keyword";
+      inherit keyword;
+    };
   ingressJson =
     name: host: path: query: expected:
     jsonQuery "ocr1" name "http://${ocr1}${path}" { Host = host; } query expected {
@@ -120,15 +124,13 @@ let
     # Logs in as a role with no rights beyond LOGIN (declared in the flux
     # repo's CNPG cluster), so this password guards nothing else. Characters
     # that are special in a URL must be percent-encoded in the secret.
-    postgres =
-      defaults
-      // {
-        type = "postgres";
-        parent_name = "ocr1";
-        name = "Postgres (main-cluster)";
-        database_connection_string = "postgres://uptime_kuma:${config.sops.placeholder.uptime-kuma-postgres-password}@postgres.ocr1.internal:5432/postgres";
-        query = "SELECT 1";
-      };
+    postgres = defaults // {
+      type = "postgres";
+      parent_name = "ocr1";
+      name = "Postgres (main-cluster)";
+      database_connection_string = "postgres://uptime_kuma:${config.sops.placeholder.uptime-kuma-postgres-password}@postgres.ocr1.internal:5432/postgres";
+      query = "SELECT 1";
+    };
 
     # The plain Paperless check only sees the login redirect, which is served
     # without touching Postgres or Valkey. /api/status/ reports both, plus the
@@ -231,11 +233,22 @@ in
 
         # /api/v1/ is Pangolin's API root; the dashboard is a static shell.
         pangolin = public "Pangolin" "https://pangolin.yohanzbinden.ch/api/v1/";
+        # The check above only fails after Kuma's default 48s timeout, so a
+        # thrashing Pangolin that answers in 20-40s stays green while clients
+        # time out registering and lose their tunnels. 10s is well above its
+        # normal answer time even with tiny1's CPU steal.
+        pangolin-responsive =
+          http "public" "Pangolin API (responsive)" "https://pangolin.yohanzbinden.ch/api/v1/"
+            {
+              timeout = 10;
+            };
         # /alive takes a database connection, so it fails with the database.
         vaultwarden = public "Vaultwarden" "https://vault.yohanzbinden.ch/alive";
         # /health pings the database (and Redis, if enabled); 500 otherwise.
         vikunja = public "Vikunja" "https://tasks.yohanzbinden.ch/health";
-        supersync = jsonQuery "public" "Supersync" "https://supersync.yohanzbinden.ch/health" { } "db" "connected" { };
+        supersync =
+          jsonQuery "public" "Supersync" "https://supersync.yohanzbinden.ch/health" { } "db" "connected"
+            { };
         # No unauthenticated endpoint touches its database; that is covered by
         # the Postgres monitor.
         jellyseerr = public "Jellyseerr" "https://jellyseerr.yohanzbinden.ch/";
