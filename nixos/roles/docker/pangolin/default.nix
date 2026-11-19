@@ -154,11 +154,13 @@ in
         image = "docker.io/fosrl/pangolin:ee-1.21.1";
         container_name = "pangolin";
         restart = "unless-stopped";
-        # Caps V8's heap well under the 256m container limit (the rest is young
-        # generation, code and buffers), so Node collects garbage harder before
-        # the cgroup has to step in. The image's `npm run start` runs plain
-        # `node`, which reads this.
-        environment.NODE_OPTIONS = "--max-old-space-size=160";
+        # Caps V8's heap under the 512m container limit, leaving ~160m for what
+        # lives outside it (code, buffers, source maps; ~80-100m at startup),
+        # so a leak ends in a clean heap-OOM abort and restart rather than a
+        # cgroup kill. Pangolin's live heap is already ~156m right after start
+        # (160 crash-looped on "Reached heap limit"). The image's
+        # `npm run start` runs plain `node`, which reads this.
+        environment.NODE_OPTIONS = "--max-old-space-size=352";
         volumes = [
           "${config.sops.templates."pangolin-config.yaml".path}:/app/config/config.yaml:ro"
           "${stateDir}/config:/app/config:rw"
