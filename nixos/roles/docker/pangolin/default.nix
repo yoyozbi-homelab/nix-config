@@ -138,15 +138,17 @@ in
       # millions of times but never OOM-killed: the box thrashed (80% iowait)
       # and the API stalled until clients could no longer register. With no
       # swap allowed, a leak gets the container killed and restarted instead.
+      # 256m without swap is too little: the server was OOM-killed during
+      # startup every time. 512m is the RAM + swap total it ran on before.
       pangolin.out.service =
         limits {
           cpus = "0.60";
           shares = 512;
-          mem = "256m";
+          mem = "512m";
           reserve = "128m";
         }
         // {
-          memswap_limit = "256m";
+          memswap_limit = "512m";
         };
       pangolin.service = {
         image = "docker.io/fosrl/pangolin:ee-1.21.1";
