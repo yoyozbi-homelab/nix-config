@@ -8,9 +8,12 @@ roles = [
   "networkmanager",
   "docker",
   "docker/pangolin",
+  "ipv4-relay/server",
 ]
 
 [network]
 internalIp = "10.0.0.127"
 externalIp = "140.238.221.62"
 mac = "02:00:17:18:ab:39"
+# cloudjumper's relay tunnel dials this address.
+externalIpv6 = "2603:c022:7:4e7e:0:54cb:7ad8:150f"

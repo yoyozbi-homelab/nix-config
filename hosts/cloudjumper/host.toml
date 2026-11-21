@@ -11,6 +11,12 @@ username = "nix"
 roles = [
   "cachix",
   "openssh",
+  "docker",
+  "ipv4-relay/client",
 ]
 
-# [network] is added once `tofu output ipv6` gives the address.
+[network]
+# No IPv4 of its own: internalIp is its end of the tiny1 relay tunnel.
+internalIp = "10.200.0.2"
+externalIp = "2001:1600:10:101::824"
+externalIpv6 = "2001:1600:10:101::824"

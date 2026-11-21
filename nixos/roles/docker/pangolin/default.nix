@@ -2,10 +2,12 @@
 {
   config,
   inputs,
+  lib,
   pkgs,
   ...
 }:
 let
+  ipv6Subnet = config.yoyozbi.pangolin.ipv6Subnet;
   stateDir = "/var/lib/pangolin";
   baseDomain = "yohanzbinden.ch";
   pangolinDomain = "pangolin.${baseDomain}";
@@ -39,6 +41,7 @@ in
 {
   imports = [
     inputs.arion.nixosModules.arion
+    ./options.nix
     (import ./config/config.nix {
       inherit
         config
@@ -129,8 +132,12 @@ in
           subnet = "172.31.0.0/24";
           gateway = "172.31.0.1";
         }
-      ];
-    };
+      ]
+      ++ lib.optional (ipv6Subnet != null) { subnet = ipv6Subnet; };
+    }
+    # See options.nix: without this, IPv6 clients reach gerbil/traefik with
+    # the bridge gateway as source address.
+    // lib.optionalAttrs (ipv6Subnet != null) { enable_ipv6 = true; };
 
     services = {
       # Without memswap_limit Docker allows twice mem_limit with swap, and on
