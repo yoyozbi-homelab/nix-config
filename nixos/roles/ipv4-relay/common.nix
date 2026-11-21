@@ -88,6 +88,27 @@
         serves these ports itself (before the Pangolin cutover).
       '';
     };
+    egressPush = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Client: every minute, check IPv4 egress through the tunnel and report
+          it to an Uptime Kuma push monitor. Needs the sops secret
+          `kuma-push-token-relay-egress` (the monitor's push token).
+        '';
+      };
+      kumaUrl = mkOption {
+        type = types.str;
+        default = "https://status.yohanzbinden.ch";
+        description = "Uptime Kuma base URL; reached over IPv6 if IPv4 is down.";
+      };
+      target = mkOption {
+        type = types.str;
+        default = "https://github.com";
+        description = "IPv4-only URL that must be reachable through the tunnel.";
+      };
+    };
     defaultRoute = mkOption {
       type = types.bool;
       default = false;

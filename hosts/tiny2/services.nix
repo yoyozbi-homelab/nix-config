@@ -17,13 +17,20 @@
 # cache, worker), the check uses it: a login page or SPA shell answers 2xx even
 # with the database down.
 #
+# Public services are grouped by the path they take: "Pangolin" (DNS-only
+# CNAME to pangolin.yohanzbinden.ch, served by cloudjumper; IPv4 is relayed
+# by tiny1) or "Cloudflare Tunnel" (proxied by Cloudflare, cloudflared on
+# ocr1). Each group also holds the login-gate checks of its services, and
+# "Pangolin" has a "Pangolin paths" subgroup that tests the relay itself.
+#
 # Backups report to push monitors (group "Backups"): each run calls
 # https://status.yohanzbinden.ch/api/push/<token>?status=up|down, and a run
 # that never happens shows up as a missed push.
 { config, lib, ... }:
 let
-  ocr1 = config.networking.yoyozbi.hosts.ocr1.internalIp;
-  rp = config.networking.yoyozbi.hosts.rp.internalIp;
+  hosts = config.networking.yoyozbi.hosts;
+  ocr1 = hosts.ocr1.internalIp;
+  rp = hosts.rp.internalIp;
 
   # tiny1 (Pangolin) runs at 70%+ CPU steal, so a single slow answer is not an
   # outage: only alert after a few failed checks.
@@ -92,30 +99,50 @@ let
 
   # Expect the login redirect itself (not following it).
   gate =
-    name: url:
-    http "gates" name url {
+    parent: name: url:
+    http parent "${name} (login gate)" url {
       max_redirects = 0;
       accepted_statuscodes = [ "300-399" ];
     };
 
-  public = name: url: http "public" name url { };
+  pangolin = name: url: http "via-pangolin" name url { };
+  cloudflared = name: url: http "via-cloudflared" name url { };
+
+  # Pangolin by address rather than name, so each check takes one path no
+  # matter which address family Kuma would pick. Traefik routes on the Host
+  # header; with an IP in the URL there is no SNI and it serves its default
+  # certificate, hence ignore_tls.
+  pangolinApi =
+    name: address:
+    http "relay" name "https://${address}/api/v1/" {
+      ignore_tls = true;
+      timeout = 10;
+      headers = builtins.toJSON { Host = "pangolin.yohanzbinden.ch"; };
+    };
   seedbox = name: url: http "seedbox" name url { accepted_statuscodes = [ "200-399" ]; };
 
   # Backups run daily: 25h leaves an hour of slack for a late or slow run.
   # No retries, so a missed or failed run alerts right away. The token is a
   # secret because anyone holding it can mark the backup as done.
+  backupPush = name: tokenSecret: {
+    inherit name tokenSecret;
+    parent = "backups";
+    interval = 90000;
+    max_retries = 0;
+  };
   pushMonitors = {
-    backup-rp = {
-      name = "rp (paperless, duplicity)";
-      tokenSecret = "kuma-push-token-rp-backup";
-    };
-    backup-cnpg = {
-      name = "ocr1 Postgres dump";
-      tokenSecret = "kuma-push-token-cnpg-backup";
-    };
-    backup-supersync = {
-      name = "ocr1 Supersync data";
-      tokenSecret = "kuma-push-token-supersync-backup";
+    backup-rp = backupPush "rp (paperless, duplicity)" "kuma-push-token-rp-backup";
+    backup-cnpg = backupPush "ocr1 Postgres dump" "kuma-push-token-cnpg-backup";
+    backup-supersync = backupPush "ocr1 Supersync data" "kuma-push-token-supersync-backup";
+    # cloudjumper pushes every minute (yoyozbi.ipv4Relay.egressPush): down
+    # when it can't reach the IPv4 internet through tiny1, missed when it
+    # can't push at all.
+    relay-egress = {
+      name = "IPv4 egress (cloudjumper via tiny1)";
+      tokenSecret = "kuma-push-token-relay-egress";
+      parent = "relay";
+      interval = 120;
+      max_retries = 2;
     };
   };
 
@@ -161,11 +188,9 @@ let
   }
   // lib.mapAttrs (_: m: {
     type = "push";
-    parent_name = "backups";
-    inherit (m) name;
+    parent_name = m.parent;
+    inherit (m) name interval max_retries;
     push_token = config.sops.placeholder.${m.tokenSecret};
-    interval = 90000;
-    max_retries = 0;
     notification_name_list = [ "ntfy" ];
   }) pushMonitors;
 in
@@ -217,6 +242,8 @@ in
         config.yoyozbi.pangolinClient.dnsProxy
         "1.1.1.1"
       ];
+      # For the "IPv6 (cloudjumper direct)" check.
+      ipv6Subnet = "fd4b:7d1a:52c0::/64";
 
       secretEntities = {
         ntfy = config.sops.templates."autokuma-ntfy.json".path;
@@ -224,43 +251,53 @@ in
       // lib.mapAttrs (id: _: config.sops.templates."autokuma-${id}.json".path) secretTemplates;
 
       entities = {
-        public = group "Public";
-        gates = group "Auth gates";
+        via-pangolin = group "Pangolin";
+        via-cloudflared = group "Cloudflare Tunnel";
+        relay = group "Pangolin paths" // {
+          parent_name = "via-pangolin";
+        };
         ocr1 = group "ocr1 (internal)";
         rp = group "rp (internal)";
         seedbox = group "Seedbox";
         backups = group "Backups";
 
         # /api/v1/ is Pangolin's API root; the dashboard is a static shell.
-        pangolin = public "Pangolin" "https://pangolin.yohanzbinden.ch/api/v1/";
+        pangolin = pangolin "Pangolin" "https://pangolin.yohanzbinden.ch/api/v1/";
         # The check above only fails after Kuma's default 48s timeout, so a
         # thrashing Pangolin that answers in 20-40s stays green while clients
         # time out registering and lose their tunnels. 10s is well above its
         # normal answer time even with tiny1's CPU steal.
         pangolin-responsive =
-          http "public" "Pangolin API (responsive)" "https://pangolin.yohanzbinden.ch/api/v1/"
+          http "via-pangolin" "Pangolin API (responsive)" "https://pangolin.yohanzbinden.ch/api/v1/"
             {
               timeout = 10;
             };
         # /alive takes a database connection, so it fails with the database.
-        vaultwarden = public "Vaultwarden" "https://vault.yohanzbinden.ch/alive";
+        vaultwarden = pangolin "Vaultwarden" "https://vault.yohanzbinden.ch/alive";
         # /health pings the database (and Redis, if enabled); 500 otherwise.
-        vikunja = public "Vikunja" "https://tasks.yohanzbinden.ch/health";
+        vikunja = cloudflared "Vikunja" "https://tasks.yohanzbinden.ch/health";
         supersync =
-          jsonQuery "public" "Supersync" "https://supersync.yohanzbinden.ch/health" { } "db" "connected"
+          jsonQuery "via-cloudflared" "Supersync" "https://supersync.yohanzbinden.ch/health" { } "db"
+            "connected"
             { };
         # No unauthenticated endpoint touches its database; that is covered by
         # the Postgres monitor.
-        jellyseerr = public "Jellyseerr" "https://jellyseerr.yohanzbinden.ch/";
+        jellyseerr = cloudflared "Jellyseerr" "https://jellyseerr.yohanzbinden.ch/";
         # WordPress' home page already fails without its database.
-        teamsolid = public "teamsolid.ch" "https://teamsolid.ch/";
+        # A record straight to tiny1, no AAAA: IPv4 only, always via the relay.
+        teamsolid = pangolin "teamsolid.ch" "https://teamsolid.ch/";
 
-        gate-flux = gate "Flux" "https://flux.yohanzbinden.ch/";
-        gate-longhorn = gate "Longhorn" "https://longhorn.yohanzbinden.ch/";
-        gate-bookmarks = gate "Bookmarks" "https://bookmarks.yohanzbinden.ch/";
-        gate-homepage = gate "Homepage" "https://homepage.yohanzbinden.ch/";
-        gate-traefik-ocr1 = gate "Traefik (ocr1)" "https://traefik-ocr1.yohanzbinden.ch/";
-        gate-paperless = gate "Paperless" "https://paperless.yohanzbinden.ch/";
+        gate-flux = gate "via-cloudflared" "Flux" "https://flux.yohanzbinden.ch/";
+        gate-longhorn = gate "via-cloudflared" "Longhorn" "https://longhorn.yohanzbinden.ch/";
+        gate-bookmarks = gate "via-cloudflared" "Bookmarks" "https://bookmarks.yohanzbinden.ch/";
+        gate-homepage = gate "via-pangolin" "Homepage" "https://homepage.yohanzbinden.ch/";
+        gate-traefik-ocr1 = gate "via-pangolin" "Traefik (ocr1)" "https://traefik-ocr1.yohanzbinden.ch/";
+        gate-paperless = gate "via-pangolin" "Paperless" "https://paperless.yohanzbinden.ch/";
+
+        # IPv4 clients: tiny1's public address, DNAT'd through wg-relay.
+        relay-ipv4 = pangolinApi "IPv4 (via tiny1 relay)" hosts.tiny1.externalIp;
+        # IPv6 clients: straight to cloudjumper (needs uptimeKuma.ipv6Subnet).
+        relay-ipv6 = pangolinApi "IPv6 (cloudjumper direct)" "[${hosts.cloudjumper.externalIpv6}]";
 
         # Down when any Flux resource (Kustomization, HelmRelease, ...) fails
         # to reconcile, not only when the UI is down.

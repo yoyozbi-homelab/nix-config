@@ -64,6 +64,8 @@
   # (DNAT, real source address kept) and all IPv4 egress leaves through it.
   yoyozbi.pangolin.ipv6Subnet = "fd31:7a6e:9f00::/64";
   yoyozbi.ipv4Relay.defaultRoute = true;
+  # Push monitor "IPv4 egress (cloudjumper via tiny1)" in hosts/tiny2/services.nix.
+  yoyozbi.ipv4Relay.egressPush.enable = true;
 
   sops = {
     defaultSopsFile = ./cloudjumper-sec.yml;
