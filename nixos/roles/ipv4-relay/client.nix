@@ -4,6 +4,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -12,6 +13,9 @@ let
 in
 {
   imports = [ ./common.nix ];
+
+  # networkd brings the tunnel up itself; `wg show` is for debugging.
+  environment.systemPackages = [ pkgs.wireguard-tools ];
 
   assertions = [
     {
