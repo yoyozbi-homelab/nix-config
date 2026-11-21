@@ -69,6 +69,19 @@ in
       '';
     };
 
+    ipv6Subnet = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "fd4b:7d1a:52c0::/64";
+      description = ''
+        ULA subnet for the compose network, so monitors can reach IPv6-only
+        targets (Docker masquerades it out of the host's IPv6 address; the
+        host needs a global IPv6 address). Changing it needs the network
+        recreated: stop arion-uptime-kuma, `docker rm` its containers, then
+        `docker network rm uptime-kuma`.
+      '';
+    };
+
     entities = mkOption {
       type = types.attrsOf (types.attrsOf types.anything);
       default = { };
@@ -105,6 +118,12 @@ in
     systemd.services.arion-uptime-kuma.unitConfig.RequiresMountsFor = [ cfg.dataDir ];
 
     virtualisation.arion.projects.uptime-kuma.settings = {
+      networks.default = lib.mkIf (cfg.ipv6Subnet != null) {
+        name = "uptime-kuma";
+        enable_ipv6 = true;
+        ipam.config = [ { subnet = cfg.ipv6Subnet; } ];
+      };
+
       services = {
         uptime-kuma.service = {
           image = "docker.io/louislam/uptime-kuma:2.5.11-slim";

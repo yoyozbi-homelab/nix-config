@@ -10,6 +10,24 @@
 let
   cfg = config.yoyozbi.ipv4Relay;
   server = config.networking.yoyozbi.hosts.${cfg.server};
+
+  # Pushes down with the curl error rather than staying silent, so Kuma shows
+  # why; a push that never arrives (host down) alerts as a missed push.
+  egressCheck = pkgs.writeShellApplication {
+    name = "ipv4-relay-egress-check";
+    runtimeInputs = [ pkgs.curl ];
+    text = ''
+      if out=$(curl -4 -sS -o /dev/null -m 15 -w '%{http_code}' ${lib.escapeShellArg cfg.egressPush.target} 2>&1); then
+        status=up msg="IPv4 egress via ${cfg.server}: HTTP $out"
+      else
+        status=down msg="no IPv4 egress via ${cfg.server}: $out"
+      fi
+      token=$(<"$CREDENTIALS_DIRECTORY/token")
+      curl -fsS --retry 3 -o /dev/null -G \
+        --data-urlencode "status=$status" --data-urlencode "msg=$msg" \
+        ${lib.escapeShellArg cfg.egressPush.kumaUrl}/api/push/"$token"
+    '';
+  };
 in
 {
   imports = [ ./common.nix ];
@@ -42,6 +60,27 @@ in
     group = "systemd-network";
     mode = "0400";
     restartUnits = [ "systemd-networkd.service" ];
+  };
+
+  sops.secrets.kuma-push-token-relay-egress = lib.mkIf cfg.egressPush.enable { };
+
+  systemd.services.ipv4-relay-egress-check = lib.mkIf cfg.egressPush.enable {
+    description = "Report IPv4 egress through ${cfg.interface} to Uptime Kuma";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = lib.getExe egressCheck;
+      DynamicUser = true;
+      LoadCredential = "token:${config.sops.secrets.kuma-push-token-relay-egress.path}";
+    };
+  };
+  systemd.timers.ipv4-relay-egress-check = lib.mkIf cfg.egressPush.enable {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "2min";
+      OnUnitActiveSec = "1min";
+    };
   };
 
   systemd.network.netdevs."50-${cfg.interface}" = {
