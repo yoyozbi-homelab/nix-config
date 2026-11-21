@@ -72,6 +72,11 @@ let
   hostOptions = with lib; {
     internalIp = mkOption { type = types.str; };
     externalIp = mkOption { type = types.str; };
+    externalIpv6 = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Public IPv6 address of the host, if it has one.";
+    };
     mac = mkOption {
       type = types.nullOr types.str;
       default = null;

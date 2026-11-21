@@ -52,7 +52,13 @@
     };
   };
 
-  # Secrets: add hosts/cloudjumper/cloudjumper-sec.yml once the host key's age
-  # recipient is in .sops.yaml (infra: `tofu output -raw ssh_host_public_key | ssh-to-age`):
+  # Publish container ports over IPv6 in the kernel (ip6tables DNAT) instead of
+  # through docker-proxy, so containers see the real IPv6 client address. Pairs
+  # with yoyozbi.pangolin.ipv6Subnet on the compose network.
+  virtualisation.docker.daemon.settings = {
+    userland-proxy = false;
+    ip6tables = true;
+  };
+
   sops.defaultSopsFile = ./cloudjumper-sec.yml;
 }
