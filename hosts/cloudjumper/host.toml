@@ -3,7 +3,7 @@ username = "nix"
 
 # Infomaniak Public Cloud (dc3-a), IPv6-only on ext-v6only1. Provisioned and
 # installed by ../infra (OpenTofu + nixos-anywhere); updates via cachix-deploy.
-# Will take over Pangolin from tiny1, with tiny1 relaying IPv4 (see infra/PLAN.md).
+# Runs Pangolin; tiny1 relays IPv4 to it (see nixos/roles/ipv4-relay).
 #
 # No boot-grub: that role is EFI-only (device = "nodev"), this host needs
 # BIOS+EFI grub, configured in hardware.nix. No networkmanager: networking is
@@ -12,6 +12,7 @@ roles = [
   "cachix",
   "openssh",
   "docker",
+  "docker/pangolin",
   "ipv4-relay/client",
 ]
 

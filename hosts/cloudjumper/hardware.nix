@@ -60,5 +60,16 @@
     ip6tables = true;
   };
 
-  sops.defaultSopsFile = ./cloudjumper-sec.yml;
+  # IPv6 clients reach Pangolin directly; IPv4 clients come in through tiny1
+  # (DNAT, real source address kept) and all IPv4 egress leaves through it.
+  yoyozbi.pangolin.ipv6Subnet = "fd31:7a6e:9f00::/64";
+  yoyozbi.ipv4Relay.defaultRoute = true;
+
+  sops = {
+    defaultSopsFile = ./cloudjumper-sec.yml;
+    secrets = {
+      pangolin-server-secret = { };
+      crowdsec-bouncer-key = { };
+    };
+  };
 }
