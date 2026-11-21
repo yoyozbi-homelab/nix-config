@@ -124,7 +124,12 @@ in
   };
 
   virtualisation.arion.projects.pangolin.settings = {
-    networks.pangolin = {
+    # Every service joins compose's `default` network (named after the
+    # project, so also "pangolin"); a separate networks.pangolin entry is never
+    # attached and its ipam/IPv6 settings would be silently ignored. Changing
+    # these needs the network recreated: stop arion-pangolin, then
+    # `docker network rm pangolin`.
+    networks.default = {
       name = "pangolin";
       driver = "bridge";
       ipam.config = [
