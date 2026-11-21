@@ -6,8 +6,6 @@ roles = [
   "cachix",
   "openssh",
   "networkmanager",
-  "docker",
-  "docker/pangolin",
   "ipv4-relay/server",
 ]
 

@@ -69,11 +69,9 @@
     firewall.enable = lib.mkForce false;
   };
 
-  sops = {
-    defaultSopsFile = ./tiny1-sec.yml;
-    secrets = {
-      pangolin-server-secret = { };
-      crowdsec-bouncer-key = { };
-    };
-  };
+  sops.defaultSopsFile = ./tiny1-sec.yml;
+
+  # Pangolin runs on cloudjumper; tiny1 forwards IPv4 web/WireGuard traffic for
+  # 140.238.221.62 to it through wg-relay (see nixos/roles/ipv4-relay).
+  yoyozbi.ipv4Relay.forward.enable = true;
 }
