@@ -4,6 +4,7 @@ keys:
   - &tiny1 age1m3gcq6a43fht8rt5k90k9ydlsr7d037lrqqx9lsyd92chfus6pss34q9jw
   - &tiny2 age1wyggh6p77q5g00e784psmvtm2m8j96nsnzry4cpj9g70agexmatquped2e
   - &rp age1f4rkcz2c8ecerzyv9vlj84kf0d93ythhmq8flw5rm45n0vkwzagqtn7gfv
+  - &cloudjumper age13ydyn2t8gu4ax7k46fcx3ph9a9aw8m9gepmctv0geumkfasrys0sueehpg
 creation_rules:
   - path_regex: secrets.yml$
     key_groups:
@@ -27,3 +28,8 @@ creation_rules:
       - age:
           - *laptop
           - *tiny2
+  - path_regex: hosts/cloudjumper/cloudjumper-sec.yml$
+    key_groups:
+      - age:
+          - *laptop
+          - *cloudjumper

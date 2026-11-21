@@ -1,0 +1,16 @@
+[host]
+username = "nix"
+
+# Infomaniak Public Cloud (dc3-a), IPv6-only on ext-v6only1. Provisioned and
+# installed by ../infra (OpenTofu + nixos-anywhere); updates via cachix-deploy.
+# Will take over Pangolin from tiny1, with tiny1 relaying IPv4 (see infra/PLAN.md).
+#
+# No boot-grub: that role is EFI-only (device = "nodev"), this host needs
+# BIOS+EFI grub, configured in hardware.nix. No networkmanager: networking is
+# systemd-networkd with DHCPv6, also in hardware.nix.
+roles = [
+  "cachix",
+  "openssh",
+]
+
+# [network] is added once `tofu output ipv6` gives the address.
