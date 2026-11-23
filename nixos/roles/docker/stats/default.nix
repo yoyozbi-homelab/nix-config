@@ -81,7 +81,7 @@ in
       };
 
       cadvisor.service = {
-        image = "ghcr.io/google/cadvisor:v0.60.6";
+        image = "ghcr.io/google/cadvisor:v0.61.1";
         container_name = "cadvisor";
         restart = "unless-stopped";
         privileged = true;
@@ -101,7 +101,7 @@ in
       };
 
       node-exporter.service = {
-        image = "quay.io/prometheus/node-exporter:v1.12.1";
+        image = "quay.io/prometheus/node-exporter:v1.13.1";
         container_name = "node-exporter";
         restart = "unless-stopped";
         volumes = [

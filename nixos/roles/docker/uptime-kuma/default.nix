@@ -126,7 +126,7 @@ in
 
       services = {
         uptime-kuma.service = {
-          image = "docker.io/louislam/uptime-kuma:2.5.11-slim";
+          image = "docker.io/louislam/uptime-kuma:2.5.12-slim";
           container_name = "uptime-kuma";
           restart = "unless-stopped";
           ports = [ "127.0.0.1:${toString httpPort}:3001" ];
