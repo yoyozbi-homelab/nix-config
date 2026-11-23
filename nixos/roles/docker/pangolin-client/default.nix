@@ -83,7 +83,7 @@ in
 
     virtualisation.arion.projects.pangolin-client.settings = {
       services.pangolin-cli.service = {
-        image = "docker.io/fosrl/pangolin-cli:0.21.0";
+        image = "docker.io/fosrl/pangolin-cli:0.23.0";
         container_name = "pangolin-cli";
         restart = "unless-stopped";
         network_mode = "host";

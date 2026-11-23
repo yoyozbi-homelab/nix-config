@@ -163,7 +163,7 @@ in
           memswap_limit = "512m";
         };
       pangolin.service = {
-        image = "docker.io/fosrl/pangolin:ee-1.21.1";
+        image = "docker.io/fosrl/pangolin:ee-1.27.1";
         container_name = "pangolin";
         restart = "unless-stopped";
         # Caps V8's heap under the 512m container limit, leaving ~160m for what
